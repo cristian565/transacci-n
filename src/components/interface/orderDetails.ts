@@ -1,0 +1,60 @@
+export interface OrderDetails {
+  data: {
+    reference: string,
+    id: string;
+    created_at: string;
+    amount_in_cents: number;
+    currency: string;
+    payment_method_type: string;
+    payment_method: {
+      type: string;
+      extra: {
+        name?: string;
+        brand?: string;
+        last_four?: string;
+        ticket_id?: string;
+        return_code?: string;
+        request_date?: string;
+        async_payment_url?: string;
+        traceability_code?: string;
+        transaction_cycle?: string;
+        transaction_state?: string;
+        external_identifier?: string;
+        bank_processing_date?: string;
+        bin?: string;
+        exp_year?: string;
+        exp_month?: string;
+        card_holder?: string;
+        business_agreement_code?: string
+        payment_intention_identifier?: string
+        
+      };
+      phone_number?: string;
+      token?: string;
+      installments?: number;
+      user_type?: number;
+      user_legal_id?: string;
+      user_legal_id_type?: string;
+      payment_description?: string;
+      financial_institution_code?: string;
+
+    };
+    redirect_url: string;
+    status: string;
+    status_message: string;
+    merchant: {
+      name: string;
+      legal_name: string;
+      contact_name: string;
+      phone_number: string;
+      logo_url: null;
+      legal_id_type: string;
+      email: string;
+      legal_id: string;
+    };
+    taxes: any[];
+  };
+  meta: {
+    trace_id: string;
+  };
+}
