@@ -14,7 +14,6 @@ export const SearchForm = (props: SearchFormProps) => {
   const statusOrderArray = ["Declinada", "Error", "Aprobado", "Anulada"];
   const paymentMethodArray = ["Tarjeta", "Nequi", "Bancolombia", "PSE"];
 
-
   const searchForm = useFormik({
     initialValues: {
       stateOrders: "",

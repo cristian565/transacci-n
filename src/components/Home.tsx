@@ -1,8 +1,12 @@
 import React from "react";
 import { useState, useEffect, useMemo } from "react";
 import { Transition } from "@headlessui/react";
-import { HomeIcon } from "@heroicons/react/outline";
-import logoBellaPiel from "../assets/logo-BellaPiel.svg";
+import {
+  HomeIcon,
+  LogoutIcon,
+  SearchCircleIcon,
+  SearchIcon,
+} from "@heroicons/react/outline";
 import { TableTransaction } from "./TableTransaction";
 import { Details } from "./Details";
 import { imagenes } from "../assets/imagenes";
@@ -10,9 +14,9 @@ import { SearchForm } from "./SearchForm";
 import { SearchFormValue } from "./interface/searchFormValue";
 import { orderInvoiceSearch } from "../hooks/setOrderInvoiceSearch";
 import { Order } from "./interface/order";
-import { TableTransactionSkeleton } from "./TableTransactionSkeleton";
+/* import { TableTransactionSkeleton } from "./TableTransactionSkeleton"; */
 import Modal from "./Modal";
-import { NoDate } from "./NoDate";
+/* import { NotFilterData } from "./NotFilterData"; */
 import OrderNotFound from "./OrderNotFound";
 
 export const Home = () => {
@@ -24,43 +28,42 @@ export const Home = () => {
     return classes.filter(Boolean).join(" ");
   }
   const dataInvoice = [
-    
-  {
-    transactionId:"188178-1651016434-52942",
-        reference: "1111",
-        client: "juan@gmail.com",
-        totalTransactionValue: 179437900,
-        currency: "COP",
-        transactionStatus: "ERROR",
-        warehouse: "Vjerto",
-        transactionDate: "2022-04-26T23:40:35.227Z",
-        paymentType:"NEQUI",
-        paymentGateway:"wompi",
-  },   
-  {
-    transactionId:"188178-1651016434-52942",
-        reference: "1111",
-        client: "juan@gmail.com",
-        totalTransactionValue: 179437900,
-        currency: "COP",
-        transactionStatus: "APPROVED",
-        warehouse: "Vjerto",
-        transactionDate: "2022-04-26T23:40:35.227Z",
-        paymentType:"PSE",
-        paymentGateway:"wompi",
-  },
-  {
-    transactionId:"188178-1651016434-52942",
-        reference: "1111",
-        client: "juan@gmail.com",
-        totalTransactionValue: 179437900,
-        currency: "COP",
-        transactionStatus: "DECLINED",
-        warehouse: "Vjerto",
-        transactionDate: "2022-04-26T23:40:35.227Z",
-        paymentType:"BANCOLOMBIA",
-        paymentGateway:"wompi",
-  }
+    {
+      transactionId: "188178-1651016434-52942",
+      reference: "1111",
+      client: "juan@gmail.com",
+      totalTransactionValue: 179437900,
+      currency: "COP",
+      transactionStatus: "ERROR",
+      warehouse: "Vjerto",
+      transactionDate: "2022-04-26T23:40:35.227Z",
+      paymentType: "NEQUI",
+      paymentGateway: "wompi",
+    },
+    {
+      transactionId: "188178-1651016434-52942",
+      reference: "1111",
+      client: "juan@gmail.com",
+      totalTransactionValue: 179437900,
+      currency: "COP",
+      transactionStatus: "APPROVED",
+      warehouse: "Vjerto",
+      transactionDate: "2022-04-26T23:40:35.227Z",
+      paymentType: "PSE",
+      paymentGateway: "wompi",
+    },
+    {
+      transactionId: "188178-1651016434-52942",
+      reference: "1111",
+      client: "juan@gmail.com",
+      totalTransactionValue: 179437900,
+      currency: "COP",
+      transactionStatus: "DECLINED",
+      warehouse: "Vjerto",
+      transactionDate: "2022-04-26T23:40:35.227Z",
+      paymentType: "BANCOLOMBIA",
+      paymentGateway: "wompi",
+    },
   ];
   const [data, setData] = useState<Order[]>([]);
   const dataOrder = useMemo(() => data, [data]);
@@ -114,41 +117,15 @@ export const Home = () => {
                   />
                 </div>
 
-                <div
-                  className="flex flex-row w-24 justify-between md:hidden cursor-pointer"
-                  onClick={() => setopenFilter(true)}
-                >
-                  <button className="rounded-md ">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
+                <div className="flex flex-row w-24 justify-between md:hidden">
+                  <div onClick={() => setopenFilter(true)}>
+                    <SearchCircleIcon
+                      aria-hidden="true"
                       className="h-10 w-10"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M8 16l2.879-2.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                  </button>
-                  <div>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-10 w-10"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                      />
-                    </svg>
+                    />
+                  </div>
+                  <div onClick={() => alert("Cerrar session cliquedo")}>
+                    <LogoutIcon aria-hidden="true" className="h-10 w-10 " />
                   </div>
                 </div>
                 <div className="hidden md:flex-1 md:flex md:items-center md:justify-end">
@@ -157,38 +134,15 @@ export const Home = () => {
                       onClick={() => setopenFilter(true)}
                       className="ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-wompi hover:bg-indigo-700"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 mr-1"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth="3"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                        />
-                      </svg>
+                      <SearchIcon aria-hidden="true" className="h-4 w-4 mr-1" />
                       <span>Buscar</span>
                     </div>
-                    <div className="ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-wompi hover:bg-indigo-700">
+                    <div
+                      onClick={() => alert("Cerrar session")}
+                      className="ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-wompi hover:bg-indigo-700"
+                    >
                       <span>Salir</span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6 ml-1"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                        />
-                      </svg>
+                      <LogoutIcon aria-hidden="true" className="h-6 w-6 ml-1" />
                     </div>
                   </div>
                 </div>
@@ -282,27 +236,20 @@ export const Home = () => {
             </div>
             <div className="flex-shrink-0 flex p-4 bg-white-wompi border-r-2 border-t-2 border-gray-200">
               <div className="flex-shrink-0 w-full group block">
-                <div className="flex justify-center ">
+                <div
+                  className="flex justify-center cursor-pointer"
+                  onClick={() => alert("cerrar sesion listo")}
+                >
                   <div className="mr-2">
-                    <p className="text-xl font-semibold text-blue-wompi">
+                    <p className="text-xl font-semibold text-blue-wompi hover:text-blue-300 active:bg-gray-300 focus:ring">
                       Cerrar Sesion
                     </p>
                   </div>
                   <div>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6 mt-1"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                      />
-                    </svg>
+                    <LogoutIcon
+                      aria-hidden="true"
+                      className="h-6 w-6 mt-1 hover:bg-gray-300 active:bg-gray-300 focus:ring"
+                    />
                   </div>
                 </div>
               </div>
@@ -415,18 +362,17 @@ export const Home = () => {
               "fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity",
           }}
         >
-          <OrderNotFound data={ {email:"crismal565@gmail.com", nationalIdNumber:"123213",invoiceNumber:"12213"}}  
-          onClick={() => {
-            setShowNoDateFilter(false);
-            setremoveSearch(false);
-          }}
-
-          
-        button={
-         { className:"bg-blue-400 inline-flex justify-center py-2 px-4 w-full text-base font-medium text-white bg-pantone-blue-100 hover:bg-pantone-blue-300 rounded-md border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm sm:text-sm"       }}
-         
-         />
-          {/* <NoDate
+          <OrderNotFound
+            onClick={() => {
+              setShowNoDateFilter(false);
+              setremoveSearch(false);
+            }}
+            button={{
+              className:
+                "bg-blue-400 inline-flex justify-center py-2 px-4 w-full text-base font-medium text-white bg-pantone-blue-100 hover:bg-pantone-blue-300 rounded-md border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm sm:text-sm",
+            }}
+          />
+          {/* <NotFilterData
             onClick={() => {
               setShowNoDateFilter(false);
               setremoveSearch(false);
@@ -437,6 +383,25 @@ export const Home = () => {
             }}
           /> */}
         </Modal>
+
+        {/* {returns.returns.error?.status === 100 && (
+        <Modal
+          open={showOrderNotFound}
+          backdropClose={true}
+          onClose={() => {
+            console.warn('clicked for closed');
+          }}
+          style={{
+            container:
+              'inline-block align-bottom bg-gray-50 rounded-lg px-4 tw-pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6',
+            opacity:
+              'fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity',
+          }}
+          e2eAttr="modal-server-down"
+        >
+          <ServerDown />
+        </Modal>
+      )} */}
       </div>
     </>
   );

@@ -5,14 +5,14 @@ import {
   DocumentSearchIcon,
 } from "@heroicons/react/outline";
 
-export interface NoDateProps {
+export interface NotFilterDataProps {
   onClick: () => void;
   metadata: {
     button: string;
   };
 }
 
-export const NoDate = (props: NoDateProps) => {
+export const NotFilterData = (props: NotFilterDataProps) => {
   return (
     <div className="p-5 max-w-md bg-gray-50">
       <div>

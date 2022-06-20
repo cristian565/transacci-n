@@ -336,7 +336,9 @@ export const TableTransaction = (props: TableTransactionProps) => {
                           <span className="text-blue-400 inline-block truncate">
                             ID Transaccion
                           </span>
-                          <span className="font-bold">{item.transactionId}</span>
+                          <span className="font-bold">
+                            {item.transactionId}
+                          </span>
                         </div>
 
                         <div className="flex flex-col w-full ">
