@@ -10,6 +10,7 @@ export interface NotFilterDataProps {
   metadata: {
     button: string;
   };
+  e2eAttr?: string;
 }
 
 export const NotFilterData = (props: NotFilterDataProps) => {

@@ -1,16 +1,15 @@
 import React, { useState, useEffect, Dispatch, SetStateAction } from "react";
-import { useNavigate } from "react-router-dom";
-import logoBellaPiel from "../assets/logo-BellaPiel.svg";
 import { imagenes } from "../assets/imagenes";
 import { useFormik } from "formik";
 import InputBasic from "./InputBasic";
 import { accesUserLogin } from "../hooks/accesUserLogin";
 import Modal from "./Modal";
 import { UserAccesError } from "./UserAccesError";
-import { Transition } from "@headlessui/react";
+
 
 export interface LoginProps {
   accesUser: Dispatch<SetStateAction<boolean>>;
+  e2eAttr?: string;
 }
 
 export const Login = (props: LoginProps) => {
@@ -46,7 +45,8 @@ export const Login = (props: LoginProps) => {
 
   return (
     <>
-      <div className="h-screen flex flex-col lg:flex-row">
+      <div className="h-screen flex flex-col lg:flex-row"
+      data-cy={`login`}>
         <div className="h-3/4  border-r-2 order-last items-start border-gray-200 flex-1 flex flex-col justify-start  lg:h-full lg:justify-center xl:w-5/12 lg:py-12 px-4 sm:px-6 lg:order-none lg:flex-none lg:px-16 xl:px-24">
           <div className="mx-auto w-full max-w-sm lg:w-96">
             <div>
@@ -84,6 +84,7 @@ export const Login = (props: LoginProps) => {
                           "block text-sm font-medium text-gray-700 capitalize",
                       }}
                       touched={searchForm.touched.user}
+                      e2eAttr={"login-input_user"}
                     />
                   </div>
 
@@ -108,6 +109,7 @@ export const Login = (props: LoginProps) => {
                           "block text-sm font-medium text-gray-700 capitalize",
                       }}
                       touched={searchForm.touched.user}
+                      e2eAttr={"login-input_password"}
                     />
                   </div>
 
@@ -115,11 +117,12 @@ export const Login = (props: LoginProps) => {
                     <button
                       /* onClick={handleLogin} */
                       type="submit"
-                      className="w-full hidden justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      className="w-full justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      data-cy={`login-send__button-normal`}
                     >
                       Iniciar sesión
                     </button>
-                    <Transition show={showLoadingButton}>
+                    {/* <Transition show={showLoadingButton}>
                       <button
                         disabled={true}
                         type="submit"
@@ -147,7 +150,7 @@ export const Login = (props: LoginProps) => {
                         </svg>
                         <span>Procesando...</span>
                       </button>
-                    </Transition>
+                    </Transition> */}
                   </div>
                 </form>
               </div>

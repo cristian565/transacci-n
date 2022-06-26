@@ -12,6 +12,7 @@ export interface ModalProps {
     container: string;
   };
   onClose: () => void;
+  e2eAttr?: string;
 }
 
 export function Modal(props: ModalProps) {

@@ -5,6 +5,7 @@ export interface SelectData {
   text: string;
   disabled: boolean;
   hidden?: boolean;
+  e2eAttr?: string;
 }
 
 /* eslint-disable-next-line */

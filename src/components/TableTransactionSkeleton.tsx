@@ -1,6 +1,9 @@
 import { useState, memo } from "react";
+import { ClockIcon, CalendarIcon } from "@heroicons/react/outline";
 
-export interface TableReturnsSkeletonProps {}
+export interface TableReturnsSkeletonProps {
+  e2eAttr?: string;
+}
 
 export const TableTransactionSkeleton = memo(function (
   props: TableReturnsSkeletonProps
@@ -91,40 +94,17 @@ export const TableTransactionSkeleton = memo(function (
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-600 font-semibold">
                       <div className="flex flex-col space-y-1">
                         <div className="flex flex-row content-center">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-6 w-6"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                          </svg>
+                          <ClockIcon aria-hidden="true" className="h-6 w-6" />
                           <span className="ml-1 mt-1 w-16 h-4 bg-gray-300 rounded-lg">
                             {/* aqui la HORA*/}
                           </span>
                         </div>
 
                         <div className="flex flex-row content-center">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
+                          <CalendarIcon
+                            aria-hidden="true"
                             className="h-6 w-6"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                            />
-                          </svg>
+                          />
                           <span className="ml-1 mt-1 w-16 h-4 bg-gray-300 rounded-lg">
                             {/* aqui la FECHA */}
                           </span>
@@ -204,40 +184,14 @@ export const TableTransactionSkeleton = memo(function (
                       <span>{/* aqui el email */}</span>
                     </div>
                     <div className="flex flex-row content-center mt-1">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
+                      <ClockIcon aria-hidden="true" className="h-6 w-6" />
                       <span className="ml-1 w-14 h-4 bg-gray-300 rounded-full mt-1">
                         {/* aqui la hora*/}
                       </span>
                     </div>
 
                     <div className="flex flex-row content-center mb-1">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                        />
-                      </svg>
+                      <CalendarIcon aria-hidden="true" className="h-6 w-6" />
                       <span className="ml-1 w-14 h-4 bg-gray-300 rounded-full mt-1">
                         {/* aqui la fecha */}
                       </span>
@@ -298,40 +252,17 @@ export const TableTransactionSkeleton = memo(function (
                       </span>
                       <div className=" flex flex-row space-x-2">
                         <div className="flex flex-row content-center">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-6 w-6"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                          </svg>
+                          <ClockIcon aria-hidden="true" className="h-6 w-6" />
                           <span className="ml-1 w-16 h-4 mt-1 bg-gray-300 rounded-full">
                             {/* aqui la HORA */}
                           </span>
                         </div>
 
                         <div className="flex flex-row content-center">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
+                          <CalendarIcon
+                            aria-hidden="true"
                             className="h-6 w-6"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                            />
-                          </svg>
+                          />
                           <span className="ml-1 w-16 h-4 mt-1 bg-gray-300 rounded-full">
                             {/* aqui la FECHA*/}
                           </span>

@@ -4,10 +4,12 @@ import { parseCurrency } from "../hooks/parse-currency";
 import { parseDate } from "../hooks/parse-date";
 import { Order } from "./interface/order";
 import { imagenes } from "../assets/imagenes";
+import { ClockIcon, CalendarIcon } from "@heroicons/react/outline";
 
 export interface TableTransactionProps {
   openTransaction: Dispatch<SetStateAction<boolean>>;
   order: Order[];
+  e2eAttr?: string;
 }
 
 export const TableTransaction = (props: TableTransactionProps) => {
@@ -50,7 +52,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
 
   return (
     <>
-      <div className="px-4 sm:px-6 lg:px-2 mt-8 ">
+      <div className="px-4 sm:px-6 lg:px-2 mt-8 " data-cy={`table-transaction`}>
         <div className="hidden md:flex mt-4 flex-col shadow-xl">
           <div className="overflow-x-auto ">
             <div className="inline-block min-w-full py-2 align-middle md:px-3 lg:px-2">
@@ -93,6 +95,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                       >
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 md:pr-1 lg:pr-3 text-sm font-medium text-gray-900 sm:pl-6 md:pl-4 lg:pl-6">
                           <span
+                            data-cy="e-commerce--table-transaction__transaction_status-md"
                             className={`${statusStyles[item.transactionStatus]}
                              font-semibold inline-block  rounded-lg h-1/2 px-3 md:px-1 lg:px-3 w-24 md:w-20 lg:w-24 text-center`}
                           >
@@ -103,6 +106,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                           <div className="flex flex-row">
                             <div className="flex-shrink-0 flex justify-center w-1/6 ">
                               <img
+                                data-cy="e-commerce--table-transaction__image-md"
                                 className="block h-8 w-auto"
                                 src={
                                   imagenes[
@@ -115,7 +119,10 @@ export const TableTransaction = (props: TableTransactionProps) => {
                               />
                             </div>
                             <div className="flex flex-col w-full px-3 lg:w-full">
-                              <span className="font-bold">
+                              <span
+                                className="font-bold"
+                                data-cy="e-commerce--table-transaction__money-md"
+                              >
                                 {parseCurrency(item.totalTransactionValue)}
                               </span>
                               <span>{item.client}</span>
@@ -124,50 +131,39 @@ export const TableTransaction = (props: TableTransactionProps) => {
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-600 font-semibold">
                           <div className="flex flex-col">
-                            <span className="font-bold">
+                            <span
+                              className="font-bold"
+                              data-cy="e-commerce--table-transaction__transactionId-md"
+                            >
                               {`#${item.transactionId}`}
                             </span>
-                            <span>{`Ref: ${item.reference}`}</span>
+                            <span data-cy="e-commerce--table-transaction__reference-md">{`Ref: ${item.reference}`}</span>
                           </div>
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-600 font-semibold">
                           <div className="flex flex-col space-y-1">
                             <div className="flex flex-row content-center">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
+                              <ClockIcon
+                                aria-hidden="true"
                                 className="h-6 w-6"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                strokeWidth={2}
+                              />
+                              <span
+                                data-cy="e-commerce--table-transaction__date_hour-md"
+                                className="ml-1"
                               >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                                />
-                              </svg>
-                              <span className="ml-1">
                                 {parseDate(item.transactionDate).hour}
                               </span>
                             </div>
 
                             <div className="flex flex-row content-center">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
+                              <CalendarIcon
+                                aria-hidden="true"
                                 className="h-6 w-6"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                strokeWidth={2}
+                              />
+                              <span
+                                data-cy="e-commerce--table-transaction__date-md"
+                                className="ml-1"
                               >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                />
-                              </svg>
-                              <span className="ml-1">
                                 {parseDate(item.transactionDate).date}
                               </span>
                             </div>
@@ -264,40 +260,17 @@ export const TableTransaction = (props: TableTransactionProps) => {
                           <span>{item.client}</span>
                         </div>
                         <div className="flex flex-row content-center">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-6 w-6"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                          </svg>
+                          <ClockIcon aria-hidden="true" className="h-6 w-6" />
                           <span className="ml-1">
                             {parseDate(item.transactionDate).hour}
                           </span>
                         </div>
 
                         <div className="flex flex-row content-center">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
+                          <CalendarIcon
+                            aria-hidden="true"
                             className="h-6 w-6"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                            />
-                          </svg>
+                          />
                           <span className="ml-1">
                             {parseDate(item.transactionDate).date}
                           </span>
@@ -365,40 +338,20 @@ export const TableTransaction = (props: TableTransactionProps) => {
                           </span>
                           <div className=" flex flex-row space-x-2">
                             <div className="flex flex-row content-center">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
+                              <ClockIcon
+                                aria-hidden="true"
                                 className="h-6 w-6"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                strokeWidth={2}
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                                />
-                              </svg>
+                              />
                               <span className="ml-1">
                                 {parseDate(item.transactionDate).hour}
                               </span>
                             </div>
 
                             <div className="flex flex-row content-center">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
+                              <CalendarIcon
+                                aria-hidden="true"
                                 className="h-6 w-6"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                strokeWidth={2}
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                />
-                              </svg>
+                              />
                               <span className="ml-1">
                                 {parseDate(item.transactionDate).date}
                               </span>

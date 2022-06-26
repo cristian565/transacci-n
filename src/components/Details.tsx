@@ -3,9 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { parseCurrency } from "../hooks/parse-currency";
 import { parseDate } from "../hooks/parse-date";
 import { imagenes } from "../assets/imagenes";
+import {ArrowLeftIcon,ClockIcon,CalendarIcon} from "@heroicons/react/outline";
+
+
 
 export interface DetailsProps {
-  openTransaction: Dispatch<SetStateAction<boolean>>;
+  onClose: () => void;
+  e2eAttr?: string;
 }
 
 export const Details = (props: DetailsProps) => {
@@ -37,21 +41,13 @@ ATRAS
         <main className="py-2 md:py-9 ">
           {/* Page header */}
           <div className="mx-auto px-4 h-10 sm:px-6  md:flex md:content-center  md:space-x-2 lg:max-w-7xl lg:px-8">
-            <svg
-              onClick={() => props.openTransaction(true)}
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-7 w-6 my-1 cursor-pointer"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              />
-            </svg>
+            <ArrowLeftIcon
+             aria-hidden="true"
+             onClick={() => {
+                props.onClose();
+              }}           
+              className="h-7 w-6 my-1 cursor-pointer"           
+            />
             <h1 className="text-2xl text-center md:text-left font-semibold text-gray-900">
               Detalle de la transacción
             </h1>
@@ -131,40 +127,20 @@ ATRAS
                         </dt>
                         <div className="flex flex-col space-y-1">
                           <div className="flex flex-row content-center">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
+                            <ClockIcon
+                              aria-hidden="true"
                               className="h-6 w-6"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              strokeWidth={2}
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                              />
-                            </svg>
+                            />
                             <span className="ml-1">
                               {parseDate("2022-04-26T14:40:35.227Z").hour}
                             </span>
                           </div>
 
                           <div className="flex flex-row content-center">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
+                            <CalendarIcon
+                              aria-hidden="true"
                               className="h-6 w-6"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              strokeWidth={2}
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                               />
-                            </svg>
                             <span className="ml-1">
                               {parseDate("2022-04-26T14:40:35.227Z").date}
                             </span>
@@ -177,40 +153,21 @@ ATRAS
                         </dt>
                         <div className="flex flex-col space-y-1">
                           <div className="flex flex-row content-center">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
+                            <ClockIcon
+                            aria-hidden="true"
                               className="h-6 w-6"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              strokeWidth={2}
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                              />
-                            </svg>
+                            />
                             <span className="ml-1">
                               {parseDate("2022-04-26T14:40:35.227Z").hour}
                             </span>
                           </div>
 
                           <div className="flex flex-row content-center">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
+                            <CalendarIcon
+                            aria-hidden="true"
                               className="h-6 w-6"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              strokeWidth={2}
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                              />
-                            </svg>
+                              
+                            />
                             <span className="ml-1">
                               {parseDate("2022-04-26T14:40:35.227Z").date}
                             </span>

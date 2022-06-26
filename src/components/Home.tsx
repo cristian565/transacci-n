@@ -6,6 +6,7 @@ import {
   LogoutIcon,
   SearchCircleIcon,
   SearchIcon,
+  FilterIcon
 } from "@heroicons/react/outline";
 import { TableTransaction } from "./TableTransaction";
 import { Details } from "./Details";
@@ -42,8 +43,8 @@ export const Home = () => {
     },
     {
       transactionId: "188178-1651016434-52942",
-      reference: "1111",
-      client: "juan@gmail.com",
+      reference: "2222",
+      client: "andres@gmail.com",
       totalTransactionValue: 179437900,
       currency: "COP",
       transactionStatus: "APPROVED",
@@ -54,8 +55,8 @@ export const Home = () => {
     },
     {
       transactionId: "188178-1651016434-52942",
-      reference: "1111",
-      client: "juan@gmail.com",
+      reference: "3333",
+      client: "cristian@gmail.com",
       totalTransactionValue: 179437900,
       currency: "COP",
       transactionStatus: "DECLINED",
@@ -100,7 +101,7 @@ export const Home = () => {
       <div>
         {/* Componente para movil */}
 
-        <div className=" h-screen w-full lg:hidden">
+        <div className="h-screen w-full lg:hidden">
           <div className="relative bg-white">
             <div
               className="absolute inset-0 shadow z-30 pointer-events-none"
@@ -192,12 +193,18 @@ export const Home = () => {
             leaveFrom="opacity-100 translate-y-0"
             leaveTo="opacity-0 translate-y-1"
           >
-            <Details openTransaction={setOpenTransaction} />
+            <Details
+             onClose={() => {
+              setOpenTransaction(true);
+              }}/>
           </Transition>
         </div>
 
+
         {/* Static sidebar for desktop */}
-        <div className="hidden lg:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
+        <div className="hidden lg:flex">
+        <div className="hidden lg:flex md:w-64 md:flex-col md:fixed md:inset-y-0"
+        >
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex-1 flex flex-col min-h-0 bg-gray-800">
             <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto bg-white border-r-2 border-gray-200">
@@ -293,20 +300,11 @@ export const Home = () => {
                         }
                         onClick={() => setopenFilter(true)}
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
+                        <FilterIcon
                           className="h-6 w-6 text-lg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-                          />
-                        </svg>
+                          aria-hidden="true"
+                                                
+                        />
                         <span className="text-gray-700 font-bold text-md">
                           Filtros
                         </span>
@@ -342,12 +340,16 @@ export const Home = () => {
                     leaveFrom="opacity-100  scale-100 "
                     leaveTo="opacity-0 scale-95 "
                   >
-                    <Details openTransaction={setOpenTransaction} />
+                    <Details
+                     onClose={() => {
+                      setOpenTransaction(true);
+                    }} />
                   </Transition>
                 </div>
               </div>
             </div>
           </main>
+        </div>
         </div>
         <Modal
           open={showNoDateFilter}

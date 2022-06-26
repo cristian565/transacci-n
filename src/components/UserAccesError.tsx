@@ -6,6 +6,7 @@ export interface UserAccesErrorProps {
   button: {
     className: string;
   };
+  e2eAttr?: string;
 }
 
 export const UserAccesError = (props: UserAccesErrorProps) => {

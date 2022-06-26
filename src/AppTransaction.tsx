@@ -7,7 +7,7 @@ import { accesUserLogin } from './hooks/accesUserLogin'
  */
 export const AppTransaction = () => {
 
-  const [acceState, setAcceState] = useState<boolean>(true)
+  const [acceState, setAcceState] = useState<boolean>(false)
   
   return (
     <>

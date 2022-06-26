@@ -7,6 +7,7 @@ export interface OrderNotFoundProps {
   button: {
     className: string;
   };
+  e2eAttr?: string;
 }
 
 export function OrderNotFound(props: OrderNotFoundProps) {

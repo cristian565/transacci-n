@@ -22,18 +22,22 @@ export interface InputBasicProps {
   };
   children?: React.ReactNode;
   touched?: boolean;
+  e2eAttr?: string;
 }
 
 export function InputBasic(props: InputBasicProps) {
   return (
     <div>
       {props.label.text.length !== 0 && (
-        <label htmlFor={props.metadata.name} className={props.label.className}>
+        <label htmlFor={props.metadata.name} className={props.label.className}
+        data-cy={`${props.e2eAttr}--label`}>
           {props.label.text}
         </label>
       )}
       <div className="relative mt-1">
-        <input {...props.metadata} className={props.metadata.className} />
+        <input {...props.metadata} className={props.metadata.className}
+         data-cy={`${props.e2eAttr}--input`}
+          />
         {props.children}
       </div>
     </div>
