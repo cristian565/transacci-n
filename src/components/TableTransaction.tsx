@@ -4,16 +4,20 @@ import { parseCurrency } from "../hooks/parse-currency";
 import { parseDate } from "../hooks/parse-date";
 import { Order } from "./interface/order";
 import { imagenes } from "../assets/imagenes";
-import { ClockIcon, CalendarIcon } from "@heroicons/react/outline";
+import {
+  ClockIcon,
+  CalendarIcon,
+  CreditCardIcon,
+} from "@heroicons/react/outline";
 
 export interface TableTransactionProps {
   openTransaction: Dispatch<SetStateAction<boolean>>;
-  order: Order[];
+  order: Order;
   e2eAttr?: string;
 }
 
 export const TableTransaction = (props: TableTransactionProps) => {
-  const data = useMemo(() => props.order, [props.order]);
+  const data = useMemo(() => props.order.transactions, [props.order]);
 
   const [start, setStart] = useState(0);
   const [limit, setLimit] = useState(4);
@@ -52,7 +56,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
 
   return (
     <>
-      <div className="px-4 sm:px-6 lg:px-2 mt-8 " data-cy={`table-transaction`}>
+      <div className="px-4 sm:px-6 lg:px-2 mt-8 " data-cy={props.e2eAttr}>
         <div className="hidden md:flex mt-4 flex-col shadow-xl">
           <div className="overflow-x-auto ">
             <div className="inline-block min-w-full py-2 align-middle md:px-3 lg:px-2">
@@ -92,10 +96,12 @@ export const TableTransaction = (props: TableTransactionProps) => {
                         key={item.reference}
                         onClick={() => [handleDetails(item.reference)]}
                         className="cursor-pointer hover:bg-gray-300 active:bg-gray-300 focus:ring"
+                        dta-cy={`table-transaction__${item.reference}`}
+                        id={item.reference}
                       >
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 md:pr-1 lg:pr-3 text-sm font-medium text-gray-900 sm:pl-6 md:pl-4 lg:pl-6">
                           <span
-                            data-cy="e-commerce--table-transaction__transaction_status-md"
+                            data-cy={`${props.e2eAttr}__transaction_status-md`}
                             className={`${statusStyles[item.transactionStatus]}
                              font-semibold inline-block  rounded-lg h-1/2 px-3 md:px-1 lg:px-3 w-24 md:w-20 lg:w-24 text-center`}
                           >
@@ -105,23 +111,24 @@ export const TableTransaction = (props: TableTransactionProps) => {
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-600 font-semibold">
                           <div className="flex flex-row">
                             <div className="flex-shrink-0 flex justify-center w-1/6 ">
-                              <img
-                                data-cy="e-commerce--table-transaction__image-md"
-                                className="block h-8 w-auto"
-                                src={
-                                  imagenes[
-                                    item.paymentType === "CARD"
-                                      ? "CARD"
-                                      : item.paymentType
-                                  ]
-                                }
-                                alt="LogoMetPago"
-                              />
+                              {item.paymentType === "CARD" ? (
+                                <CreditCardIcon
+                                  aria-hidden="true"
+                                  className="h-8 w-8"
+                                />
+                              ) : (
+                                <img
+                                  data-cy={`${props.e2eAttr}__image-md`}
+                                  className="block h-8 w-auto"
+                                  src={imagenes[item.paymentType]}
+                                  alt="LogoMetPago"
+                                />
+                              )}
                             </div>
                             <div className="flex flex-col w-full px-3 lg:w-full">
                               <span
                                 className="font-bold"
-                                data-cy="e-commerce--table-transaction__money-md"
+                                data-cy={`${props.e2eAttr}__money-md`}
                               >
                                 {parseCurrency(item.totalTransactionValue)}
                               </span>
@@ -133,11 +140,13 @@ export const TableTransaction = (props: TableTransactionProps) => {
                           <div className="flex flex-col">
                             <span
                               className="font-bold"
-                              data-cy="e-commerce--table-transaction__transactionId-md"
+                              data-cy={`${props.e2eAttr}__transactionId-md`}
                             >
                               {`#${item.transactionId}`}
                             </span>
-                            <span data-cy="e-commerce--table-transaction__reference-md">{`Ref: ${item.reference}`}</span>
+                            <span
+                              data-cy={`${props.e2eAttr}__reference-md`}
+                            >{`Ref: ${item.reference}`}</span>
                           </div>
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-600 font-semibold">
@@ -148,7 +157,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                                 className="h-6 w-6"
                               />
                               <span
-                                data-cy="e-commerce--table-transaction__date_hour-md"
+                                data-cy={`${props.e2eAttr}__date_hour-md`}
                                 className="ml-1"
                               >
                                 {parseDate(item.transactionDate).hour}
@@ -161,7 +170,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                                 className="h-6 w-6"
                               />
                               <span
-                                data-cy="e-commerce--table-transaction__date-md"
+                                data-cy={`${props.e2eAttr}__date-md`}
                                 className="ml-1"
                               >
                                 {parseDate(item.transactionDate).date}
@@ -182,12 +191,14 @@ export const TableTransaction = (props: TableTransactionProps) => {
                       Mostrando <span className="font-medium">{start + 1}</span>{" "}
                       de{" "}
                       <span className="font-medium">
-                        {limit > props.order.length
-                          ? props.order.length
+                        {limit > props.order.transactions.length
+                          ? props.order.transactions.length
                           : limit}
                       </span>{" "}
                       de{" "}
-                      <span className="font-medium">{props.order.length}</span>{" "}
+                      <span className="font-medium">
+                        {props.order.transactions.length}
+                      </span>{" "}
                       resultados
                     </p>
                   </div>
@@ -203,7 +214,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                       className={
                         "inline-flex relative items-center py-2 px-4 ml-3 text-sm font-medium text-white bg-blue-wompi hover:bg-blue-400 rounded-md border border-gray-300"
                       }
-                      disabled={limit >= props.order.length}
+                      disabled={limit >= props.order.transactions.length}
                       onClick={() => handlePagination("next")}
                     >
                       Siguiente
@@ -224,7 +235,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
               </span>
             </div>
             <ul className="overflow-hidden mt-2 divide-y divide-gray-200 shadow ">
-              {props.order.slice(start, limit).map((item) => (
+              {data.slice(start, limit).map((item) => (
                 <li
                   key={item.reference}
                   className="sm:relative mb-0 "
@@ -283,17 +294,18 @@ export const TableTransaction = (props: TableTransactionProps) => {
                           <span>{`Ref: ${item.reference}`}</span>
                         </div>
                         <div className="flex flex-col">
-                          <img
-                            className="block h-8 w-8"
-                            src={
-                              imagenes[
-                                item.paymentType === "CARD"
-                                  ? "CARD"
-                                  : item.paymentType
-                              ]
-                            }
-                            alt="LogoMetPago"
-                          />
+                          {item.paymentType === "CARD" ? (
+                            <CreditCardIcon
+                              aria-hidden="true"
+                              className="h-8 w-8"
+                            />
+                          ) : (
+                            <img
+                              className="block h-8 w-8"
+                              src={imagenes[item.paymentType]}
+                              alt="LogoMetPago"
+                            />
+                          )}
                         </div>
                       </div>
 
@@ -364,17 +376,18 @@ export const TableTransaction = (props: TableTransactionProps) => {
                             Metodo de pago
                           </span>
                           <div className="flex flex-col">
-                            <img
-                              className="block h-8 w-8"
-                              src={
-                                imagenes[
-                                  item.paymentType === "CARD"
-                                    ? "CARD"
-                                    : item.paymentType
-                                ]
-                              }
-                              alt="LogoMetPago"
-                            />
+                            {item.paymentType === "CARD" ? (
+                              <CreditCardIcon
+                                aria-hidden="true"
+                                className="h-8 w-8"
+                              />
+                            ) : (
+                              <img
+                                className="block h-8 w-8"
+                                src={imagenes[item.paymentType]}
+                                alt="LogoMetPago"
+                              />
+                            )}
                           </div>
                         </div>
                       </div>
@@ -405,7 +418,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                 <button
                   type="button"
                   className="bg-blue-wompi hover:bg-blue-800 inline-flex relative items-center py-2 px-4 ml-3 text-sm font-medium text-white rounded-md border border-gray-300"
-                  disabled={limit >= props.order.length}
+                  disabled={limit >= props.order.transactions.length}
                   onClick={() => handlePagination("next")}
                 >
                   Siguiente

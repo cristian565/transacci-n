@@ -12,5 +12,6 @@ import logoBellaPiel from './logo-BellaPiel.svg'
     PSE: logoPse,
     MASTERCARD: logoMasterCard, 
     VISA: logoVisa,
-    BELLAPIEL: logoBellaPiel
+    BELLAPIEL: logoBellaPiel,
+    BANCOLOMBIA_TRANSFER: logoBancolombia
 }

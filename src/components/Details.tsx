@@ -38,9 +38,10 @@ export const Details = (props: DetailsProps) => {
         {/*    <button onClick={handleHome}>
 ATRAS
         </button> */}
-        <main className="py-2 md:py-9 ">
+        <main className="py-2 md:py-9"
+        data-cy={props.e2eAttr}>
           {/* Page header */}
-          <div className="mx-auto px-4 h-10 sm:px-6  md:flex md:content-center  md:space-x-2 lg:max-w-7xl lg:px-8">
+          <div className=" mx-auto px-4 h-10 sm:px-6  md:flex md:content-center  md:space-x-2 lg:max-w-7xl lg:px-8">
             <ArrowLeftIcon
              aria-hidden="true"
              onClick={() => {

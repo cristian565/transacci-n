@@ -29,7 +29,7 @@ export const SearchForm = (props: SearchFormProps) => {
     onSubmit: (values) => {
       props.searchValue(values);
 
-      props.cleanSeacrh(true);
+      props.cleanSeacrh(false);
     },
   });
   const resetValuesForm = () => {
@@ -42,13 +42,17 @@ export const SearchForm = (props: SearchFormProps) => {
       refTransaction: "",
       emailUser: "",
     });
-    props.cleanSeacrh(false);
+    props.cleanSeacrh(true);
   };
 
   return (
-    <div className="relative mt-2 px-4 lg:px-0 lg:mt-0 lg:w-full sm:flex sm:items-center md:flex md:items-center py-4 rounded-lg w-4/5 sm:w-3/5 md:w-4/5 mx-auto bg-gray-50 drop-shadow-lg">
+    <div 
+    className="relative mt-2 px-4 lg:px-0 lg:mt-0 lg:w-full sm:flex sm:items-center md:flex md:items-center py-4 rounded-lg w-4/5 sm:w-3/5 md:w-4/5 mx-auto bg-gray-50 drop-shadow-lg"
+    data-cy={props.e2eAttr}
+    >
       <div
-        onClick={() => props.stateFilter(false)}
+        onClick={() => {props.stateFilter(false)
+        props.cleanSeacrh(true)}}
         className="absolute top-1 lg:top-0 right-0 cursor-pointer flex flex-row px-2 "
       >
         <XIcon
@@ -85,6 +89,7 @@ export const SearchForm = (props: SearchFormProps) => {
                     "block text-sm font-medium text-gray-700 capitalize",
                 }}
                 touched={searchForm.touched.idTransaction}
+                e2eAttr={`${props.e2eAttr}__idTransaction`}
               />
             </div>
 
@@ -109,6 +114,7 @@ export const SearchForm = (props: SearchFormProps) => {
                     "block text-sm font-medium text-gray-700 capitalize",
                 }}
                 touched={searchForm.touched.refTransaction}
+                e2eAttr={`${props.e2eAttr}__refTransaction`}
               />
             </div>
 
@@ -133,6 +139,7 @@ export const SearchForm = (props: SearchFormProps) => {
                     "block text-sm font-medium text-gray-700 capitalize",
                 }}
                 touched={searchForm.touched.emailUser}
+                e2eAttr={`${props.e2eAttr}__emailUser`}
               />
             </div>
           </div>
@@ -171,6 +178,7 @@ export const SearchForm = (props: SearchFormProps) => {
                   value: searchForm.values.stateOrders,
                 }}
                 touched={searchForm.touched.stateOrders}
+                e2eAttr={`${props.e2eAttr}__stateOrders`}
               />
             </div>
             <div className="md:w-2/5 mt-2 md:mt-0 lg:mt-4 xl:w-44">
@@ -206,7 +214,8 @@ export const SearchForm = (props: SearchFormProps) => {
                   value: searchForm.values.paymentMethod,
                 }}
                 touched={searchForm.touched.paymentMethod}
-              />
+                e2eAttr={`${props.e2eAttr}__paymentMethod`}
+/>
             </div>
           </div>
         </div>

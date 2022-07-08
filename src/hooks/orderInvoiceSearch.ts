@@ -16,8 +16,8 @@ const paymentMethod: Record<string, string> = {
   Bancolombia:"BANCOLOMBIA",
 };
 
-export function orderInvoiceSearch(searchValue:SearchFormValue, data: Order[]){
- return data.filter(
+export function orderInvoiceSearch(searchValue:SearchFormValue, data: Order){
+ return data.transactions.filter(
    (item)=>( (item.transactionStatus===statusOrder[searchValue.stateOrders] || searchValue.stateOrders=="" )
     && (item.reference== searchValue.refTransaction.toString() || searchValue.refTransaction=="") 
     && (item.paymentType==paymentMethod[searchValue.paymentMethod] || searchValue.paymentMethod=="") 
