@@ -21,6 +21,8 @@ import Modal from "../components/Modal";
 import OrderNotFound from "../components/OrderNotFound";
 import { useOrders } from "../hooks/useOrders";
 import ServerDown from "../components/ServerDow";
+import { useKeycloak } from "@react-keycloak/web";
+import { useNavigate } from "react-router";
 
 export const Home = () => {
   const navigation = [
@@ -85,17 +87,19 @@ export const Home = () => {
   const [removeSearch, setremoveSearch] = useState<boolean>(false);
   const [openFilter, setopenFilter] = useState<boolean>(false);
   const [showOrderNotFound, setShowOrderNotFound] = useState<boolean>(false);
-  
-  
+  const { keycloak, initialized } = useKeycloak(); 
+  const  navegation = useNavigate();
+
 
   const {
     orders,
     isLoading,
     isError
   } = useOrders(
-    "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/",
-    {userId: 8301374612,}    
-  );
+    "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/"
+  ,(keycloak.token ? keycloak.token : ""));
+
+  console.log(keycloak,"aqui keycloak");
 
   useEffect(() => {
     console.log(orders?.transactions,"aqui data del ent poin")
@@ -105,23 +109,27 @@ export const Home = () => {
     ); */
   }, [orders]) 
 
-  /*  useEffect(() => {
+    useEffect(() => {
     if (!removeSearch) {
-      if (orderInvoiceSearch(searchValue,orders.transactions).length !== 0) {
+      if (orderInvoiceSearch(searchValue,orders?.transactions).length !== 0) {
        setDataOrder(orderInvoiceSearch(searchValue,orders?.transactions));
       } else {
        
         setShowNoDateFilter(true);
       }
-    } else { setDataOrder(dataOrder);}
+    } else { setDataOrder(orders?.transactions);}
    
-  }, [searchValue, removeSearch,orders]) ; */
+  }, [searchValue, removeSearch,orders]) ;
 
-
+const  handlePrueba=()=>{
+  keycloak.logout();
+  navegation("/")
+}
   
 
   return (
     <>
+    {console.log(keycloak.token,"token")}
       <div className="h-screen">
         {/* Componente para movil */}
 
@@ -284,7 +292,7 @@ export const Home = () => {
                 <div className="flex-shrink-0 w-full group block">
                   <div
                     className="flex justify-center cursor-pointer"
-                    onClick={() => alert("cerrar sesion listo")}
+                    onClick={() =>  handlePrueba()}
                   >
                     <div className="mr-2">
                       <p className="text-xl font-semibold text-blue-wompi hover:text-blue-300 active:bg-gray-300 focus:ring">

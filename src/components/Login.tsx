@@ -6,6 +6,7 @@ import { accesUserLogin } from "../hooks/accesUserLogin";
 import Modal from "./Modal";
 import { UserAccesError } from "./UserAccesError";
 import { useKeycloak } from "@react-keycloak/web";
+import { useNavigate, Navigate } from "react-router-dom";
 
 export interface LoginProps {
   accesUser?: Dispatch<SetStateAction<boolean>>;
@@ -17,6 +18,10 @@ export const Login = (props: LoginProps) => {
   const [showErrorAcces, setShowErrorAcces] = useState<boolean>(false);
   const [showLoadingButton, setShowLoadingButtons] = useState<boolean>(true);
  const { keycloak, initialized } = useKeycloak(); 
+   const  history = useNavigate();
+
+
+
   /*const navegate = useNavigate();
    const handleLogin = () => {
     navegate("/Home", {
@@ -24,7 +29,7 @@ export const Login = (props: LoginProps) => {
     });
   }; */
 
-  const searchForm = useFormik({
+ /*  const searchForm = useFormik({
     initialValues: {
       user: "",
       password: "",
@@ -35,7 +40,7 @@ export const Login = (props: LoginProps) => {
     onSubmit: (values) => {
       setValuesFormt(values);
     },
-  });
+  }); */
 
   /* useEffect(() => {
     accesUserLogin(valuesFormt.user, valuesFormt.password)
@@ -43,10 +48,32 @@ export const Login = (props: LoginProps) => {
       : setShowErrorAcces(true);
   }, [valuesFormt]); */
 
+   useEffect(() => {
+    
+    console.log("---> ",keycloak);
+    if(!keycloak.authenticated){
+      //keycloak.login();
+      console.log("entro")
+    }
+  // if(keycloak.authenticated){
+       
+  //       console.log("HOME")
+  //     }
+  },[]);
+   
+
   return (
     <>
-   {console.log(keycloak)}
-      <div className="h-screen flex flex-col lg:flex-row"
+
+                   {!keycloak.authenticated && keycloak.authenticated==!"undefined" && ( 
+                   keycloak.login()
+                   )}
+    {/* <div onClick={()=>{keycloak.login()}}>
+      ENTART
+    </div>
+   {console.log(keycloak)} */}
+
+      {/* <div className="h-screen flex flex-col lg:flex-row"
       data-cy={"login"}>
         <div className="h-3/4  border-r-2 order-last items-start border-gray-200 flex-1 flex flex-col justify-start  lg:h-full lg:justify-center xl:w-5/12 lg:py-12 px-4 sm:px-6 lg:order-none lg:flex-none lg:px-16 xl:px-24">
           <div className="mx-auto w-full max-w-sm lg:w-96">
@@ -117,7 +144,7 @@ export const Login = (props: LoginProps) => {
                   <div>
                    {!keycloak.authenticated && (  
                     <button
-                      /* onClick={handleLogin} */
+                      
                       type="button"
                       className="w-full justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                       data-cy={"login-send__button-normal"}
@@ -133,10 +160,10 @@ export const Login = (props: LoginProps) => {
                      className="w-full justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                      onClick={() => keycloak.logout()}
                    >
-                     Logout{/*  ({keycloak.tokenParsed.preferred_username}) */}
+                     
                    </button>
                    )}  
-                    {/* <Transition show={showLoadingButton}>
+                    <Transition show={showLoadingButton}>
                       <button
                         disabled={true}
                         type="submit"
@@ -164,7 +191,7 @@ export const Login = (props: LoginProps) => {
                         </svg>
                         <span>Procesando...</span>
                       </button>
-                    </Transition> */}
+                    </Transition> 
                   </div>
                 </form>
               </div>
@@ -201,8 +228,8 @@ export const Login = (props: LoginProps) => {
                 "bg-blue-400 inline-flex justify-center py-2 px-4 w-full text-base font-medium text-white bg-pantone-blue-100 hover:bg-pantone-blue-300 rounded-md border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm sm:text-sm",
             }}
           />
-        </Modal> */}
-      </div>
+        </Modal>
+      </div> */}
     </>
   );
 };

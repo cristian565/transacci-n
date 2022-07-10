@@ -8,6 +8,6 @@ import { useKeycloak } from "@react-keycloak/web";
 
 export const PrivateRouter = ({ children }:any) => {
     const { keycloak, initialized } = useKeycloak(); 
-
+       
     return keycloak.authenticated ? children : null;
 };
