@@ -23,6 +23,9 @@ import { useOrders } from "../hooks/useOrders";
 import ServerDown from "../components/ServerDow";
 import { useKeycloak } from "@react-keycloak/web";
 import { useNavigate } from "react-router";
+import { DetailsValue } from "../components/interface/detailsValue";
+import { useOrdersDetail } from "../hooks/useOrdersDetail";
+import { OrderDetails } from "../components/interface/orderDetails";
 
 export const Home = () => {
   const navigation = [
@@ -83,14 +86,56 @@ export const Home = () => {
     refTransaction: "",
     emailUser: "",
   });
+  const [detailsValue, setDetailsValue] = useState<DetailsValue>({
+    transactionId:"",
+    paymentGateway:""
+  })
   const [openTransaction, setOpenTransaction] = useState<boolean>(true);
   const [removeSearch, setremoveSearch] = useState<boolean>(false);
   const [openFilter, setopenFilter] = useState<boolean>(false);
   const [showOrderNotFound, setShowOrderNotFound] = useState<boolean>(false);
   const { keycloak, initialized } = useKeycloak(); 
   const  navegation = useNavigate();
-
-
+  const [dataDetails, setdataDetails] = useState<OrderDetails>(
+   {data:{
+      id: "113864-1656958379-67204",
+      createdAt: "2022-07-04T18:12:59.466Z",
+      finalizedAt: "2022-07-07T15:21:23.204Z",
+      amountInCents: 5200000,
+      reference: "10",
+      customerEmail: "programador2@hardtech.co",
+      currency: "COP",
+      paymentMethodType: "PSE",
+      paymentMethod: {
+          type: "PSE",
+          extra: {
+              ticket_id: "113864165695837967204",
+              return_code: "SUCCESS",
+              request_date: "2022-07-07",
+              async_payment_url: "https://sandbox.wompi.co/v1/pse/redirect?ticket_id=113864165695837967204",
+              traceability_code: "SANDBOX-N7eqPgFMWX-OK",
+              transaction_cycle: "1",
+              transaction_state: null,
+              external_identifier: "SANDBOX-N7eqPgFMWX-OK",
+              bank_processing_date: "2022-07-07"
+          },
+          user_type: 0,
+          user_legal_id: "1999888777",
+          user_legal_id_type: "CC",
+          payment_description: "Pago a Tienda Wompi",
+          financial_institution_code: "1"
+      },
+      status: "APPROVED",
+      statusMessage: null,
+      shippingAddress: null,
+      redirectUrl: null,
+   paymentSourceId: null,
+      paymentLinkId: "VjertO",
+      customerData: null,
+      billingData: null
+  }}
+  )
+  
   const {
     orders,
     isLoading,
@@ -109,7 +154,7 @@ export const Home = () => {
     ); */
   }, [orders]) 
 
-    useEffect(() => {
+ /*    useEffect(() => {
     if (!removeSearch) {
       if (orderInvoiceSearch(searchValue,orders?.transactions).length !== 0) {
        setDataOrder(orderInvoiceSearch(searchValue,orders?.transactions));
@@ -119,17 +164,31 @@ export const Home = () => {
       }
     } else { setDataOrder(orders?.transactions);}
    
-  }, [searchValue, removeSearch,orders]) ;
+  }, [searchValue, removeSearch,orders]) ; */
 
 const  handlePrueba=()=>{
   keycloak.logout();
   navegation("/")
 }
-  
+
+const {
+  orders:details,
+  isLoading:detailsisLoading,
+  isError:detailsisError,
+} = useOrdersDetail(
+  "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/"
+,(keycloak.token ? keycloak.token : ""),detailsValue.paymentGateway,detailsValue.transactionId);
+
+console.log("-------> ",details);
+
+useEffect(() => {
+  setdataDetails(details)
+  console.log("el datadetails",dataDetails);
+}, [details])
 
   return (
     <>
-    {console.log(keycloak.token,"token")}
+ 
       <div className="h-screen">
         {/* Componente para movil */}
 
@@ -216,12 +275,14 @@ const  handlePrueba=()=>{
             leaveTo="opacity-0 translate-y-1"
           >
             <TableTransaction
+             detailsValue={setDetailsValue}
+           
               openTransaction={setOpenTransaction}
               order={dataOrder}
               e2eAttr="table-transaction"
             />
               </Transition> 
-
+              
               <Transition
             show={isLoading}
            
@@ -232,7 +293,7 @@ const  handlePrueba=()=>{
               </Transition>
 
           <Transition
-            show={!openTransaction}
+            show={!openTransaction && !!details}
             enter="transition ease-out duration-200"
             enterFrom="opacity-0 translate-y-1"
             enterTo="opacity-100 translate-y-0"
@@ -241,10 +302,17 @@ const  handlePrueba=()=>{
             leaveTo="opacity-0 translate-y-1"
           >
             <Details
+            detailsValue={
+              {
+                transactionId:detailsValue.transactionId,
+                 paymentGateway:detailsValue.paymentGateway,
+              }}
               onClose={() => {
                 setOpenTransaction(true);
               }}
+              // status={(dataDetails)?dataDetails.data.status:"hola"}
             e2eAttr="details--transaction"
+            // status={""}
             />
           </Transition>
         </div>
@@ -386,6 +454,7 @@ const  handlePrueba=()=>{
                         leaveTo="opacity-0 translate-y-1"
                       >
                         <TableTransaction
+                        detailsValue={setDetailsValue}
                           openTransaction={setOpenTransaction}
                           order={dataOrder}
                         />
@@ -400,7 +469,7 @@ const  handlePrueba=()=>{
                       </Transition> 
 
                       <Transition
-                        show={!openTransaction}
+                        show={!openTransaction && details?.data.amountInCents!==0}
                         enter="transition ease-out duration-200"
                         enterFrom="opacity-0 translate-y-1"
                         enterTo="opacity-100 translate-y-0"
@@ -409,9 +478,15 @@ const  handlePrueba=()=>{
                         leaveTo="opacity-0 translate-y-1"
                       >
                         <Details
+                        detailsValue={
+                          {
+                            transactionId:detailsValue.transactionId,
+                             paymentGateway:detailsValue.paymentGateway,
+                          }}
                           onClose={() => {
                             setOpenTransaction(true);
                           }}
+                          /* status={(details.data.status)?dataDetails.data.status:"hola"} */
                         />
                       </Transition>
                     </div>

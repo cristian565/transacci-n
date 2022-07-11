@@ -1,11 +1,14 @@
 export interface OrderDetails {
   data: {
-    reference: string,
-    id: string;
-    created_at: string;
-    amount_in_cents: number;
+    amountInCents: number;
+    billingData: null;
+    createdAt: string;
     currency: string;
-    payment_method_type: string;
+    customerData: null;
+    customerEmail: string;
+    finalizedAt: string;
+    id: string;
+    paymentLinkId: string;
     payment_method: {
       type: string;
       extra: {
@@ -25,9 +28,8 @@ export interface OrderDetails {
         exp_year?: string;
         exp_month?: string;
         card_holder?: string;
-        business_agreement_code?: string
-        payment_intention_identifier?: string
-        
+        business_agreement_code?: string;
+        payment_intention_identifier?: string;
       };
       phone_number?: string;
       token?: string;
@@ -37,8 +39,13 @@ export interface OrderDetails {
       user_legal_id_type?: string;
       payment_description?: string;
       financial_institution_code?: string;
-
     };
+    paymentMethodType: string;
+    paymentSourceId: null;
+    redirectUrl: null;
+    reference: string;
+    shippingAddress: null;
+
     redirect_url: string;
     status: string;
     status_message: string;

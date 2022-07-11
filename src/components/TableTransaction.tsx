@@ -9,8 +9,10 @@ import {
   CalendarIcon,
   CreditCardIcon,
 } from "@heroicons/react/outline";
+import { DetailsValue } from "./interface/detailsValue";
 
 export interface TableTransactionProps {
+  detailsValue: Dispatch<SetStateAction<DetailsValue>>;
   openTransaction: Dispatch<SetStateAction<boolean>>;
   order: Order;
   e2eAttr?: string;
@@ -94,7 +96,14 @@ export const TableTransaction = (props: TableTransactionProps) => {
                     {data.slice(start, limit).map((item) => (
                       <tr
                         key={item.reference}
-                        onClick={() => [handleDetails(item.reference)]}
+                        onClick={() =>{
+                          props.detailsValue(
+                            {
+                              transactionId:item.transactionId,
+                              paymentGateway:item.paymentGateway
+                            })
+                          props.openTransaction(false)
+                        }}
                         className="cursor-pointer hover:bg-gray-300 active:bg-gray-300 focus:ring"
                         dta-cy={`table-transaction__${item.reference}`}
                         id={item.reference}

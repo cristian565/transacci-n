@@ -1,18 +1,27 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { parseCurrency } from "../hooks/parse-currency";
 import { parseDate } from "../hooks/parse-date";
 import { imagenes } from "../assets/imagenes";
-import {ArrowLeftIcon,ClockIcon,CalendarIcon} from "@heroicons/react/outline";
+import {ArrowLeftIcon,ClockIcon,CalendarIcon, CreditCardIcon} from "@heroicons/react/outline";
+import { OrderDetails } from "./interface/orderDetails";
+import { useOrdersDetail } from "../hooks/useOrdersDetail";
+import { useKeycloak } from "@react-keycloak/web";
+import { DetailsValue } from "./interface/detailsValue";
+
 
 
 
 export interface DetailsProps {
+  detailsValue:DetailsValue
+  data?:OrderDetails;
+
   onClose: () => void;
   e2eAttr?: string;
 }
 
 export const Details = (props: DetailsProps) => {
+const [data, setdata] = useState<OrderDetails>()
   const statusStyles: Record<string, string> = {
     DECLINED: "bg-red-400 text-red-700",
     ERROR: "bg-red-400 text-red-700",
@@ -27,14 +36,37 @@ export const Details = (props: DetailsProps) => {
     VOIDED: "Anulada",
   };
 
+  const { keycloak, initialized } = useKeycloak(); 
   /* const navegate = useNavigate();
   const handleHome = () => {
     navegate("/Login");
   };
  */
+  
+ /* const {
+    orders:details,
+    isLoading:detailsisLoading,
+    isError:detailsisError,
+  } = useOrdersDetail(
+    "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/"
+  ,(keycloak.token ? keycloak.token : ""),props.detailsValue.paymentGateway,props.detailsValue.transactionId);
+    
+  console.log(props.detailsValue,"valor del obejto")
+    console.log(details,"valor de la consulta de detalles")
+
+  
+ useEffect(() => {
+   setdata(details)
+ }, [details])
+ 
+ */
+
+
+
   return (
     <>
-      <div className="min-h-full">
+      
+        <div className="min-h-full">
         {/*    <button onClick={handleHome}>
 ATRAS
         </button> */}
@@ -73,18 +105,18 @@ ATRAS
                           Monto
                         </dt>
                         <dd className="mt-1 text-sm font-semibold text-gray-900">{`COP ${parseCurrency(
-                          330221125356
+                          454322345432
                         )}`}</dd>
                       </div>
                       <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">
-                          Estado
+                          Estado 
                         </dt>
                         <span
                           className={`${statusStyles["DECLINED"]}
                              font-semibold inline-block  rounded-lg h-1/2 px-3 w-24 text-center`}
                         >
-                          {statusOrder["DECLINED"]}
+                          
                         </span>
                       </div>
                       <div className="sm:col-span-1">
@@ -92,7 +124,7 @@ ATRAS
                           Detalle del estado
                         </dt>
                         <dd className="mt-1 text-sm text-gray-900">
-                          Denegada en ruta
+                          PREGUNTAR
                         </dd>
                       </div>
                       <div className="sm:col-span-1">
@@ -100,7 +132,7 @@ ATRAS
                           Transacción #
                         </dt>
                         <dd className="mt-1 text-sm text-gray-900">
-                          555-555-5555
+                          23432234
                         </dd>
                       </div>
                       <div className="sm:col-span-1 ">
@@ -108,11 +140,13 @@ ATRAS
                           Medio de pago
                         </dt>
                         <div className="flex flex-row">
-                          <img
-                            className="block h-8 w-auto"
-                            src={imagenes["VISA"]}
-                            alt="MetodoPago"
-                          />
+                                <img
+                                  data-cy={`${props.e2eAttr}__image-md`}
+                                  className="block h-8 w-auto"
+                                  src={imagenes["PSE"]}
+                                  alt="LogoMetPago"
+                                />
+                              
                           <dd className="mt-1 text-sm text-gray-900">-3342</dd>
                         </div>
                       </div>
@@ -294,6 +328,7 @@ ATRAS
           </div>
         </main>
       </div>
+      
     </>
   );
 };
