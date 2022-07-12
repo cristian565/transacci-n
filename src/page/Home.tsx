@@ -15,7 +15,7 @@ import { SearchForm } from "../components/SearchForm";
 import { SearchFormValue } from "../components/interface/searchFormValue";
 import { orderInvoiceSearch } from "../hooks/orderInvoiceSearch";
 import { Order } from "../components/interface/order";
- import { TableTransactionSkeleton } from "../components/TableTransactionSkeleton"; 
+import { TableTransactionSkeleton } from "../components/TableTransactionSkeleton";
 import Modal from "../components/Modal";
 /* import { NotFilterData } from "./NotFilterData"; */
 import OrderNotFound from "../components/OrderNotFound";
@@ -24,15 +24,13 @@ import ServerDown from "../components/ServerDow";
 import { useKeycloak } from "@react-keycloak/web";
 import { useNavigate } from "react-router";
 import { DetailsValue } from "../components/interface/detailsValue";
-import { useOrdersDetail } from "../hooks/useOrdersDetail";
+import { ordersDetail } from "../hooks/ordersDetail";
 import { OrderDetails } from "../components/interface/orderDetails";
 
 export const Home = () => {
   const navigation = [
     { name: "Transacciones", href: "#", icon: HomeIcon, current: true },
   ];
-  
-
 
   function classNames(...classes: any) {
     return classes.filter(Boolean).join(" ");
@@ -76,7 +74,7 @@ export const Home = () => {
     },
   ];
   const [dataOrder, setDataOrder] = useState<any>({});
-/*   const dataOrder = useMemo(() => data, [data]); */
+  /*   const dataOrder = useMemo(() => data, [data]); */
   const [showNoDateFilter, setShowNoDateFilter] = useState<boolean>(false);
 
   const [searchValue, setSearchValue] = useState<SearchFormValue>({
@@ -87,74 +85,34 @@ export const Home = () => {
     emailUser: "",
   });
   const [detailsValue, setDetailsValue] = useState<DetailsValue>({
-    transactionId:"",
-    paymentGateway:""
-  })
+    transactionId: "",
+    paymentGateway: "",
+  });
   const [openTransaction, setOpenTransaction] = useState<boolean>(true);
   const [removeSearch, setremoveSearch] = useState<boolean>(false);
   const [openFilter, setopenFilter] = useState<boolean>(false);
   const [showOrderNotFound, setShowOrderNotFound] = useState<boolean>(false);
-  const { keycloak, initialized } = useKeycloak(); 
-  const  navegation = useNavigate();
-  const [dataDetails, setdataDetails] = useState<OrderDetails>(
-   {data:{
-      id: "113864-1656958379-67204",
-      createdAt: "2022-07-04T18:12:59.466Z",
-      finalizedAt: "2022-07-07T15:21:23.204Z",
-      amountInCents: 5200000,
-      reference: "10",
-      customerEmail: "programador2@hardtech.co",
-      currency: "COP",
-      paymentMethodType: "PSE",
-      paymentMethod: {
-          type: "PSE",
-          extra: {
-              ticket_id: "113864165695837967204",
-              return_code: "SUCCESS",
-              request_date: "2022-07-07",
-              async_payment_url: "https://sandbox.wompi.co/v1/pse/redirect?ticket_id=113864165695837967204",
-              traceability_code: "SANDBOX-N7eqPgFMWX-OK",
-              transaction_cycle: "1",
-              transaction_state: null,
-              external_identifier: "SANDBOX-N7eqPgFMWX-OK",
-              bank_processing_date: "2022-07-07"
-          },
-          user_type: 0,
-          user_legal_id: "1999888777",
-          user_legal_id_type: "CC",
-          payment_description: "Pago a Tienda Wompi",
-          financial_institution_code: "1"
-      },
-      status: "APPROVED",
-      statusMessage: null,
-      shippingAddress: null,
-      redirectUrl: null,
-   paymentSourceId: null,
-      paymentLinkId: "VjertO",
-      customerData: null,
-      billingData: null
-  }}
-  )
-  
-  const {
-    orders,
-    isLoading,
-    isError
-  } = useOrders(
-    "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/"
-  ,(keycloak.token ? keycloak.token : ""));
+  const { keycloak, initialized } = useKeycloak();
+  const navegation = useNavigate();
+  const [dataDetails, setdataDetails] = useState<any>();
+  const [dataConsulta, setdataConsulta] = useState<OrderDetails>();
+  const [bandera,setbandera] = useState<boolean>(false);
 
-  console.log(keycloak,"aqui keycloak");
+
+  const { orders, isLoading, isError } = useOrders(
+    "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/",
+    keycloak.token ? keycloak.token : ""
+  );
 
   useEffect(() => {
-    console.log(orders?.transactions,"aqui data del ent poin")
-    setDataOrder(orders)
+    
+    setDataOrder(orders);
     /* setShowOrderNotFound(
       isLoading && isError ? false : !!isError
     ); */
-  }, [orders]) 
+  }, [orders]);
 
- /*    useEffect(() => {
+  /*    useEffect(() => {
     if (!removeSearch) {
       if (orderInvoiceSearch(searchValue,orders?.transactions).length !== 0) {
        setDataOrder(orderInvoiceSearch(searchValue,orders?.transactions));
@@ -166,32 +124,47 @@ export const Home = () => {
    
   }, [searchValue, removeSearch,orders]) ; */
 
-const  handlePrueba=()=>{
-  keycloak.logout();
-  navegation("/")
-}
+  const handlePrueba = () => {
+    keycloak.logout();
+    navegation("/");
+  };
 
-const {
-  orders:details,
-  isLoading:detailsisLoading,
-  isError:detailsisError,
-} = useOrdersDetail(
-  "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/"
-,(keycloak.token ? keycloak.token : ""),detailsValue.paymentGateway,detailsValue.transactionId);
-
-console.log("-------> ",details);
-
+  useEffect(() => {
+    (!openTransaction)&&(
+      ordersDetail(
+        "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/"
+      ,(keycloak.token ? keycloak.token : ""),detailsValue.paymentGateway,detailsValue.transactionId).then((resp)=>{
+       
+        if (resp.status==200) {
+          console.log('Resp consulta ',resp)
+          
+          setdataConsulta(resp.data)
+          
+          console.log('data exit')
+        }else{
+            if (resp.status==500){
+              console.log('Internal server error')
+               
+            }
+        }
+    })
+    )
+  }, [openTransaction])
+  
 useEffect(() => {
-  setdataDetails(details)
-  console.log("el datadetails",dataDetails);
-}, [details])
+  if (dataConsulta) {
+    setbandera(true)
+  }
+}, [dataConsulta])
+
 
   return (
     <>
- 
+   
+
       <div className="h-screen">
         {/* Componente para movil */}
-
+    
         <div className="h-screen w-full lg:hidden">
           <div className="relative bg-white">
             <div
@@ -265,7 +238,7 @@ useEffect(() => {
             />
           </Transition>
 
-           <Transition
+          <Transition
             show={openTransaction && !isLoading}
             enter="transition ease-out duration-200"
             enterFrom="opacity-0 translate-y-1"
@@ -275,25 +248,19 @@ useEffect(() => {
             leaveTo="opacity-0 translate-y-1"
           >
             <TableTransaction
-             detailsValue={setDetailsValue}
-           
+              detailsValue={setDetailsValue}
               openTransaction={setOpenTransaction}
               order={dataOrder}
               e2eAttr="table-transaction"
             />
-              </Transition> 
-              
-              <Transition
-            show={isLoading}
-           
-          >
-            <TableTransactionSkeleton
-              e2eAttr="table-transaction"
-            />
-              </Transition>
+          </Transition>
+
+          <Transition show={isLoading}>
+            <TableTransactionSkeleton e2eAttr="table-transaction" />
+          </Transition>
 
           <Transition
-            show={!openTransaction && !!details}
+            show={!openTransaction}
             enter="transition ease-out duration-200"
             enterFrom="opacity-0 translate-y-1"
             enterTo="opacity-100 translate-y-0"
@@ -302,19 +269,21 @@ useEffect(() => {
             leaveTo="opacity-0 translate-y-1"
           >
             <Details
-            detailsValue={
-              {
-                transactionId:detailsValue.transactionId,
-                 paymentGateway:detailsValue.paymentGateway,
+            
+              token={keycloak.token ? keycloak.token : ""}
+              detailsValue={{
+                transactionId: detailsValue.transactionId,
+                paymentGateway: detailsValue.paymentGateway,
               }}
               onClose={() => {
                 setOpenTransaction(true);
               }}
               // status={(dataDetails)?dataDetails.data.status:"hola"}
-            e2eAttr="details--transaction"
-            // status={""}
+              e2eAttr="details--transaction"
+              // status={""}
             />
           </Transition>
+          
         </div>
 
         {/* Static sidebar for desktop */}
@@ -360,7 +329,7 @@ useEffect(() => {
                 <div className="flex-shrink-0 w-full group block">
                   <div
                     className="flex justify-center cursor-pointer"
-                    onClick={() =>  handlePrueba()}
+                    onClick={() => handlePrueba()}
                   >
                     <div className="mr-2">
                       <p className="text-xl font-semibold text-blue-wompi hover:text-blue-300 active:bg-gray-300 focus:ring">
@@ -443,8 +412,8 @@ useEffect(() => {
                           e2eAttr={"search-form"}
                         />
                       </Transition>
-
-                     <Transition
+                      
+                      <Transition
                         show={openTransaction && !isLoading}
                         enter="transition ease-out duration-200"
                         enterFrom="opacity-0 translate-y-1"
@@ -454,22 +423,17 @@ useEffect(() => {
                         leaveTo="opacity-0 translate-y-1"
                       >
                         <TableTransaction
-                        detailsValue={setDetailsValue}
+                          detailsValue={setDetailsValue}
                           openTransaction={setOpenTransaction}
                           order={dataOrder}
                         />
-                      </Transition> 
-                      <Transition
-                        show={isLoading}
-                       
-                      >
-                        <TableTransactionSkeleton
-                        e2eAttr="table-transaction-skeleton"
-                        />
-                      </Transition> 
+                      </Transition>
+                      <Transition show={isLoading}>
+                        <TableTransactionSkeleton e2eAttr="table-transaction-skeleton" />
+                      </Transition>
 
                       <Transition
-                        show={!openTransaction && details?.data.amountInCents!==0}
+                        show={!openTransaction && bandera}
                         enter="transition ease-out duration-200"
                         enterFrom="opacity-0 translate-y-1"
                         enterTo="opacity-100 translate-y-0"
@@ -478,16 +442,20 @@ useEffect(() => {
                         leaveTo="opacity-0 translate-y-1"
                       >
                         <Details
-                        detailsValue={
-                          {
-                            transactionId:detailsValue.transactionId,
-                             paymentGateway:detailsValue.paymentGateway,
+                        data={dataConsulta}
+                          token={keycloak.token ? keycloak.token : ""}
+                          detailsValue={{
+                            transactionId: detailsValue.transactionId,
+                            paymentGateway: detailsValue.paymentGateway,
                           }}
                           onClose={() => {
                             setOpenTransaction(true);
                           }}
                           /* status={(details.data.status)?dataDetails.data.status:"hola"} */
                         />
+                      </Transition>
+                      <Transition show={!bandera}>
+                        <div>holaaa</div>
                       </Transition>
                     </div>
                   </div>

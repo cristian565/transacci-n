@@ -5,22 +5,17 @@ import { parseDate } from "../hooks/parse-date";
 import { imagenes } from "../assets/imagenes";
 import {ArrowLeftIcon,ClockIcon,CalendarIcon, CreditCardIcon} from "@heroicons/react/outline";
 import { OrderDetails } from "./interface/orderDetails";
-import { ordersDetail } from "../hooks/ordersDetail";
 import { useKeycloak } from "@react-keycloak/web";
 import { DetailsValue } from "./interface/detailsValue";
 
 
 
 
-export interface DetailsProps {
-  detailsValue:DetailsValue
-  data?:any;
-  token:string;
-  onClose: () => void;
+export interface DetailsSkeletonProps {
   e2eAttr?: string;
 }
 
-export const Details = memo((props: DetailsProps) => {
+export const DetailsSkeleton = memo((props: DetailsSkeletonProps) => {
 const [data, setdata] = useState<any>(111)
   const statusStyles: Record<string, string> = {
     DECLINED: "bg-red-400 text-red-700",
@@ -36,36 +31,11 @@ const [data, setdata] = useState<any>(111)
     VOIDED: "Anulada",
   };
 
-  const { keycloak, initialized } = useKeycloak(); 
-  /* const navegate = useNavigate();
-  const handleHome = () => {
-    navegate("/Login");
-  };
- */
-  
-//   useOrdersDetail(
-//     "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/"
-//   ,props.token,props.detailsValue.paymentGateway,props.detailsValue.transactionId).then((resp)=>{
-   
-//     if (resp.status==200) {
-//       console.log('Resp consulta ',resp)
-//       console.log('data exit')
-//     }else{
-//         if (resp.status==500){
-//           console.log('Internal server error')
-           
-//         }
-//     }
-// });
-    
-  
-  
-
-  
-
+ 
   return (
     <>
-       {console.log('data en details', props.data)}
+       
+       
         <div className="min-h-full">
         {/*    <button onClick={handleHome}>
 ATRAS
@@ -75,10 +45,7 @@ ATRAS
           {/* Page header */}
           <div className=" mx-auto px-4 h-10 sm:px-6  md:flex md:content-center  md:space-x-2 lg:max-w-7xl lg:px-8">
             <ArrowLeftIcon
-             aria-hidden="true"
-             onClick={() => {
-                props.onClose();
-              }}           
+             aria-hidden="true"    
               className="h-7 w-6 my-1 cursor-pointer"           
             />
             <h1 className="text-2xl text-center md:text-left font-semibold text-gray-900">
@@ -105,7 +72,7 @@ ATRAS
                           Monto
                         </dt>
                         <dd className="mt-1 text-sm font-semibold text-gray-900">{`COP ${parseCurrency(
-                          43473524342153
+                          4543345432
                         )}`}</dd>
                       </div>
                       <div className="sm:col-span-1">
