@@ -4,16 +4,30 @@ import InputBasic from "./InputBasic";
 import { useFormik } from "formik";
 import { SearchFormValue } from "./interface/searchFormValue";
 import {XIcon,SearchIcon,TrashIcon} from "@heroicons/react/outline";
+import { getDataSearch } from "../hooks/dataSearch";
 export interface SearchFormProps {
   stateFilter: Dispatch<SetStateAction<boolean>>;
-  searchValue: Dispatch<SetStateAction<SearchFormValue>>;
   cleanSeacrh: Dispatch<SetStateAction<boolean>>;
+  token:string;
   e2eAttr?: string;
 }
 
+const URI = "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions";
 export const SearchForm = (props: SearchFormProps) => {
   const statusOrderArray = ["Declinada", "Error", "Aprobado", "Anulada"];
   const paymentMethodArray = ["Tarjeta", "Nequi", "Bancolombia", "PSE"];
+  const { token } = props;
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState<any>({});
+  const [showSearch, setshowSearch] = useState<boolean>(false);
+  
+  const [searchValue, setSearchValue] = useState<SearchFormValue>({
+    stateOrders: "",
+    paymentMethod: "",
+    idTransaction: "",
+    refTransaction: "",
+    emailUser: "",
+  });
 
   const searchForm = useFormik({
     initialValues: {
@@ -27,7 +41,7 @@ export const SearchForm = (props: SearchFormProps) => {
     validateOnMount: false,
 
     onSubmit: (values) => {
-      props.searchValue(values);
+      setSearchValue(values);
 
       props.cleanSeacrh(false);
     },
@@ -35,7 +49,7 @@ export const SearchForm = (props: SearchFormProps) => {
   const resetValuesForm = () => {
     searchForm.resetForm();
 
-    props.searchValue({
+    setSearchValue({
       stateOrders: "",
       paymentMethod: "",
       idTransaction: "",
@@ -44,6 +58,30 @@ export const SearchForm = (props: SearchFormProps) => {
     });
     props.cleanSeacrh(true);
   };
+
+  // fromDate?: string,
+  // untilDate?: string,
+  useEffect(() => {
+    if(showSearch){
+    getDataSearch(
+      URI,
+      token,
+      setLoading,
+      setData,
+      searchValue.idTransaction,
+      searchValue.refTransaction,
+      searchValue.stateOrders,
+      "NEQUI",
+      searchValue.emailUser
+      ); }
+  }, [searchValue,showSearch])
+
+  useEffect(() => {
+    if (data) {
+      console.log("data search",data);
+      console.log("data searchVlue",searchValue);
+    }  
+  }, [data])
 
   return (
     <div 
@@ -221,9 +259,9 @@ export const SearchForm = (props: SearchFormProps) => {
         </div>
 
         <div className="flex flex-row space-x-8 content-center justify-center mt-6">
-          <button
-            type="submit"
+          <button        
             className="bg-blue-wompi w-32 flex flex-row justify-center py-2 h-11 sm:h-auto sm:py-1 content-center mt-1 hover:bg-blue-800 text-white border border-solid rounded-xl cursor-pointer md:w-32 md:h-9"
+            onClick={() => setshowSearch(true)}
           >
             <SearchIcon
               aria-hidden="true"

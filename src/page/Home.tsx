@@ -35,55 +35,12 @@ export const Home = () => {
   function classNames(...classes: any) {
     return classes.filter(Boolean).join(" ");
   }
-  const dataInvoice = [
-    {
-      transactionId: "188178-1651016434-52942",
-      reference: "1111",
-      client: "juan@gmail.com",
-      totalTransactionValue: 179437900,
-      currency: "COP",
-      transactionStatus: "ERROR",
-      warehouse: "Vjerto",
-      transactionDate: "2022-04-26T23:40:35.227Z",
-      paymentType: "NEQUI",
-      paymentGateway: "wompi",
-    },
-    {
-      transactionId: "188178-1651016434-52942",
-      reference: "2222",
-      client: "andres@gmail.com",
-      totalTransactionValue: 179437900,
-      currency: "COP",
-      transactionStatus: "APPROVED",
-      warehouse: "Vjerto",
-      transactionDate: "2022-04-26T23:40:35.227Z",
-      paymentType: "PSE",
-      paymentGateway: "wompi",
-    },
-    {
-      transactionId: "188178-1651016434-52942",
-      reference: "3333",
-      client: "cristian@gmail.com",
-      totalTransactionValue: 179437900,
-      currency: "COP",
-      transactionStatus: "DECLINED",
-      warehouse: "Vjerto",
-      transactionDate: "2022-04-26T23:40:35.227Z",
-      paymentType: "BANCOLOMBIA",
-      paymentGateway: "wompi",
-    },
-  ];
+ 
   const [dataOrder, setDataOrder] = useState<any>({});
   /*   const dataOrder = useMemo(() => data, [data]); */
   const [showNoDateFilter, setShowNoDateFilter] = useState<boolean>(false);
 
-  const [searchValue, setSearchValue] = useState<SearchFormValue>({
-    stateOrders: "",
-    paymentMethod: "",
-    idTransaction: "",
-    refTransaction: "",
-    emailUser: "",
-  });
+  
   const [detailsValue, setDetailsValue] = useState<DetailsValue>({
     transactionId: "",
     paymentGateway: "",
@@ -96,7 +53,7 @@ export const Home = () => {
   const history = useHistory();
   const [dataDetails, setdataDetails] = useState<any>();
   const [dataConsulta, setdataConsulta] = useState<OrderDetails>();
-  const [bandera,setbandera] = useState<boolean>(false);
+  
 
 
   const { orders, isLoading, isError } = useOrders(
@@ -152,17 +109,10 @@ export const Home = () => {
   //   )
   // }, [openTransaction])
   
-useEffect(() => {
-  if (dataConsulta) {
-    setbandera(true)
-  }
-}, [dataConsulta])
-
 
   return (
     <>
    
-
       <div className="h-screen">
         {/* Componente para movil */}
     
@@ -232,8 +182,8 @@ useEffect(() => {
             leaveTo="opacity-0 translate-y-1"
           >
             <SearchForm
+            token={keycloak.token ? keycloak.token : ""}
               stateFilter={setopenFilter}
-              searchValue={setSearchValue}
               cleanSeacrh={setremoveSearch}
               e2eAttr={"search-form"}
             />
@@ -407,8 +357,8 @@ useEffect(() => {
                         leaveTo="opacity-0 translate-y-1"
                       >
                         <SearchForm
+                        token={keycloak.token ? keycloak.token : ""}
                           stateFilter={setopenFilter}
-                          searchValue={setSearchValue}
                           cleanSeacrh={setremoveSearch}
                           e2eAttr={"search-form"}
                         />
@@ -434,7 +384,7 @@ useEffect(() => {
                       </Transition>
 
                       <Transition
-                        show={!openTransaction && bandera}
+                        show={!openTransaction}
                         enter="transition ease-out duration-200"
                         enterFrom="opacity-0 translate-y-1"
                         enterTo="opacity-100 translate-y-0"
@@ -455,9 +405,7 @@ useEffect(() => {
                           /* status={(details.data.status)?dataDetails.data.status:"hola"} */
                         />
                       </Transition>
-                      <Transition show={!bandera}>
-                        <div>holaaa</div>
-                      </Transition>
+                      
                     </div>
                   </div>
                 </div>

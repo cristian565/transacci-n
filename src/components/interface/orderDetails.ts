@@ -48,7 +48,7 @@ export interface OrderDetails {
 
     redirect_url: string;
     status: string;
-    status_message: string;
+    statusMessage: string;
     merchant: {
       name: string;
       legal_name: string;

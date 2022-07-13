@@ -37,7 +37,6 @@ export const Details = (props: DetailsProps) => {
     VOIDED: "Anulada",
   };
 
-  const { keycloak, initialized } = useKeycloak();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<any>({});
   /* const navegate = useNavigate();
@@ -78,7 +77,7 @@ export const Details = (props: DetailsProps) => {
 
   return (
     <>
-
+{console.log(data.status_message,"status_message")}
       <div className="min-h-full">
         {/*    <button onClick={handleHome}>
 ATRAS
@@ -118,7 +117,7 @@ ATRAS
                           Monto
                         </dt>
                         <dd className="mt-1 text-sm font-semibold text-gray-900">{`COP ${parseCurrency(
-                          43473524342153
+                          data.amountInCents
                         )}`}</dd>
                       </div>
                       <div className="sm:col-span-1">
@@ -126,24 +125,24 @@ ATRAS
                           Estado
                         </dt>
                         <span
-                          className={`${statusStyles["DECLINED"]}
+                          className={`${statusStyles[data.status]}
                              font-semibold inline-block  rounded-lg h-1/2 px-3 w-24 text-center`}
                         >
-
+                            {statusOrder[data.status]}
                         </span>
                       </div>
                       <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">
                           Detalle del estado
                         </dt>
-                        {viewState}
+                        {(data.statusMessage)?data.statusMessage:"-------"}
                       </div>
                       <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">
                           Transacción #
                         </dt>
                         <dd className="mt-1 text-sm text-gray-900">
-                          23432234
+                          {data.id}
                         </dd>
                       </div>
                       <div className="sm:col-span-1 ">
@@ -154,18 +153,22 @@ ATRAS
                           <img
                             data-cy={`${props.e2eAttr}__image-md`}
                             className="block h-8 w-auto"
-                            src={imagenes["PSE"]}
+                            src={imagenes[(data.paymentMethodType==="CARD")?
+                            data.paymentMethod.extra.type
+                            :data.paymentMethodType]}
                             alt="LogoMetPago"
                           />
-
-                          <dd className="mt-1 text-sm text-gray-900">-3342</dd>
+                            {(data.paymentMethodType==="CARD")&&
+                           <dd className="mt-1 text-sm text-gray-900">Preguntar</dd>
+                            }
+                          
                         </div>
                       </div>
                       <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">
                           Referencia
                         </dt>
-                        <dd className="mt-1 text-sm text-gray-900">3545</dd>
+                        <dd className="mt-1 text-sm text-gray-900">{data.refrence}</dd>
                       </div>
                       <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">
@@ -178,7 +181,7 @@ ATRAS
                               className="h-6 w-6"
                             />
                             <span className="ml-1">
-                              {parseDate("2022-04-26T14:40:35.227Z").hour}
+                              {parseDate(data.createdAt).hour}
                             </span>
                           </div>
 
@@ -188,7 +191,7 @@ ATRAS
                               className="h-6 w-6"
                             />
                             <span className="ml-1">
-                              {parseDate("2022-04-26T14:40:35.227Z").date}
+                              {parseDate(data.createdAt).date}
                             </span>
                           </div>
                         </div>
@@ -204,7 +207,7 @@ ATRAS
                               className="h-6 w-6"
                             />
                             <span className="ml-1">
-                              {parseDate("2022-04-26T14:40:35.227Z").hour}
+                              {parseDate(data.finalizedAt).hour}
                             </span>
                           </div>
 
@@ -215,7 +218,7 @@ ATRAS
 
                             />
                             <span className="ml-1">
-                              {parseDate("2022-04-26T14:40:35.227Z").date}
+                              {parseDate(data.finalizedAt).date}
                             </span>
                           </div>
                         </div>
@@ -289,7 +292,7 @@ ATRAS
                   <div className="sm:py-4 mt-2 sm:mt-0">
                     <dt className="text-sm font-medium text-gray-500">Email</dt>
                     <dd className="mt-1 text-sm font-semibold text-gray-900">
-                      Juan445@gmail.com
+                     {data.customerEmail}
                     </dd>
                   </div>
                   <div className="sm:sm:py-4 mt-4 sm:mt-0">
@@ -297,15 +300,17 @@ ATRAS
                       Nombres y apellidos
                     </dt>
                     <dd className="mt-1 text-sm font-semibold text-gray-900">
-                      Pepito Juan Perez Ramos
+                      Preguntar
                     </dd>
                   </div>
                   <div className="sm:sm:py-4 mt-4 sm:mt-0">
                     <dt className="text-sm font-medium text-gray-500">
-                      Número de contacto
+                      Número de contacto--preguntar
                     </dt>
                     <dd className="mt-1 text-sm font-semibold text-gray-900">
-                      3002458760
+                      {(data.paymentMethodType==="CARD")?
+                            "-------"
+                            :data.paymentMethod.phone_number}
                     </dd>
                   </div>
                 </div>

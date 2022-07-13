@@ -22,17 +22,17 @@ export const TableTransaction = (props: TableTransactionProps) => {
   const data = useMemo(() => props.order.transactions, [props.order]);
 
   const [start, setStart] = useState(0);
-  const [limit, setLimit] = useState(4);
+  const [limit, setLimit] = useState(10);
 
   const handlePagination = (action: "next" | "previous") => {
     switch (action) {
       case "next":
-        setStart(start + 4);
-        setLimit(limit + 4);
+        setStart(start + 10);
+        setLimit(limit + 10);
         break;
       case "previous":
-        setStart(start - 4);
-        setLimit(limit - 4);
+        setStart(start - 10);
+        setLimit(limit - 10);
         break;
     }
   };
