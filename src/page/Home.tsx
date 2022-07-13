@@ -22,9 +22,9 @@ import OrderNotFound from "../components/OrderNotFound";
 import { useOrders } from "../hooks/useOrders";
 import ServerDown from "../components/ServerDow";
 import { useKeycloak } from "@react-keycloak/web";
-import { useNavigate } from "react-router";
+import { useHistory } from "react-router-dom";
 import { DetailsValue } from "../components/interface/detailsValue";
-import { ordersDetail } from "../hooks/ordersDetail";
+// import { ordersDetail } from "../hooks/ordersDetail";
 import { OrderDetails } from "../components/interface/orderDetails";
 
 export const Home = () => {
@@ -93,7 +93,7 @@ export const Home = () => {
   const [openFilter, setopenFilter] = useState<boolean>(false);
   const [showOrderNotFound, setShowOrderNotFound] = useState<boolean>(false);
   const { keycloak, initialized } = useKeycloak();
-  const navegation = useNavigate();
+  const history = useHistory();
   const [dataDetails, setdataDetails] = useState<any>();
   const [dataConsulta, setdataConsulta] = useState<OrderDetails>();
   const [bandera,setbandera] = useState<boolean>(false);
@@ -104,6 +104,7 @@ export const Home = () => {
     keycloak.token ? keycloak.token : ""
   );
 
+    console.log("🚀 ~ file: Home.tsx ~ line 103 ~ Home ~ orders", orders)
   useEffect(() => {
     
     setDataOrder(orders);
@@ -126,30 +127,30 @@ export const Home = () => {
 
   const handlePrueba = () => {
     keycloak.logout();
-    navegation("/");
+    history.push("/");
   };
 
-  useEffect(() => {
-    (!openTransaction)&&(
-      ordersDetail(
-        "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/"
-      ,(keycloak.token ? keycloak.token : ""),detailsValue.paymentGateway,detailsValue.transactionId).then((resp)=>{
+  // useEffect(() => {
+  //   (!openTransaction)&&(
+  //     ordersDetail(
+  //       "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/"
+  //     ,(keycloak.token ? keycloak.token : ""),detailsValue.paymentGateway,detailsValue.transactionId).then((resp)=>{
        
-        if (resp.status==200) {
-          console.log('Resp consulta ',resp)
+  //       if (resp.status==200) {
+  //         console.log('Resp consulta ',resp)
           
-          setdataConsulta(resp.data)
+  //         setdataConsulta(resp.data)
           
-          console.log('data exit')
-        }else{
-            if (resp.status==500){
-              console.log('Internal server error')
+  //         console.log('data exit')
+  //       }else{
+  //           if (resp.status==500){
+  //             console.log('Internal server error')
                
-            }
-        }
-    })
-    )
-  }, [openTransaction])
+  //           }
+  //       }
+  //   })
+  //   )
+  // }, [openTransaction])
   
 useEffect(() => {
   if (dataConsulta) {

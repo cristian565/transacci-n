@@ -1,5 +1,5 @@
 import React, { Dispatch, memo, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { parseCurrency } from "../hooks/parse-currency";
 import { parseDate } from "../hooks/parse-date";
 import { imagenes } from "../assets/imagenes";

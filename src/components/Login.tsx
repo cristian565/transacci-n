@@ -6,7 +6,7 @@ import { accesUserLogin } from "../hooks/accesUserLogin";
 import Modal from "./Modal";
 import { UserAccesError } from "./UserAccesError";
 import { useKeycloak } from "@react-keycloak/web";
-import { useNavigate, Navigate } from "react-router-dom";
+// import { useNavigate, Navigate } from "react-router-dom";
 
 export interface LoginProps {
   accesUser?: Dispatch<SetStateAction<boolean>>;
@@ -18,7 +18,7 @@ export const Login = (props: LoginProps) => {
   const [showErrorAcces, setShowErrorAcces] = useState<boolean>(false);
   const [showLoadingButton, setShowLoadingButtons] = useState<boolean>(true);
  const { keycloak, initialized } = useKeycloak(); 
-   const  history = useNavigate();
+  //  const  history = useNavigate();
 
 
 
