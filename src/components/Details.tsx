@@ -1,27 +1,28 @@
 import React, { Dispatch, memo, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { parseCurrency } from "../hooks/parse-currency";
 import { parseDate } from "../hooks/parse-date";
 import { imagenes } from "../assets/imagenes";
-import {ArrowLeftIcon,ClockIcon,CalendarIcon, CreditCardIcon} from "@heroicons/react/outline";
+import { ArrowLeftIcon, ClockIcon, CalendarIcon, CreditCardIcon } from "@heroicons/react/outline";
 import { OrderDetails } from "./interface/orderDetails";
-import { ordersDetail } from "../hooks/ordersDetail";
+import { getOrdersDetail } from "../hooks/ordersDetail";
 import { useKeycloak } from "@react-keycloak/web";
 import { DetailsValue } from "./interface/detailsValue";
 
-
-
-
+const URI = "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/";
 export interface DetailsProps {
-  detailsValue:DetailsValue
-  data?:any;
-  token:string;
+  detailsValue: DetailsValue
+  data?: any;
+  token: string;
   onClose: () => void;
   e2eAttr?: string;
 }
 
-export const Details = memo((props: DetailsProps) => {
-const [data, setdata] = useState<any>(111)
+export const Details = (props: DetailsProps) => {
+
+  const { detailsValue: { transactionId, paymentGateway }, token } = props;
+
+  // const [data, setdata] = useState<any>(111)
   const statusStyles: Record<string, string> = {
     DECLINED: "bg-red-400 text-red-700",
     ERROR: "bg-red-400 text-red-700",
@@ -36,50 +37,62 @@ const [data, setdata] = useState<any>(111)
     VOIDED: "Anulada",
   };
 
-  const { keycloak, initialized } = useKeycloak(); 
+  const { keycloak, initialized } = useKeycloak();
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState<any>({});
   /* const navegate = useNavigate();
   const handleHome = () => {
     navegate("/Login");
   };
  */
-  
-//   useOrdersDetail(
-//     "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/"
-//   ,props.token,props.detailsValue.paymentGateway,props.detailsValue.transactionId).then((resp)=>{
-   
-//     if (resp.status==200) {
-//       console.log('Resp consulta ',resp)
-//       console.log('data exit')
-//     }else{
-//         if (resp.status==500){
-//           console.log('Internal server error')
-           
-//         }
-//     }
-// });
-    
-  
-  
 
-  
+  // const loadOrderDetails = async ()  => {
+  //   await getOrdersDetail(URI, token, paymentGateway, transactionId, setLoading);
+  // }
+
+  useEffect(() => {
+    getOrdersDetail(URI, token, paymentGateway, transactionId, setLoading, setData);  
+  }, [])
+
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+      
+    }  
+  }, [data])
+
+  // useEffect(() => {
+  //   console.log('data en details', {field: data.paymentMethodType})
+
+  // }, [])
+
+
+
+  if(loading) return <h1>loading...</h1> 
+
+  const viewState = data.paymentMethodType ? (
+    <dd className="mt-1 text-sm text-gray-900">
+      {data.paymentMethodType}
+    </dd>
+  ) : null;
 
   return (
     <>
-       {console.log('data en details', props.data)}
-        <div className="min-h-full">
+
+      <div className="min-h-full">
         {/*    <button onClick={handleHome}>
 ATRAS
         </button> */}
         <main className="py-2 md:py-9"
-        data-cy={props.e2eAttr}>
+          data-cy={props.e2eAttr}>
           {/* Page header */}
           <div className=" mx-auto px-4 h-10 sm:px-6  md:flex md:content-center  md:space-x-2 lg:max-w-7xl lg:px-8">
             <ArrowLeftIcon
-             aria-hidden="true"
-             onClick={() => {
+              aria-hidden="true"
+              onClick={() => {
                 props.onClose();
-              }}           
-              className="h-7 w-6 my-1 cursor-pointer"           
+              }}
+              className="h-7 w-6 my-1 cursor-pointer"
             />
             <h1 className="text-2xl text-center md:text-left font-semibold text-gray-900">
               Detalle de la transacción
@@ -110,22 +123,20 @@ ATRAS
                       </div>
                       <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">
-                          Estado 
+                          Estado
                         </dt>
                         <span
                           className={`${statusStyles["DECLINED"]}
                              font-semibold inline-block  rounded-lg h-1/2 px-3 w-24 text-center`}
                         >
-                          
+
                         </span>
                       </div>
                       <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">
                           Detalle del estado
                         </dt>
-                        <dd className="mt-1 text-sm text-gray-900">
-                          PREGUNTAR
-                        </dd>
+                        {viewState}
                       </div>
                       <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">
@@ -140,13 +151,13 @@ ATRAS
                           Medio de pago
                         </dt>
                         <div className="flex flex-row">
-                                <img
-                                  data-cy={`${props.e2eAttr}__image-md`}
-                                  className="block h-8 w-auto"
-                                  src={imagenes["PSE"]}
-                                  alt="LogoMetPago"
-                                />
-                              
+                          <img
+                            data-cy={`${props.e2eAttr}__image-md`}
+                            className="block h-8 w-auto"
+                            src={imagenes["PSE"]}
+                            alt="LogoMetPago"
+                          />
+
                           <dd className="mt-1 text-sm text-gray-900">-3342</dd>
                         </div>
                       </div>
@@ -175,7 +186,7 @@ ATRAS
                             <CalendarIcon
                               aria-hidden="true"
                               className="h-6 w-6"
-                              />
+                            />
                             <span className="ml-1">
                               {parseDate("2022-04-26T14:40:35.227Z").date}
                             </span>
@@ -189,7 +200,7 @@ ATRAS
                         <div className="flex flex-col space-y-1">
                           <div className="flex flex-row content-center">
                             <ClockIcon
-                            aria-hidden="true"
+                              aria-hidden="true"
                               className="h-6 w-6"
                             />
                             <span className="ml-1">
@@ -199,9 +210,9 @@ ATRAS
 
                           <div className="flex flex-row content-center">
                             <CalendarIcon
-                            aria-hidden="true"
+                              aria-hidden="true"
                               className="h-6 w-6"
-                              
+
                             />
                             <span className="ml-1">
                               {parseDate("2022-04-26T14:40:35.227Z").date}
@@ -328,8 +339,8 @@ ATRAS
           </div>
         </main>
       </div>
-    
-      
+
+
     </>
   );
-});
+};
