@@ -1,4 +1,4 @@
-import React, { useState, Dispatch, SetStateAction, useMemo } from "react";
+import React, { useState, Dispatch, SetStateAction, useMemo, useEffect } from "react";
 
 import { parseCurrency } from "../hooks/parse-currency";
 import { parseDate } from "../hooks/parse-date";
@@ -28,10 +28,18 @@ export interface TableTransactionProps {
 export const TableTransaction = (props: TableTransactionProps) => {
   const data = useMemo(() => props.order.transactions, [props.order]);
 
-  const [start, setStart] = useState(((props.pageState===0)?0:props.pagStart));
-  const [limit, setLimit] = useState(((props.pageState===0)?1:props.pagLimit));
-  const [pageIndex, setPageIndex] = useState(((props.pageState===0)?0:props.pageState));
+  const [start, setStart] = useState(props.pagStart);
+  const [limit, setLimit] = useState(props.pagLimit);
+  const [pageIndex, setPageIndex] = useState(props.pageState);
+  console.log("STRAR ",props.pageState);
 
+  useEffect(() => {
+    setStart(((props.pageState===0)?0:props.pagStart))
+    setLimit(((props.pageState===0)?1:props.pagLimit))
+    setPageIndex(((props.pageState===0)?0:props.pageState))
+  }, [props.order])
+  
+  
   const handlePagination = (action: "next" | "previous") => {
     switch (action) {
       case "next":
@@ -82,8 +90,8 @@ export const TableTransaction = (props: TableTransactionProps) => {
     {console.log(pageIndex,"pageIndex")}
     
     
-      <div className="px-4 sm:px-6 lg:px-2 mt-8 " data-cy={props.e2eAttr}>
-        <div className="hidden md:flex mt-4 flex-col shadow-xl">
+      <div className="px-4 mt-8 sm:px-6 lg:px-2 " data-cy={props.e2eAttr}>
+        <div className="flex-col hidden mt-4 shadow-xl md:flex">
           <div className="overflow-x-auto ">
             <div className="inline-block min-w-full py-2 align-middle md:px-3 lg:px-2">
               <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
@@ -116,7 +124,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200 bg-white">
+                  <tbody className="bg-white divide-y divide-gray-200">
                     {data.map((item) => (
                       <tr
                         key={item.reference}
@@ -132,7 +140,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                         dta-cy={`table-transaction__${item.reference}`}
                         id={item.reference}
                       >
-                        <td className="whitespace-nowrap py-4 pl-4 pr-3 md:pr-1 lg:pr-3 text-sm font-medium text-gray-900 sm:pl-6 md:pl-4 lg:pl-6">
+                        <td className="py-4 pl-4 pr-3 text-sm font-medium text-gray-900 whitespace-nowrap md:pr-1 lg:pr-3 sm:pl-6 md:pl-4 lg:pl-6">
                           <span
                             data-cy={`${props.e2eAttr}__transaction_status-md`}
                             className={`${statusStyles[item.transactionStatus]}
@@ -141,18 +149,18 @@ export const TableTransaction = (props: TableTransactionProps) => {
                             {statusOrder[item.transactionStatus]}
                           </span>
                         </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-600 font-semibold">
+                        <td className="px-3 py-4 text-sm font-semibold text-gray-600 whitespace-nowrap">
                           <div className="flex flex-row">
-                            <div className="flex-shrink-0 flex justify-center w-1/6 ">
+                            <div className="flex justify-center flex-shrink-0 w-1/6 ">
                               {item.paymentType === "CARD" ? (
                                 <CreditCardIcon
                                   aria-hidden="true"
-                                  className="h-8 w-8"
+                                  className="w-8 h-8"
                                 />
                               ) : (
                                 <img
                                   data-cy={`${props.e2eAttr}__image-md`}
-                                  className="block h-8 w-auto"
+                                  className="block w-auto h-8"
                                   src={imagenes[item.paymentType]}
                                   alt="LogoMetPago"
                                 />
@@ -169,7 +177,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                             </div>
                           </div>
                         </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-600 font-semibold">
+                        <td className="px-3 py-4 text-sm font-semibold text-gray-600 whitespace-nowrap">
                           <div className="flex flex-col">
                             <span
                               className="font-bold"
@@ -182,12 +190,12 @@ export const TableTransaction = (props: TableTransactionProps) => {
                             >{`Ref: ${item.reference}`}</span>
                           </div>
                         </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-600 font-semibold">
+                        <td className="px-3 py-4 text-sm font-semibold text-gray-600 whitespace-nowrap">
                           <div className="flex flex-col space-y-1">
                             <div className="flex flex-row content-center">
                               <ClockIcon
                                 aria-hidden="true"
-                                className="h-6 w-6"
+                                className="w-6 h-6"
                               />
                               <span
                                 data-cy={`${props.e2eAttr}__date_hour-md`}
@@ -200,7 +208,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                             <div className="flex flex-row content-center">
                               <CalendarIcon
                                 aria-hidden="true"
-                                className="h-6 w-6"
+                                className="w-6 h-6"
                               />
                               <span
                                 data-cy={`${props.e2eAttr}__date-md`}
@@ -216,7 +224,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                   </tbody>
                 </table>
                 <nav
-                  className="flex justify-between items-center py-3 px-4 bg-white border-t border-gray-200 sm:px-6"
+                  className="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200 sm:px-6"
                   aria-label="Pagination"
                 >
                   <div className="hidden sm:block">
@@ -235,9 +243,9 @@ export const TableTransaction = (props: TableTransactionProps) => {
                       resultados
                     </p>
                   </div>
-                  <div className="flex flex-1 justify-between sm:justify-end">
+                  <div className="flex justify-between flex-1 sm:justify-end">
                     <button
-                      className="inline-flex relative items-center py-2 px-4 text-sm font-medium text-white bg-blue-wompi hover:bg-blue-400 rounded-md border border-gray-300"
+                      className="relative inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-gray-300 rounded-md bg-blue-wompi hover:bg-blue-400"
                       disabled={start === 0}
                       onClick={() => handlePagination("previous")}
                     >
@@ -261,39 +269,39 @@ export const TableTransaction = (props: TableTransactionProps) => {
 
         <div>
           <div className="shadow md:hidden">
-            <div className="flex py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase bg-pantone-blue-100 rounded-t-lg">
-              <span className="flex flex-1 justify-center items-center">
+            <div className="flex px-6 py-3 text-xs font-medium tracking-wider text-center text-gray-700 uppercase rounded-t-lg bg-pantone-blue-100">
+              <span className="flex items-center justify-center flex-1">
                 {" "}
                 Transacciones{" "}
               </span>
             </div>
-            <ul className="overflow-hidden mt-2 divide-y divide-gray-200 shadow ">
+            <ul className="mt-2 overflow-hidden divide-y divide-gray-200 shadow ">
               {data.map((item) => (
                 <li
                   key={item.reference}
-                  className="sm:relative mb-0 "
+                  className="mb-0 sm:relative "
                   onClick={() => handleDetails(item.reference)}
                 >
-                  <div className="sm:py-2 sm:h-44 flex flex-row md:px-4 justify-center mt-4 sm:mt-0">
-                    <div className="py-4  flex flex-row justify-between px-4 sm:pb-4 text-sm sm:py-2 sm:justify-center sm:items-center sm:px-2 sm:w-full sm:h-48 md:justify-center md:items-center md:py-2 md:px-4 md:w-1/2 md:h-full">
-                      <div className="flex sm:hidden flex-col space-y-1 text-sm mt-1 mr-2 ">
+                  <div className="flex flex-row justify-center mt-4 sm:py-2 sm:h-44 md:px-4 sm:mt-0">
+                    <div className="flex flex-row justify-between px-4 py-4 text-sm sm:pb-4 sm:py-2 sm:justify-center sm:items-center sm:px-2 sm:w-full sm:h-48 md:justify-center md:items-center md:py-2 md:px-4 md:w-1/2 md:h-full">
+                      <div className="flex flex-col mt-1 mr-2 space-y-1 text-sm sm:hidden ">
                         <span className="text-blue-400 truncate">Estado</span>
                         <span className="text-blue-400 truncate">Cliente:</span>
-                        <span className="text-blue-400 inline-block truncate">
+                        <span className="inline-block text-blue-400 truncate">
                           Hora
                         </span>
-                        <span className="text-blue-400 inline-block truncate">
+                        <span className="inline-block text-blue-400 truncate">
                           Fecha
                         </span>
 
-                        <span className="text-blue-400 inline-block h-10 py-3 truncate">
+                        <span className="inline-block h-10 py-3 text-blue-400 truncate">
                           Datos del pago
                         </span>
-                        <span className="text-blue-400 inline-block truncate py-2 sm:py-1 ">
+                        <span className="inline-block py-2 text-blue-400 truncate sm:py-1 ">
                           Metodo de pago
                         </span>
                       </div>
-                      <div className="flex sm:hidden flex-col text-sm text-gray-700 space-y-1 ">
+                      <div className="flex flex-col space-y-1 text-sm text-gray-700 sm:hidden ">
                         <span
                           className={`${statusStyles[item.transactionStatus]}
                              font-semibold inline-block  rounded-lg px-3 w-24 text-center h-5`}
@@ -304,7 +312,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                           <span>{item.client}</span>
                         </div>
                         <div className="flex flex-row content-center">
-                          <ClockIcon aria-hidden="true" className="h-6 w-6" />
+                          <ClockIcon aria-hidden="true" className="w-6 h-6" />
                           <span className="ml-1">
                             {parseDate(item.transactionDate).hour}
                           </span>
@@ -313,7 +321,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                         <div className="flex flex-row content-center">
                           <CalendarIcon
                             aria-hidden="true"
-                            className="h-6 w-6"
+                            className="w-6 h-6"
                           />
                           <span className="ml-1">
                             {parseDate(item.transactionDate).date}
@@ -330,11 +338,11 @@ export const TableTransaction = (props: TableTransactionProps) => {
                           {item.paymentType === "CARD" ? (
                             <CreditCardIcon
                               aria-hidden="true"
-                              className="h-8 w-8"
+                              className="w-8 h-8"
                             />
                           ) : (
                             <img
-                              className="block h-8 w-8"
+                              className="block w-8 h-8"
                               src={imagenes[item.paymentType]}
                               alt="LogoMetPago"
                             />
@@ -342,7 +350,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                         </div>
                       </div>
 
-                      <div className="hidden sm:flex md:hidden flex-col text-sm text-gray-700  justify-between  pl-12  w-2/4 h-40 ">
+                      <div className="flex-col justify-between hidden w-2/4 h-40 pl-12 text-sm text-gray-700 sm:flex md:hidden ">
                         <div className="flex flex-col w-full ">
                           <span className="text-blue-400 truncate">
                             Cliente
@@ -351,7 +359,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                         </div>
 
                         <div className="flex flex-col w-full ">
-                          <span className="text-blue-400 inline-block truncate">
+                          <span className="inline-block text-blue-400 truncate">
                             ID Transaccion
                           </span>
                           <span className="font-bold">
@@ -360,13 +368,13 @@ export const TableTransaction = (props: TableTransactionProps) => {
                         </div>
 
                         <div className="flex flex-col w-full ">
-                          <span className="text-blue-400 inline-block truncate">
+                          <span className="inline-block text-blue-400 truncate">
                             Ref. Transaccion
                           </span>
                           <span>{item.reference}</span>
                         </div>
                       </div>
-                      <div className="hidden sm:flex md:hidden  flex-col content-center justify-between  text-sm mr-2 px-12  w-2/4 h-40">
+                      <div className="flex-col content-center justify-between hidden w-2/4 h-40 px-12 mr-2 text-sm sm:flex md:hidden">
                         <div className="flex flex-col">
                           <span className="text-blue-400 truncate">Estado</span>
                           <span
@@ -378,14 +386,14 @@ export const TableTransaction = (props: TableTransactionProps) => {
                         </div>
 
                         <div className="flex flex-col">
-                          <span className="text-blue-400 inline-block truncate">
+                          <span className="inline-block text-blue-400 truncate">
                             Hora y Fecha
                           </span>
-                          <div className=" flex flex-row space-x-2">
+                          <div className="flex flex-row space-x-2 ">
                             <div className="flex flex-row content-center">
                               <ClockIcon
                                 aria-hidden="true"
-                                className="h-6 w-6"
+                                className="w-6 h-6"
                               />
                               <span className="ml-1">
                                 {parseDate(item.transactionDate).hour}
@@ -395,7 +403,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                             <div className="flex flex-row content-center">
                               <CalendarIcon
                                 aria-hidden="true"
-                                className="h-6 w-6"
+                                className="w-6 h-6"
                               />
                               <span className="ml-1">
                                 {parseDate(item.transactionDate).date}
@@ -405,18 +413,18 @@ export const TableTransaction = (props: TableTransactionProps) => {
                         </div>
                         <div className="flex flex-col">
                           {" "}
-                          <span className="text-blue-400 inline-block truncate">
+                          <span className="inline-block text-blue-400 truncate">
                             Metodo de pago
                           </span>
                           <div className="flex flex-col">
                             {item.paymentType === "CARD" ? (
                               <CreditCardIcon
                                 aria-hidden="true"
-                                className="h-8 w-8"
+                                className="w-8 h-8"
                               />
                             ) : (
                               <img
-                                className="block h-8 w-8"
+                                className="block w-8 h-8"
                                 src={imagenes[item.paymentType]}
                                 alt="LogoMetPago"
                               />
@@ -427,8 +435,8 @@ export const TableTransaction = (props: TableTransactionProps) => {
                     </div>
                   </div>
 
-                  <div className="flex flex-col h-auto sm:mt-4 sm:relative sm:bottom-0 bg-gray-200 rounded-lg sm:flex-row sm:justify-between">
-                    <div className="py-1 px-2 text-sm font-bold text-gray-700 sm:order-last sm:p-2 sm:text-sm">
+                  <div className="flex flex-col h-auto bg-gray-200 rounded-lg sm:mt-4 sm:relative sm:bottom-0 sm:flex-row sm:justify-between">
+                    <div className="px-2 py-1 text-sm font-bold text-gray-700 sm:order-last sm:p-2 sm:text-sm">
                       TOTAL: {parseCurrency(item.totalTransactionValue)}
                     </div>
                   </div>
@@ -436,13 +444,13 @@ export const TableTransaction = (props: TableTransactionProps) => {
               ))}
             </ul>
             <nav
-              className="flex justify-between items-center py-3 px-4 bg-white border-t border-gray-200"
+              className="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200"
               aria-label="Pagination"
             >
-              <div className="flex flex-1 justify-between">
+              <div className="flex justify-between flex-1">
                 <button
                   type="button"
-                  className="bg-blue-wompi hover:bg-blue-800 inline-flex relative items-center py-2 px-4 text-sm font-medium text-white rounded-md border border-gray-300"
+                  className="relative inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-gray-300 rounded-md bg-blue-wompi hover:bg-blue-800"
                   disabled={start === 0}
                   onClick={() => handlePagination("previous")}
                 >
@@ -450,7 +458,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                 </button>
                 <button
                   type="button"
-                  className="bg-blue-wompi hover:bg-blue-800 inline-flex relative items-center py-2 px-4 ml-3 text-sm font-medium text-white rounded-md border border-gray-300"
+                  className="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-white border border-gray-300 rounded-md bg-blue-wompi hover:bg-blue-800"
                   disabled={limit >= props.order.totalTransactions}
                   onClick={() => handlePagination("next")}
                 >

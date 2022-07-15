@@ -99,27 +99,27 @@ export const SearchForm = (props: SearchFormProps) => {
 
   return (
     <div 
-    className="relative mt-2 px-4 lg:px-0 lg:mt-0 lg:w-full sm:flex sm:items-center md:flex md:items-center py-4 rounded-lg w-4/5 sm:w-3/5 md:w-4/5 mx-auto bg-gray-50 drop-shadow-lg"
+    className="relative w-4/5 px-4 py-4 mx-auto mt-2 rounded-lg lg:px-0 lg:mt-0 lg:w-full sm:flex sm:items-center md:flex md:items-center sm:w-3/5 md:w-4/5 bg-gray-50 drop-shadow-lg"
     data-cy={props.e2eAttr}
     >
       <div
         onClick={() => {props.stateFilter(false)
         props.cleanSeacrh(true)}}
-        className="absolute top-1 lg:top-0 right-0 cursor-pointer flex flex-row px-2 "
+        className="absolute right-0 flex flex-row px-2 cursor-pointer top-1 lg:top-0 "
       >
         <XIcon
          aria-hidden="true"
-          className="h-5 w-5"
+          className="w-5 h-5"
           />
-        <span className="hidden lg:flex font-bold text-sm">Cerrar</span>
+        <span className="hidden text-sm font-bold lg:flex">Cerrar</span>
       </div>
 
       <form
-        className="md:w-full md:mt-3 mx-auto"
+        className="mx-auto md:w-full md:mt-3"
         onSubmit={searchForm.handleSubmit}
       >
-        <div className="flex space-y-3 lg:space-y-0  md:flex-col flex-col xl:flex-row justify-between px-4 sm:px-0">
-          <div className="flex flex-col md:flex-row md:justify-around space-y-2 order-last mt-2 xl:w-3/5 xl:order-last md:mt-0 md:space-y-0 md:order-none">
+        <div className="flex flex-col justify-between px-4 space-y-3 lg:space-y-0 md:flex-col xl:flex-row sm:px-0">
+          <div className="flex flex-col order-last mt-2 space-y-2 md:flex-row md:justify-around xl:w-3/5 xl:order-last md:mt-0 md:space-y-0 md:order-none">
             <div>
               <InputBasic
                 metadata={{
@@ -196,7 +196,7 @@ export const SearchForm = (props: SearchFormProps) => {
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row md:w-3/4 md:mx-auto space-y-2 lg:space-y-2 xl:space-y-0 xl:justify-around xl:w-2/5 ">
+          <div className="flex flex-col space-y-2 md:flex-row md:w-3/4 md:mx-auto lg:space-y-2 xl:space-y-0 xl:justify-around xl:w-2/5 ">
             <div className="md:w-2/5 md:mr-14 md:mt-2 xl:mr-0 xl:mt-0 xl:w-40">
               <Select
                 label={{
@@ -233,7 +233,7 @@ export const SearchForm = (props: SearchFormProps) => {
                 e2eAttr={`${props.e2eAttr}__stateOrders`}
               />
             </div>
-            <div className="md:w-2/5 mt-2 md:mt-0 lg:mt-4 xl:w-44">
+            <div className="mt-2 md:w-2/5 md:mt-0 lg:mt-4 xl:w-44">
               <Select
                 label={{
                   text: "Método de pago",
@@ -272,26 +272,29 @@ export const SearchForm = (props: SearchFormProps) => {
           </div>
         </div>
 
-        <div className="flex flex-row space-x-8 content-center justify-center mt-6">
+        <div className="flex flex-row content-center justify-center mt-6 space-x-8">
           <button        
-            className="bg-blue-wompi w-32 flex flex-row justify-center py-2 h-11 sm:h-auto sm:py-1 content-center mt-1 hover:bg-blue-800 text-white border border-solid rounded-xl cursor-pointer md:w-32 md:h-9"
-            // onClick={() => {
-            //  }}
+            className="flex flex-row content-center justify-center w-32 py-2 mt-1 text-white border border-solid cursor-pointer bg-blue-wompi h-11 sm:h-auto sm:py-1 hover:bg-blue-800 rounded-xl md:w-32 md:h-9"
+            onClick={() => {
+              props.resPage(0)
+              props.resStart(0)
+              props.resLimit(1)
+             }}
           >
             <SearchIcon
               aria-hidden="true"
-              className="h-4 w-4 mt-1 mr-1"
+              className="w-4 h-4 mt-1 mr-1"
              />
             <span>Buscar</span>
           </button>
 
           <div
-            className="text-sm font-bold cursor-pointer flex flex-row justify-center ml-2 py-2 content-center "
+            className="flex flex-row content-center justify-center py-2 ml-2 text-sm font-bold cursor-pointer "
             onClick={resetValuesForm}
           >
             <TrashIcon
               aria-hidden="true"
-              className="h-6 w-6"
+              className="w-6 h-6"
              />
             <span className="inline-block my-auto underline">
               Limpiar filtro

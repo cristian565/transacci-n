@@ -63,16 +63,17 @@ export const Home = () => {
     customer?: string,
     fromDate?: string,
     untilDate?: string */
-  const { orders, isLoading, isError } = useOrders(
-    "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/",
-    keycloak.token ? keycloak.token : "",
-    pagination,
-    (openTransaction && openFilter)?searchValue.idTransaction: "",
-    (openTransaction && openFilter)?searchValue.refTransaction: "",
-    (openTransaction && openFilter)?searchValue.stateOrders: "",
-    (openTransaction && openFilter)?searchValue.paymentMethod: "",
-    (openTransaction && openFilter)?searchValue.emailUser: "" 
-  );
+    const { orders, isLoading, isError } = useOrders(
+      "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/",
+      keycloak.token ? keycloak.token : "",
+      pagination,
+      (openTransaction && openFilter)?searchValue.idTransaction: "",
+      (openTransaction && openFilter)?searchValue.refTransaction: "",
+      (openTransaction && openFilter)?searchValue.stateOrders: "",
+      (openTransaction && openFilter)?searchValue.paymentMethod: "",
+      (openTransaction && openFilter)?searchValue.emailUser: "" 
+    );
+    
 
   useEffect(() => {
     if (orders && !showNoDateFilter) { setDataOrder(orders); }
@@ -104,53 +105,53 @@ export const Home = () => {
       <div className="h-screen">
         {/* Componente para movil */}
 
-        <div className="h-screen w-full lg:hidden">
+        <div className="w-full h-screen lg:hidden">
           <div className="relative bg-white">
             <div
-              className="absolute inset-0 shadow z-30 pointer-events-none"
+              className="absolute inset-0 z-30 shadow pointer-events-none"
               aria-hidden="true"
             />
             <div className="relative z-20">
-              <div className="max-w-7xl mx-auto flex justify-between items-center px-4 py-5 sm:px-6 sm:py-4 lg:px-8 md:justify-start md:space-x-10">
+              <div className="flex items-center justify-between px-4 py-5 mx-auto max-w-7xl sm:px-6 sm:py-4 lg:px-8 md:justify-start md:space-x-10">
                 <div>
                   <span className="sr-only">BellaPiel</span>
                   <img
-                    className="h-8 w-auto sm:h-10"
+                    className="w-auto h-8 sm:h-10"
                     src={imagenes["BELLAPIEL"]}
                     alt="LogoBellaPiel"
                   />
                 </div>
 
-                <div className="flex flex-row w-24 justify-between md:hidden">
+                <div className="flex flex-row justify-between w-24 md:hidden">
                   <div
                     className={openTransaction ? "cursor-pointer" : "hidden"}
                     onClick={() => setopenFilter(true)}
                   >
                     <SearchCircleIcon
                       aria-hidden="true"
-                      className="h-10 w-10"
+                      className="w-10 h-10"
                     />
                   </div>
                   <div onClick={() => handleClosedSession()}>
-                    <LogoutIcon aria-hidden="true" className="h-10 w-10 " />
+                    <LogoutIcon aria-hidden="true" className="w-10 h-10 " />
                   </div>
                 </div>
                 <div className="hidden md:flex-1 md:flex md:items-center md:justify-end">
-                  <div className="w-auto flex">
+                  <div className="flex w-auto">
                     <div
                       onClick={() => setopenFilter(true)}
-                      className="ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-wompi hover:bg-indigo-700"
+                      className="inline-flex items-center justify-center px-4 py-2 ml-8 text-base font-medium text-white border border-transparent rounded-md shadow-sm bg-blue-wompi hover:bg-indigo-700"
                       data-cy="search--form-button-normal__md"
                     >
-                      <SearchIcon aria-hidden="true" className="h-4 w-4 mr-1" />
+                      <SearchIcon aria-hidden="true" className="w-4 h-4 mr-1" />
                       <span>Buscar</span>
                     </div>
                     <div
                       onClick={() => handleClosedSession()}
-                      className="ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-wompi hover:bg-indigo-700"
+                      className="inline-flex items-center justify-center px-4 py-2 ml-8 text-base font-medium text-white border border-transparent rounded-md shadow-sm bg-blue-wompi hover:bg-indigo-700"
                     >
                       <span>Salir</span>
-                      <LogoutIcon aria-hidden="true" className="h-6 w-6 ml-1" />
+                      <LogoutIcon aria-hidden="true" className="w-6 h-6 ml-1" />
                     </div>
                   </div>
                 </div>
@@ -182,33 +183,35 @@ export const Home = () => {
               e2eAttr={"search-form"}
             />
           </Transition>
+          
+          <div>
+            <Transition
+              show={openTransaction && !isLoading}
+              enter="transition ease-out duration-200"
+              enterFrom="opacity-0 translate-y-1"
+              enterTo="opacity-100 translate-y-0"
+              leave="transition ease-in duration-150"
+              leaveFrom="opacity-100 translate-y-0"
+              leaveTo="opacity-0 translate-y-1"
+            >
+              <TableTransaction
+                detailsValue={setDetailsValue}
+                openTransaction={setOpenTransaction}
+                order={dataOrder}
+                pageState={pagination}
+                page={setpagination}
+                pageStart={setStart}
+                pageLimit={setLimit}
+                pagStart={start}
+                pagLimit={limit}
+                e2eAttr="table-transaction"
+              />
+            </Transition>
 
-          <Transition
-            show={openTransaction && !isLoading}
-            enter="transition ease-out duration-200"
-            enterFrom="opacity-0 translate-y-1"
-            enterTo="opacity-100 translate-y-0"
-            leave="transition ease-in duration-150"
-            leaveFrom="opacity-100 translate-y-0"
-            leaveTo="opacity-0 translate-y-1"
-          >
-            <TableTransaction
-              detailsValue={setDetailsValue}
-              openTransaction={setOpenTransaction}
-              order={dataOrder}
-              pageState={pagination}
-              page={setpagination}
-              pageStart={setStart}
-              pageLimit={setLimit}
-              pagStart={start}
-              pagLimit={limit}
-              e2eAttr="table-transaction"
-            />
-          </Transition>
-
-          <Transition show={isLoading}>
-            <TableTransactionSkeleton e2eAttr="table-transaction" />
-          </Transition>
+            <Transition show={isLoading}>
+              <TableTransactionSkeleton e2eAttr="table-transaction" />
+            </Transition>
+          </div>
 
           <Transition
             show={!openTransaction}
@@ -238,16 +241,16 @@ export const Home = () => {
         <div className="hidden lg:flex">
           <div className="hidden lg:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
             {/* Sidebar component, swap this element with another sidebar if you like */}
-            <div className="flex-1 flex flex-col min-h-0 bg-gray-800">
-              <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto bg-white border-r-2 border-gray-200">
+            <div className="flex flex-col flex-1 min-h-0 bg-gray-800">
+              <div className="flex flex-col flex-1 pt-5 pb-4 overflow-y-auto bg-white border-r-2 border-gray-200">
                 <div className="flex justify-center flex-shrink-0 px-4">
                   <img
-                    className="h-10 w-auto "
+                    className="w-auto h-10 "
                     src={imagenes["BELLAPIEL"]}
                     alt="logoBellaPiel"
                   />
                 </div>
-                <nav className="mt-5 flex-1 px-2 space-y-1">
+                <nav className="flex-1 px-2 mt-5 space-y-1">
                   {navigation.map((item) => (
                     <div
                       key={item.name}
@@ -273,8 +276,8 @@ export const Home = () => {
                   ))}
                 </nav>
               </div>
-              <div className="flex-shrink-0 flex p-4 bg-white-wompi border-r-2 border-t-2 border-gray-200">
-                <div className="flex-shrink-0 w-full group block">
+              <div className="flex flex-shrink-0 p-4 border-t-2 border-r-2 border-gray-200 bg-white-wompi">
+                <div className="flex-shrink-0 block w-full group">
                   <div
                     className="flex justify-center cursor-pointer"
                     onClick={() => handleClosedSession()}
@@ -287,7 +290,7 @@ export const Home = () => {
                     <div>
                       <LogoutIcon
                         aria-hidden="true"
-                        className="h-6 w-6 mt-1 hover:bg-gray-300 active:bg-gray-300 focus:ring"
+                        className="w-6 h-6 mt-1 hover:bg-gray-300 active:bg-gray-300 focus:ring"
                       />
                     </div>
                   </div>
@@ -296,16 +299,16 @@ export const Home = () => {
             </div>
           </div>
 
-          <div className="hidden lg:flex lg:pl-64 flex-col flex-1  ">
-            {/*  <div className="lg:w-4/5 h-8 fixed bg-gray-400 justify-center flex  z-50">
-            <span className=" inline-block w-1/2 px-8 font-semibold text-white ml-auto mr-auto">
+          <div className="flex-col flex-1 hidden lg:flex lg:pl-64 ">
+            {/*  <div className="fixed z-50 flex justify-center h-8 bg-gray-400 lg:w-4/5">
+            <span className="inline-block w-1/2 px-8 ml-auto mr-auto font-semibold text-white ">
               Sucursal calle 9 #18-40 Simon Bolivar
             </span>
           </div> */}
 
             <main className="flex-1 ">
-              <div className="py-6 relative ">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:mx-auto lg:px-4">
+              <div className="relative py-6 ">
+                <div className="px-4 mx-auto max-w-7xl sm:px-6 md:px-8 lg:mx-auto lg:px-4">
                   {/* Reemplazar aca los componenetes par rendizar en el home*/}
                   <div className="py-4">
                     <div className="flex flex-col">
@@ -319,8 +322,8 @@ export const Home = () => {
                         leaveTo="opacity-0 translate-y-1"
                       >
                         <div className="px-4 mt-4">
-                          <div className=" texte-center w-full">
-                            <h1 className="text-2xl h-14  left-0 font-semibold text-gray-900">
+                          <div className="w-full  texte-center">
+                            <h1 className="left-0 text-2xl font-semibold text-gray-900 h-14">
                               Transacciones
                             </h1>
                           </div>
@@ -334,10 +337,10 @@ export const Home = () => {
                             onClick={() => setopenFilter(true)}
                           >
                             <FilterIcon
-                              className="h-6 w-6 text-lg"
+                              className="w-6 h-6 text-lg"
                               aria-hidden="true"
                             />
-                            <span className="text-gray-700 font-bold text-md">
+                            <span className="font-bold text-gray-700 text-md">
                               Filtros
                             </span>
                           </div>
