@@ -7,6 +7,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import { AppRouter } from './routers/AppRouter';
 import keycloak from "./Keycloak";
+import { Login } from './components/Login';
 /* import { AppRouter } from './routers/AppRouter'; */
 
 const root = ReactDOM.createRoot(
@@ -22,6 +23,7 @@ const tokenLogger = (tokens: unknown) => {
 }
 
 root.render(
+  
   <ReactKeycloakProvider 
     authClient={keycloak}
     onEvent={eventLogger}

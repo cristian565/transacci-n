@@ -23,16 +23,17 @@ const fetcher = async (path: string,token: string, headers?: Record<string, stri
 
 export function useOrders(
     path: string,
-    token: string
+    token: string,
+    page:number
 ) {
   
-  const { data, error, mutate } = useSWR<Order>([`${path}?page=0&size=20&sort=createdAt,desc`,token],fetcher,
+  const { data, error, mutate } = useSWR<Order>([`${path}?page=${page}&size=5&sort=createdAt,desc`,token],fetcher,
      {
         onErrorRetry: (lastError, key, config, revalidate, { retryCount }) => {
           // Only retry up to 3 times.
           if (retryCount >= 3) return;
         },
-        refreshInterval: 1000 
+        // refreshInterval: 1000 
       } 
       );
 

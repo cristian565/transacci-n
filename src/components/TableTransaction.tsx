@@ -10,29 +10,47 @@ import {
   CreditCardIcon,
 } from "@heroicons/react/outline";
 import { DetailsValue } from "./interface/detailsValue";
+import { number } from "prop-types";
 
 export interface TableTransactionProps {
   detailsValue: Dispatch<SetStateAction<DetailsValue>>;
   openTransaction: Dispatch<SetStateAction<boolean>>;
   order: Order;
+  pageState:number
+  page: Dispatch<SetStateAction<number>>;
+  pageStart: Dispatch<SetStateAction<number>>;
+  pageLimit: Dispatch<SetStateAction<number>>;
+  pagStart:number;
+  pagLimit:number;
   e2eAttr?: string;
 }
 
 export const TableTransaction = (props: TableTransactionProps) => {
   const data = useMemo(() => props.order.transactions, [props.order]);
 
-  const [start, setStart] = useState(0);
-  const [limit, setLimit] = useState(10);
+  const [start, setStart] = useState(props.pagStart);
+  const [limit, setLimit] = useState(props.pagLimit);
+  const [pageIndex, setPageIndex] = useState(props.pageState);
 
   const handlePagination = (action: "next" | "previous") => {
     switch (action) {
       case "next":
-        setStart(start + 10);
-        setLimit(limit + 10);
+        setStart(start + 1);
+        setLimit(limit + 1);
+       
+        props.page(pageIndex + 1);
+        setPageIndex(pageIndex + 1);
+        props.pageStart(start + 1);
+        props.pageLimit(limit + 1);
         break;
       case "previous":
-        setStart(start - 10);
-        setLimit(limit - 10);
+        setStart(start - 1);
+        setLimit(limit - 1);
+
+        props.page(pageIndex- 1);
+        setPageIndex(pageIndex - 1);
+        props.pageStart(start - 1);
+        props.pageLimit(limit - 1);
         break;
     }
   };
@@ -56,8 +74,14 @@ export const TableTransaction = (props: TableTransactionProps) => {
     VOIDED: "Anulada",
   };
 
+
   return (
     <>
+    {console.log(start,"start")}
+    {console.log(limit,"limit")}
+    {console.log(pageIndex,"pageIndex")}
+    
+    
       <div className="px-4 sm:px-6 lg:px-2 mt-8 " data-cy={props.e2eAttr}>
         <div className="hidden md:flex mt-4 flex-col shadow-xl">
           <div className="overflow-x-auto ">
@@ -93,7 +117,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
-                    {data.slice(start, limit).map((item) => (
+                    {data.map((item) => (
                       <tr
                         key={item.reference}
                         onClick={() =>{
@@ -200,13 +224,13 @@ export const TableTransaction = (props: TableTransactionProps) => {
                       Mostrando <span className="font-medium">{start + 1}</span>{" "}
                       de{" "}
                       <span className="font-medium">
-                        {limit > props.order.transactions.length
-                          ? props.order.transactions.length
+                        {limit > ((props.order.totalTransactions%5===0)?props.order.totalTransactions/5:(Math.trunc(props.order.totalTransactions/5)+1))
+                          ? ((props.order.totalTransactions%5===0)?props.order.totalTransactions/5:(Math.trunc(props.order.totalTransactions/5)+1))
                           : limit}
                       </span>{" "}
                       de{" "}
                       <span className="font-medium">
-                        {props.order.transactions.length}
+                        {(props.order.totalTransactions%5===0)?props.order.totalTransactions/5:(Math.trunc(props.order.totalTransactions/5)+1)}
                       </span>{" "}
                       resultados
                     </p>
@@ -223,7 +247,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                       className={
                         "inline-flex relative items-center py-2 px-4 ml-3 text-sm font-medium text-white bg-blue-wompi hover:bg-blue-400 rounded-md border border-gray-300"
                       }
-                      disabled={limit >= props.order.transactions.length}
+                      disabled={limit >= ((props.order.totalTransactions%5===0)?props.order.totalTransactions/5:(Math.trunc(props.order.totalTransactions/5)+1))}
                       onClick={() => handlePagination("next")}
                     >
                       Siguiente
@@ -244,7 +268,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
               </span>
             </div>
             <ul className="overflow-hidden mt-2 divide-y divide-gray-200 shadow ">
-              {data.slice(start, limit).map((item) => (
+              {data.map((item) => (
                 <li
                   key={item.reference}
                   className="sm:relative mb-0 "

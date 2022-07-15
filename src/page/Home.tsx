@@ -31,9 +31,9 @@ export const Home = () => {
   function classNames(...classes: any) {
     return classes.filter(Boolean).join(" ");
   }
- 
+
   const [dataOrder, setDataOrder] = useState<any>({});
-  const [showNoDateFilter, setShowNoDateFilter] = useState<boolean>(false);  
+  const [showNoDateFilter, setShowNoDateFilter] = useState<boolean>(false);
   const [openTransaction, setOpenTransaction] = useState<boolean>(true);
   const [removeSearch, setremoveSearch] = useState<boolean>(false);
   const [openFilter, setopenFilter] = useState<boolean>(false);
@@ -43,18 +43,20 @@ export const Home = () => {
     transactionId: "",
     paymentGateway: "",
   });
+  const [pagination, setpagination] = useState<number>(0);
+  const [start, setStart] = useState<number>(0);
+  const [limit, setLimit] = useState<number>(1);
 
-  
 
 
   const { orders, isLoading, isError } = useOrders(
     "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/",
-    keycloak.token ? keycloak.token : ""
+    keycloak.token ? keycloak.token : "", pagination
   );
 
   useEffect(() => {
-    if(orders && !showNoDateFilter){setDataOrder(orders);}
-  },[orders,showNoDateFilter]);
+    if (orders && !showNoDateFilter) { setDataOrder(orders); }
+  }, [orders, showNoDateFilter]);
 
   /*    useEffect(() => {
     if (!removeSearch) {
@@ -75,10 +77,11 @@ export const Home = () => {
 
   return (
     <>
-    {console.log(keycloak.token)}
+      {console.log(orders)}
+      {console.log(pagination,"props.page")}
       <div className="h-screen">
         {/* Componente para movil */}
-    
+
         <div className="h-screen w-full lg:hidden">
           <div className="relative bg-white">
             <div
@@ -145,9 +148,9 @@ export const Home = () => {
             leaveTo="opacity-0 translate-y-1"
           >
             <SearchForm
-            noDateFilter={setShowNoDateFilter}
-            dataOrder={setDataOrder}
-            token={keycloak.token ? keycloak.token : ""}
+              noDateFilter={setShowNoDateFilter}
+              dataOrder={setDataOrder}
+              token={keycloak.token ? keycloak.token : ""}
               stateFilter={setopenFilter}
               cleanSeacrh={setremoveSearch}
               e2eAttr={"search-form"}
@@ -167,6 +170,12 @@ export const Home = () => {
               detailsValue={setDetailsValue}
               openTransaction={setOpenTransaction}
               order={dataOrder}
+              pageState={pagination}
+              page={setpagination}
+              pageStart={setStart}
+              pageLimit={setLimit}
+              pagStart={start}
+              pagLimit={limit}
               e2eAttr="table-transaction"
             />
           </Transition>
@@ -184,8 +193,8 @@ export const Home = () => {
             leaveFrom="opacity-100 translate-y-0"
             leaveTo="opacity-0 translate-y-1"
           >
-           
-             <Details
+
+            <Details
               token={keycloak.token ? keycloak.token : ""}
               detailsValue={{
                 transactionId: detailsValue.transactionId,
@@ -193,7 +202,7 @@ export const Home = () => {
               }}
               onClose={() => {
                 setOpenTransaction(true);
-              }} 
+              }}
               e2eAttr="details--transaction"
             />
           </Transition>
@@ -242,7 +251,7 @@ export const Home = () => {
                 <div className="flex-shrink-0 w-full group block">
                   <div
                     className="flex justify-center cursor-pointer"
-                    onClick={() =>handleClosedSession()}
+                    onClick={() => handleClosedSession()}
                   >
                     <div className="mr-2">
                       <p className="text-xl font-semibold text-blue-wompi hover:text-blue-300 active:bg-gray-300 focus:ring">
@@ -319,15 +328,15 @@ export const Home = () => {
                         leaveTo="opacity-0 translate-y-1"
                       >
                         <SearchForm
-                        noDateFilter={setShowNoDateFilter}
-                        dataOrder={setDataOrder}
-                        token={keycloak.token ? keycloak.token : ""}
+                          noDateFilter={setShowNoDateFilter}
+                          dataOrder={setDataOrder}
+                          token={keycloak.token ? keycloak.token : ""}
                           stateFilter={setopenFilter}
                           cleanSeacrh={setremoveSearch}
                           e2eAttr={"search-form"}
                         />
                       </Transition>
-                      
+
                       <Transition
                         show={openTransaction && !isLoading}
                         enter="transition ease-out duration-200"
@@ -341,6 +350,13 @@ export const Home = () => {
                           detailsValue={setDetailsValue}
                           openTransaction={setOpenTransaction}
                           order={dataOrder}
+                          pageState={pagination}
+                          page={setpagination}
+                          pageStart={setStart}
+                          pageLimit={setLimit}
+                          pagStart={start}
+                          pagLimit={limit}
+                          e2eAttr="table-transaction"
                         />
                       </Transition>
                       <Transition show={isLoading}>
@@ -348,7 +364,7 @@ export const Home = () => {
                       </Transition>
 
                       <Transition
-                        show={!openTransaction }
+                        show={!openTransaction}
                         enter="transition ease-out duration-200"
                         enterFrom="opacity-0 translate-y-1"
                         enterTo="opacity-100 translate-y-0"
@@ -356,8 +372,8 @@ export const Home = () => {
                         leaveFrom="opacity-100 translate-y-0"
                         leaveTo="opacity-0 translate-y-1"
                       >
-                        
-                       <Details
+
+                        <Details
                           token={keycloak.token ? keycloak.token : ""}
                           detailsValue={{
                             transactionId: detailsValue.transactionId,
@@ -367,10 +383,10 @@ export const Home = () => {
                             setOpenTransaction(true);
                           }}
                           e2eAttr="details--transaction"
-                          
-                        /> 
+
+                        />
                       </Transition>
-                      
+
                     </div>
                   </div>
                 </div>
