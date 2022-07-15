@@ -11,19 +11,20 @@ export async function getDataSearch(
   paymentMethod?: string,
   customer?: string,
   fromDate?: string,
-  untilDate?: string,
-  
+  untilDate?: string
 ) {
   //Cambio de contrasena
   try {
+    console.log(paymentMethod,"getDataSearch");
     setLoading(true);
     const response = await axios.get(
-      `${path}?${(id!=="")&&("id="+id)}${(reference!=="")&&("&reference="+reference)}
-        ${(status!=="")&&("&status="+status)}
-        ${(paymentMethod!=="")&&("&paymentMethod="+paymentMethod)}
-        ${(customer!=="")&& ("&customer="+customer)}
-        ${(fromDate!=="")&& ("&fromDate="+fromDate)}
-        ${(untilDate!=="")&& ("&untilDate="+untilDate)}`,
+      `${path}?${status ? "status=" + status : ""}${
+        paymentMethod ? "&paymentMethod=" + paymentMethod : ""
+      }${id ? "id=" + id : ""}${reference ? "&reference=" + reference : ""}${
+        customer ? "&customer=" + customer : ""
+      }${fromDate ? "&fromDate=" + fromDate : ""}${
+        untilDate ? "&untilDate=" + untilDate : ""
+      }`,
       {
         headers: {
           "x-store-id": "hardtech",

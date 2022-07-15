@@ -3,20 +3,25 @@ import React, { Dispatch, memo, useEffect, useState } from "react";
 import { parseCurrency } from "../hooks/parse-currency";
 import { parseDate } from "../hooks/parse-date";
 import { imagenes } from "../assets/imagenes";
-import {ArrowLeftIcon,ClockIcon,CalendarIcon, CreditCardIcon} from "@heroicons/react/outline";
+import { ArrowLeftIcon, ClockIcon, CalendarIcon, CreditCardIcon } from "@heroicons/react/outline";
 import { OrderDetails } from "./interface/orderDetails";
+import { getOrdersDetail } from "../hooks/ordersDetail";
 import { useKeycloak } from "@react-keycloak/web";
 import { DetailsValue } from "./interface/detailsValue";
-
-
+import { AuthorizingDetailsCard } from "./AuthorizingDetailsCard";
+import { AuthorizingDetailsPse } from "./AuthorizingDetailsPse";
+import { AuthorizingDetailsTransfer } from "./AuthorizingDetailsTransfer";
+import { AuthorizingDetailsCollect } from "./AuthorizingDetailsCollect";
+import { AuthorizingDetailsNequi } from "./AuthorizingDetailsNequi";
 
 
 export interface DetailsSkeletonProps {
   e2eAttr?: string;
 }
 
-export const DetailsSkeleton = memo((props: DetailsSkeletonProps) => {
-const [data, setdata] = useState<any>(111)
+export const DetailsSkeleton = (props: DetailsSkeletonProps) => {
+
+  // const [data, setdata] = useState<any>(111)
   const statusStyles: Record<string, string> = {
     DECLINED: "bg-red-400 text-red-700",
     ERROR: "bg-red-400 text-red-700",
@@ -31,22 +36,20 @@ const [data, setdata] = useState<any>(111)
     VOIDED: "Anulada",
   };
 
- 
   return (
     <>
-       
-       
-        <div className="min-h-full">
+
+      <div className="min-h-full">
         {/*    <button onClick={handleHome}>
 ATRAS
         </button> */}
         <main className="py-2 md:py-9"
-        data-cy={props.e2eAttr}>
+          data-cy={props.e2eAttr}>
           {/* Page header */}
           <div className=" mx-auto px-4 h-10 sm:px-6  md:flex md:content-center  md:space-x-2 lg:max-w-7xl lg:px-8">
             <ArrowLeftIcon
-             aria-hidden="true"    
-              className="h-7 w-6 my-1 cursor-pointer"           
+              aria-hidden="true"
+              className="h-7 w-6 my-1 cursor-pointer"
             />
             <h1 className="text-2xl text-center md:text-left font-semibold text-gray-900">
               Detalle de la transacción
@@ -65,63 +68,68 @@ ATRAS
                       Detalles de pago
                     </h2>
                   </div>
-                  <div className="border-t border-gray-200 px-4 py-5 sm:px-6 lg:pb-8">
+                  <div className="animate-pulse border-t border-gray-200 px-4 py-5 sm:px-6 lg:pb-8">
                     <dl className="grid grid-cols-1 gap-x-4 gap-y-5 sm:gap-y-8 sm:grid-cols-2">
                       <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">
                           Monto
                         </dt>
-                        <dd className="mt-1 text-sm font-semibold text-gray-900">{`COP ${parseCurrency(
-                          4543345432
-                        )}`}</dd>
+                        <div className="flex flex-row ">
+                          <span className="w-24 h-4 bg-gray-300 rounded-full">
+                            {/* aqui la el monto*/}
+                          </span>
+                        </div>
                       </div>
                       <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">
-                          Estado 
+                          Estado
                         </dt>
-                        <span
-                          className={`${statusStyles["DECLINED"]}
-                             font-semibold inline-block  rounded-lg h-1/2 px-3 w-24 text-center`}
-                        >
-                          
-                        </span>
+                        <div className="flex flex-row ">
+                          <span className="w-20 h-4 bg-gray-300 rounded-full">
+                            {/* aqui la el monto*/}
+                          </span>
+                        </div>
                       </div>
                       <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">
                           Detalle del estado
                         </dt>
-                        <dd className="mt-1 text-sm text-gray-900">
-                          PREGUNTAR
-                        </dd>
+                        <div className="flex flex-row ">
+                          <span className="w-32 h-4 bg-gray-300 rounded-full">
+                            {/* aqui la el monto*/}
+                          </span>
+                        </div>
                       </div>
                       <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">
                           Transacción #
                         </dt>
-                        <dd className="mt-1 text-sm text-gray-900">
-                          23432234
-                        </dd>
+                        <div className="flex flex-row ">
+                          <span className="w-32 h-4 bg-gray-300 rounded-full">
+                            {/* aqui la el monto*/}
+                          </span>
+                        </div>
                       </div>
                       <div className="sm:col-span-1 ">
                         <dt className="text-sm font-medium text-gray-500">
                           Medio de pago
                         </dt>
-                        <div className="flex flex-row">
-                                <img
-                                  data-cy={`${props.e2eAttr}__image-md`}
-                                  className="block h-8 w-auto"
-                                  src={imagenes["PSE"]}
-                                  alt="LogoMetPago"
-                                />
-                              
-                          <dd className="mt-1 text-sm text-gray-900">-3342</dd>
+                        <div className="flex flex-row ">
+                          <span className="w-12 h-10 bg-gray-300 rounded-lg">
+                            {/* aqui la el monto*/}
+                          </span>
+
                         </div>
                       </div>
                       <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">
                           Referencia
                         </dt>
-                        <dd className="mt-1 text-sm text-gray-900">3545</dd>
+                        <div className="flex flex-row ">
+                          <span className="w-28 h-4 bg-gray-300 rounded-full">
+                            {/* aqui la el monto*/}
+                          </span>
+                        </div>
                       </div>
                       <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">
@@ -133,8 +141,8 @@ ATRAS
                               aria-hidden="true"
                               className="h-6 w-6"
                             />
-                            <span className="ml-1">
-                              {parseDate("2022-04-26T14:40:35.227Z").hour}
+                            <span className="w-12 h-4 mt-1 bg-gray-300 rounded-full">
+                              {/* aqui la el monto*/}
                             </span>
                           </div>
 
@@ -142,9 +150,9 @@ ATRAS
                             <CalendarIcon
                               aria-hidden="true"
                               className="h-6 w-6"
-                              />
-                            <span className="ml-1">
-                              {parseDate("2022-04-26T14:40:35.227Z").date}
+                            />
+                            <span className="w-12 h-4 mt-1 bg-gray-300 rounded-full">
+                              {/* aqui la el monto*/}
                             </span>
                           </div>
                         </div>
@@ -156,22 +164,22 @@ ATRAS
                         <div className="flex flex-col space-y-1">
                           <div className="flex flex-row content-center">
                             <ClockIcon
-                            aria-hidden="true"
+                              aria-hidden="true"
                               className="h-6 w-6"
                             />
-                            <span className="ml-1">
-                              {parseDate("2022-04-26T14:40:35.227Z").hour}
+                            <span className="w-12 h-4 mt-1 bg-gray-300 rounded-full">
+                              {/* aqui la el monto*/}
                             </span>
                           </div>
 
                           <div className="flex flex-row content-center">
                             <CalendarIcon
-                            aria-hidden="true"
+                              aria-hidden="true"
                               className="h-6 w-6"
-                              
+
                             />
-                            <span className="ml-1">
-                              {parseDate("2022-04-26T14:40:35.227Z").date}
+                            <span className="w-12 h-4 mt-1 bg-gray-300 rounded-full">
+                              {/* aqui la el monto*/}
                             </span>
                           </div>
                         </div>
@@ -191,40 +199,32 @@ ATRAS
                     >
                       Detalles del autorizador
                     </h2>
-                  </div>
-                  <div className="border-t border-gray-200 px-4 py-5 sm:px-6 lg:pb-8">
-                    <dl className="grid grid-cols-1 gap-x-4 gap-y-5 sm:gap-y-8 sm:grid-cols-2">
-                      <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">
-                          Número de cuotas
-                        </dt>
-                        <dd className="mt-1 text-sm font-semibold text-gray-900">
-                          1
-                        </dd>
-                      </div>
-                      <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">
-                          Franquicia
-                        </dt>
-                        <dd className="mt-1 text-sm font-semibold text-gray-900">
-                          VISA
-                        </dd>
-                      </div>
-                      <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">
-                          Número de tarjeta
-                        </dt>
-                        <dd className="mt-1 text-sm text-gray-900">
-                          128343*****1843
-                        </dd>
-                      </div>
-                      <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">
-                          Fecha de vencimiento
-                        </dt>
-                        <dd className="mt-1 text-sm text-gray-900">01/22</dd>
-                      </div>
-                    </dl>
+                    <div className=" animate-pulse border-t border-gray-200 px-4 py-5 sm:px-6 lg:pb-8">
+                      <dl className="grid grid-cols-1 gap-x-4 gap-y-5 sm:gap-y-8 sm:grid-cols-2">
+
+                        <div className="sm:col-span-1">
+                          <dt className="text-sm font-medium text-gray-500">
+                            Número de cuotas
+                          </dt>
+                          <div className="flex flex-row ">
+                            <span className="w-28 h-4 bg-gray-300 rounded-full">
+                              {/* aqui la el monto*/}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="sm:col-span-1">
+                          <dt className="text-sm font-medium text-gray-500">
+                            Franquicia
+                          </dt>
+                          <div className="flex flex-row ">
+                            <span className="w-28 h-4 bg-gray-300 rounded-full">
+                              {/* aqui la el monto*/}
+                            </span>
+                          </div>
+                        </div>
+                      </dl>
+                    </div>
                   </div>
                 </div>
               </section>
@@ -239,30 +239,36 @@ ATRAS
                   id="timeline-title"
                   className="text-lg font-medium text-gray-900 mt-2 md:mt-0"
                 >
-                  Entradas contables
+                  Infromación del comprador
                 </h2>
-                <div className="mt-3 sm:mt-4 flow-root border-t border-gray-200">
+                <div className="animate-pulse mt-3 sm:mt-4 flow-root border-t border-gray-200">
                   <div className="sm:py-4 mt-2 sm:mt-0">
                     <dt className="text-sm font-medium text-gray-500">Email</dt>
-                    <dd className="mt-1 text-sm font-semibold text-gray-900">
-                      Juan445@gmail.com
-                    </dd>
+                    <div className="flex flex-row ">
+                      <span className="w-28 h-4 bg-gray-300 rounded-full">
+                        {/* aqui la el monto*/}
+                      </span>
+                    </div>
                   </div>
                   <div className="sm:sm:py-4 mt-4 sm:mt-0">
                     <dt className="text-sm font-medium text-gray-500">
                       Nombres y apellidos
                     </dt>
-                    <dd className="mt-1 text-sm font-semibold text-gray-900">
-                      Pepito Juan Perez Ramos
-                    </dd>
+                    <div className="flex flex-row ">
+                      <span className="w-28 h-4 bg-gray-300 rounded-full">
+                        {/* aqui la el monto*/}
+                      </span>
+                    </div>
                   </div>
                   <div className="sm:sm:py-4 mt-4 sm:mt-0">
                     <dt className="text-sm font-medium text-gray-500">
                       Número de contacto
                     </dt>
-                    <dd className="mt-1 text-sm font-semibold text-gray-900">
-                      3002458760
-                    </dd>
+                    <div className="flex flex-row ">
+                      <span className="w-28 h-4 bg-gray-300 rounded-full">
+                        {/* aqui la el monto*/}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -272,22 +278,26 @@ ATRAS
                   id="timeline-title"
                   className="text-lg font-medium text-gray-900 sm:mt-2 md:mt-2"
                 >
-                  Infromación del comprador
+                  Entradas contables
                 </h2>
-                <div className="mt-3 md:mt-4 lg:mt-6 flow-root border-t border-gray-200 ">
+                <div className="animate-pulse mt-3 md:mt-4 lg:mt-6 flow-root border-t border-gray-200 ">
                   <div className="sm:py-4 mt-4 sm:mt-0">
                     <dt className="text-sm font-medium text-gray-500">
                       Concepto
                     </dt>
-                    <dd className="mt-1 text-sm font-semibold text-gray-900">
-                      Sin datos
-                    </dd>
+                    <div className="flex flex-row ">
+                      <span className="w-28 h-4 bg-gray-300 rounded-full">
+                        {/* aqui la el monto*/}
+                      </span>
+                    </div>
                   </div>
                   <div className="sm:sm:py-4 mt-4 sm:mt-0 ">
                     <dt className="text-sm font-medium text-gray-500">Monto</dt>
-                    <dd className="mt-1 text-sm font-semibold text-gray-900">
-                      Sin datos
-                    </dd>
+                    <div className="flex flex-row ">
+                      <span className="w-28 h-4 bg-gray-300 rounded-full">
+                        {/* aqui la el monto*/}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -295,8 +305,8 @@ ATRAS
           </div>
         </main>
       </div>
-    
-      
+
+
     </>
   );
-});
+};

@@ -139,7 +139,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                                 className="font-bold"
                                 data-cy={`${props.e2eAttr}__money-md`}
                               >
-                                {parseCurrency(item.totalTransactionValue)}
+                                {parseCurrency(item.totalTransactionValue/100)}
                               </span>
                               <span>{item.client}</span>
                             </div>
@@ -427,7 +427,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                 <button
                   type="button"
                   className="bg-blue-wompi hover:bg-blue-800 inline-flex relative items-center py-2 px-4 ml-3 text-sm font-medium text-white rounded-md border border-gray-300"
-                  disabled={limit >= props.order.transactions.length}
+                  disabled={limit >= props.order.totalTransactions}
                   onClick={() => handlePagination("next")}
                 >
                   Siguiente

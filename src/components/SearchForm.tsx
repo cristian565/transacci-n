@@ -6,6 +6,8 @@ import { SearchFormValue } from "./interface/searchFormValue";
 import {XIcon,SearchIcon,TrashIcon} from "@heroicons/react/outline";
 import { getDataSearch } from "../hooks/dataSearch";
 export interface SearchFormProps {
+  noDateFilter:Dispatch<SetStateAction<boolean>>;
+  dataOrder: Dispatch<SetStateAction<any>>;
   stateFilter: Dispatch<SetStateAction<boolean>>;
   cleanSeacrh: Dispatch<SetStateAction<boolean>>;
   token:string;
@@ -15,7 +17,9 @@ export interface SearchFormProps {
 const URI = "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions";
 export const SearchForm = (props: SearchFormProps) => {
   const statusOrderArray = ["Declinada", "Error", "Aprobado", "Anulada"];
-  const paymentMethodArray = ["Tarjeta", "Nequi", "Bancolombia", "PSE"];
+  const statusOrderEnglish: Record<string, string> = { Declinada:"DECLINED",Error:"ERROR",Aprobado:"APPROVED",Anulada:"VOIDED"};
+  const paymentMethodArray = ["Tarjeta", "Nequi", "Botón Bancolombia","Corresponsal Bancario Bancolombia", "PSE"];
+  const paymentMethodEnglish:Record<string, string> = {1:"CARD",2:"NEQUI",3:"BANCOLOMBIA_TRANSFER",4:"BANCOLOMBIA_COLLECT",5:"PSE"};
   const { token } = props;
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<any>({});
@@ -70,8 +74,8 @@ export const SearchForm = (props: SearchFormProps) => {
       setData,
       searchValue.idTransaction,
       searchValue.refTransaction,
-      searchValue.stateOrders,
-      "NEQUI",
+      statusOrderEnglish[searchValue.stateOrders],
+      paymentMethodEnglish[paymentMethodArray.indexOf(searchValue.paymentMethod)+1],
       searchValue.emailUser
       ); }
   }, [searchValue,showSearch])
@@ -80,6 +84,12 @@ export const SearchForm = (props: SearchFormProps) => {
     if (data) {
       console.log("data search",data);
       console.log("data searchVlue",searchValue);
+      console.log("data de la consulta",paymentMethodArray.indexOf(searchValue.paymentMethod)+1);
+      console.log(paymentMethodEnglish[paymentMethodArray.indexOf(searchValue.paymentMethod)+1],"valor buscado")
+      props.dataOrder(data);
+      if(data.transactions.length===0){
+        props.noDateFilter(true);
+      }
     }  
   }, [data])
 

@@ -26,12 +26,13 @@ export function useOrders(
     token: string
 ) {
   
-  const { data, error, mutate } = useSWR<Order>([`${path}?page=0&size=6`,token],fetcher,
+  const { data, error, mutate } = useSWR<Order>([`${path}?page=0&size=20&sort=createdAt,desc`,token],fetcher,
      {
         onErrorRetry: (lastError, key, config, revalidate, { retryCount }) => {
           // Only retry up to 3 times.
           if (retryCount >= 3) return;
         },
+        refreshInterval: 1000 
       } 
       );
 

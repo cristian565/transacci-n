@@ -12,20 +12,16 @@ import { TableTransaction } from "../components/TableTransaction";
 import { Details } from "../components/Details";
 import { imagenes } from "../assets/imagenes";
 import { SearchForm } from "../components/SearchForm";
-import { SearchFormValue } from "../components/interface/searchFormValue";
-import { orderInvoiceSearch } from "../hooks/orderInvoiceSearch";
-import { Order } from "../components/interface/order";
 import { TableTransactionSkeleton } from "../components/TableTransactionSkeleton";
 import Modal from "../components/Modal";
-/* import { NotFilterData } from "./NotFilterData"; */
 import OrderNotFound from "../components/OrderNotFound";
 import { useOrders } from "../hooks/useOrders";
-import ServerDown from "../components/ServerDow";
 import { useKeycloak } from "@react-keycloak/web";
 import { useHistory } from "react-router-dom";
 import { DetailsValue } from "../components/interface/detailsValue";
-// import { ordersDetail } from "../hooks/ordersDetail";
 import { OrderDetails } from "../components/interface/orderDetails";
+import { DetailsSkeleton } from "../components/DetailsSkeleton";
+
 
 export const Home = () => {
   const navigation = [
@@ -37,22 +33,17 @@ export const Home = () => {
   }
  
   const [dataOrder, setDataOrder] = useState<any>({});
-  /*   const dataOrder = useMemo(() => data, [data]); */
-  const [showNoDateFilter, setShowNoDateFilter] = useState<boolean>(false);
-
-  
+  const [showNoDateFilter, setShowNoDateFilter] = useState<boolean>(false);  
+  const [openTransaction, setOpenTransaction] = useState<boolean>(true);
+  const [removeSearch, setremoveSearch] = useState<boolean>(false);
+  const [openFilter, setopenFilter] = useState<boolean>(false);
+  const { keycloak, initialized } = useKeycloak();
+  const history = useHistory();
   const [detailsValue, setDetailsValue] = useState<DetailsValue>({
     transactionId: "",
     paymentGateway: "",
   });
-  const [openTransaction, setOpenTransaction] = useState<boolean>(true);
-  const [removeSearch, setremoveSearch] = useState<boolean>(false);
-  const [openFilter, setopenFilter] = useState<boolean>(false);
-  const [showOrderNotFound, setShowOrderNotFound] = useState<boolean>(false);
-  const { keycloak, initialized } = useKeycloak();
-  const history = useHistory();
-  const [dataDetails, setdataDetails] = useState<any>();
-  const [dataConsulta, setdataConsulta] = useState<OrderDetails>();
+
   
 
 
@@ -61,14 +52,9 @@ export const Home = () => {
     keycloak.token ? keycloak.token : ""
   );
 
-    console.log("🚀 ~ file: Home.tsx ~ line 103 ~ Home ~ orders", orders)
   useEffect(() => {
-    
-    setDataOrder(orders);
-    /* setShowOrderNotFound(
-      isLoading && isError ? false : !!isError
-    ); */
-  }, [orders]);
+    if(orders && !showNoDateFilter){setDataOrder(orders);}
+  },[orders,showNoDateFilter]);
 
   /*    useEffect(() => {
     if (!removeSearch) {
@@ -82,37 +68,14 @@ export const Home = () => {
    
   }, [searchValue, removeSearch,orders]) ; */
 
-  const handlePrueba = () => {
+  const handleClosedSession = () => {
     keycloak.logout();
     history.push("/");
   };
 
-  // useEffect(() => {
-  //   (!openTransaction)&&(
-  //     ordersDetail(
-  //       "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/"
-  //     ,(keycloak.token ? keycloak.token : ""),detailsValue.paymentGateway,detailsValue.transactionId).then((resp)=>{
-       
-  //       if (resp.status==200) {
-  //         console.log('Resp consulta ',resp)
-          
-  //         setdataConsulta(resp.data)
-          
-  //         console.log('data exit')
-  //       }else{
-  //           if (resp.status==500){
-  //             console.log('Internal server error')
-               
-  //           }
-  //       }
-  //   })
-  //   )
-  // }, [openTransaction])
-  
-
   return (
     <>
-   
+    {console.log(keycloak.token)}
       <div className="h-screen">
         {/* Componente para movil */}
     
@@ -143,7 +106,7 @@ export const Home = () => {
                       className="h-10 w-10"
                     />
                   </div>
-                  <div onClick={() => alert("Cerrar session cliquedo")}>
+                  <div onClick={() => handleClosedSession()}>
                     <LogoutIcon aria-hidden="true" className="h-10 w-10 " />
                   </div>
                 </div>
@@ -158,7 +121,7 @@ export const Home = () => {
                       <span>Buscar</span>
                     </div>
                     <div
-                      onClick={() => alert("Cerrar session")}
+                      onClick={() => handleClosedSession()}
                       className="ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-wompi hover:bg-indigo-700"
                     >
                       <span>Salir</span>
@@ -182,6 +145,8 @@ export const Home = () => {
             leaveTo="opacity-0 translate-y-1"
           >
             <SearchForm
+            noDateFilter={setShowNoDateFilter}
+            dataOrder={setDataOrder}
             token={keycloak.token ? keycloak.token : ""}
               stateFilter={setopenFilter}
               cleanSeacrh={setremoveSearch}
@@ -219,8 +184,8 @@ export const Home = () => {
             leaveFrom="opacity-100 translate-y-0"
             leaveTo="opacity-0 translate-y-1"
           >
-            <Details
-            
+           
+             <Details
               token={keycloak.token ? keycloak.token : ""}
               detailsValue={{
                 transactionId: detailsValue.transactionId,
@@ -228,13 +193,10 @@ export const Home = () => {
               }}
               onClose={() => {
                 setOpenTransaction(true);
-              }}
-              // status={(dataDetails)?dataDetails.data.status:"hola"}
+              }} 
               e2eAttr="details--transaction"
-              // status={""}
             />
           </Transition>
-          
         </div>
 
         {/* Static sidebar for desktop */}
@@ -280,11 +242,11 @@ export const Home = () => {
                 <div className="flex-shrink-0 w-full group block">
                   <div
                     className="flex justify-center cursor-pointer"
-                    onClick={() => handlePrueba()}
+                    onClick={() =>handleClosedSession()}
                   >
                     <div className="mr-2">
                       <p className="text-xl font-semibold text-blue-wompi hover:text-blue-300 active:bg-gray-300 focus:ring">
-                        Cerrar Sesion
+                        Cerrar Sesión
                       </p>
                     </div>
                     <div>
@@ -357,6 +319,8 @@ export const Home = () => {
                         leaveTo="opacity-0 translate-y-1"
                       >
                         <SearchForm
+                        noDateFilter={setShowNoDateFilter}
+                        dataOrder={setDataOrder}
                         token={keycloak.token ? keycloak.token : ""}
                           stateFilter={setopenFilter}
                           cleanSeacrh={setremoveSearch}
@@ -384,7 +348,7 @@ export const Home = () => {
                       </Transition>
 
                       <Transition
-                        show={!openTransaction}
+                        show={!openTransaction }
                         enter="transition ease-out duration-200"
                         enterFrom="opacity-0 translate-y-1"
                         enterTo="opacity-100 translate-y-0"
@@ -392,8 +356,8 @@ export const Home = () => {
                         leaveFrom="opacity-100 translate-y-0"
                         leaveTo="opacity-0 translate-y-1"
                       >
-                        <Details
-                        data={dataConsulta}
+                        
+                       <Details
                           token={keycloak.token ? keycloak.token : ""}
                           detailsValue={{
                             transactionId: detailsValue.transactionId,
@@ -402,8 +366,9 @@ export const Home = () => {
                           onClose={() => {
                             setOpenTransaction(true);
                           }}
-                          /* status={(details.data.status)?dataDetails.data.status:"hola"} */
-                        />
+                          e2eAttr="details--transaction"
+                          
+                        /> 
                       </Transition>
                       
                     </div>

@@ -1,4 +1,4 @@
-import React, { Dispatch, memo, useEffect, useState } from "react";
+import React, { Dispatch, memo, useEffect, useState, SetStateAction} from "react";
 // import { useNavigate } from "react-router-dom";
 import { parseCurrency } from "../hooks/parse-currency";
 import { parseDate } from "../hooks/parse-date";
@@ -8,11 +8,16 @@ import { OrderDetails } from "./interface/orderDetails";
 import { getOrdersDetail } from "../hooks/ordersDetail";
 import { useKeycloak } from "@react-keycloak/web";
 import { DetailsValue } from "./interface/detailsValue";
+import { AuthorizingDetailsCard } from "./AuthorizingDetailsCard";
+import { AuthorizingDetailsPse } from "./AuthorizingDetailsPse";
+import { AuthorizingDetailsTransfer } from "./AuthorizingDetailsTransfer";
+import { AuthorizingDetailsCollect } from "./AuthorizingDetailsCollect";
+import { AuthorizingDetailsNequi } from "./AuthorizingDetailsNequi";
+import { DetailsSkeleton } from "./DetailsSkeleton";
 
 const URI = "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/";
 export interface DetailsProps {
   detailsValue: DetailsValue
-  data?: any;
   token: string;
   onClose: () => void;
   e2eAttr?: string;
@@ -20,7 +25,7 @@ export interface DetailsProps {
 
 export const Details = (props: DetailsProps) => {
 
-  const { detailsValue: { transactionId, paymentGateway }, token } = props;
+  const {detailsValue: { transactionId, paymentGateway }, token } = props;
 
   // const [data, setdata] = useState<any>(111)
   const statusStyles: Record<string, string> = {
@@ -38,6 +43,7 @@ export const Details = (props: DetailsProps) => {
   };
 
   const [data, setData] = useState<any>(null);
+  const [prueba, setPrueba] = useState<any>(false);
   const [loading, setLoading] = useState<any>({});
   /* const navegate = useNavigate();
   const handleHome = () => {
@@ -56,7 +62,6 @@ export const Details = (props: DetailsProps) => {
   useEffect(() => {
     if (data) {
       console.log(data);
-      
     }  
   }, [data])
 
@@ -65,20 +70,12 @@ export const Details = (props: DetailsProps) => {
 
   // }, [])
 
-
-
-  if(loading) return <h1>loading...</h1> 
-
-  const viewState = data.paymentMethodType ? (
-    <dd className="mt-1 text-sm text-gray-900">
-      {data.paymentMethodType}
-    </dd>
-  ) : null;
+  
 
   return (
     <>
-{console.log(data.status_message,"status_message")}
-      <div className="min-h-full">
+    
+      {(!loading)?<div className="min-h-full">
         {/*    <button onClick={handleHome}>
 ATRAS
         </button> */}
@@ -117,7 +114,7 @@ ATRAS
                           Monto
                         </dt>
                         <dd className="mt-1 text-sm font-semibold text-gray-900">{`COP ${parseCurrency(
-                          data.amountInCents
+                          data.amountInCents/100
                         )}`}</dd>
                       </div>
                       <div className="sm:col-span-1">
@@ -149,18 +146,20 @@ ATRAS
                         <dt className="text-sm font-medium text-gray-500">
                           Medio de pago
                         </dt>
-                        <div className="flex flex-row">
+                        <div className="flex flex-row ">
                           <img
                             data-cy={`${props.e2eAttr}__image-md`}
-                            className="block h-8 w-auto"
+                            className="block h-9 mt-1 w-auto"
                             src={imagenes[(data.paymentMethodType==="CARD")?
-                            data.paymentMethod.extra.type
+                            data.paymentMethod.extra.brand
                             :data.paymentMethodType]}
                             alt="LogoMetPago"
                           />
-                            {(data.paymentMethodType==="CARD")&&
-                           <dd className="mt-1 text-sm text-gray-900">Preguntar</dd>
-                            }
+                           
+                            {(data.paymentMethodType==="CARD")?
+                           <dd className="self-center text-sm text-gray-900"> - {data.paymentMethod.extra.last_four}</dd>
+                            :""}
+                             
                           
                         </div>
                       </div>
@@ -168,7 +167,9 @@ ATRAS
                         <dt className="text-sm font-medium text-gray-500">
                           Referencia
                         </dt>
-                        <dd className="mt-1 text-sm text-gray-900">{data.refrence}</dd>
+                        <dd className="mt-1 text-sm text-gray-900 break-words">
+                          {data.reference}
+                        </dd>
                       </div>
                       <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">
@@ -236,44 +237,15 @@ ATRAS
                       id="applicant-information-title"
                       className="text-lg leading-6 font-medium text-gray-900"
                     >
-                      Detalles del autorizador
+                      Detalles del autorizador 
                     </h2>
                   </div>
-                  <div className="border-t border-gray-200 px-4 py-5 sm:px-6 lg:pb-8">
-                    <dl className="grid grid-cols-1 gap-x-4 gap-y-5 sm:gap-y-8 sm:grid-cols-2">
-                      <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">
-                          Número de cuotas
-                        </dt>
-                        <dd className="mt-1 text-sm font-semibold text-gray-900">
-                          1
-                        </dd>
-                      </div>
-                      <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">
-                          Franquicia
-                        </dt>
-                        <dd className="mt-1 text-sm font-semibold text-gray-900">
-                          VISA
-                        </dd>
-                      </div>
-                      <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">
-                          Número de tarjeta
-                        </dt>
-                        <dd className="mt-1 text-sm text-gray-900">
-                          128343*****1843
-                        </dd>
-                      </div>
-                      <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">
-                          Fecha de vencimiento
-                        </dt>
-                        <dd className="mt-1 text-sm text-gray-900">01/22</dd>
-                      </div>
-                    </dl>
-                  </div>
-                </div>
+               {(data.paymentMethodType==="CARD")? <AuthorizingDetailsCard data={data} />:""}
+               {(data.paymentMethodType==="PSE")? <AuthorizingDetailsPse data={data} />:""} 
+               {(data.paymentMethodType==="BANCOLOMBIA_TRANSFER")? <AuthorizingDetailsTransfer data={data} />:""} 
+               {(data.paymentMethodType==="BANCOLOMBIA_COLLECT")? <AuthorizingDetailsCollect data={data} />:""}      
+               {(data.paymentMethodType==="NEQUI")? <AuthorizingDetailsNequi data={data} />:""} 
+               </div>
               </section>
             </div>
 
@@ -286,7 +258,7 @@ ATRAS
                   id="timeline-title"
                   className="text-lg font-medium text-gray-900 mt-2 md:mt-0"
                 >
-                  Entradas contables
+                  Infromación del comprador
                 </h2>
                 <div className="mt-3 sm:mt-4 flow-root border-t border-gray-200">
                   <div className="sm:py-4 mt-2 sm:mt-0">
@@ -300,17 +272,15 @@ ATRAS
                       Nombres y apellidos
                     </dt>
                     <dd className="mt-1 text-sm font-semibold text-gray-900">
-                      Preguntar
+                      {(data.customerData.full_name)?data.customerData.full_name:'------'}
                     </dd>
                   </div>
                   <div className="sm:sm:py-4 mt-4 sm:mt-0">
                     <dt className="text-sm font-medium text-gray-500">
-                      Número de contacto--preguntar
+                      Número de contacto
                     </dt>
                     <dd className="mt-1 text-sm font-semibold text-gray-900">
-                      {(data.paymentMethodType==="CARD")?
-                            "-------"
-                            :data.paymentMethod.phone_number}
+                      {(data.customerData.phone_number)?data.customerData.phone_number:'------'}
                     </dd>
                   </div>
                 </div>
@@ -321,7 +291,7 @@ ATRAS
                   id="timeline-title"
                   className="text-lg font-medium text-gray-900 sm:mt-2 md:mt-2"
                 >
-                  Infromación del comprador
+                  Entradas contables 
                 </h2>
                 <div className="mt-3 md:mt-4 lg:mt-6 flow-root border-t border-gray-200 ">
                   <div className="sm:py-4 mt-4 sm:mt-0">
@@ -344,7 +314,7 @@ ATRAS
           </div>
         </main>
       </div>
-
+    :<DetailsSkeleton e2eAttr="Details-skeleton__md"/>}
 
     </>
   );
