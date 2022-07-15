@@ -6,6 +6,10 @@ import { SearchFormValue } from "./interface/searchFormValue";
 import {XIcon,SearchIcon,TrashIcon} from "@heroicons/react/outline";
 import { getDataSearch } from "../hooks/dataSearch";
 export interface SearchFormProps {
+  resPage:Dispatch<SetStateAction<number>>;
+  resStart:Dispatch<SetStateAction<number>>;
+  resLimit:Dispatch<SetStateAction<number>>;
+  formvalue:Dispatch<SetStateAction<SearchFormValue>>;
   noDateFilter:Dispatch<SetStateAction<boolean>>;
   dataOrder: Dispatch<SetStateAction<any>>;
   stateFilter: Dispatch<SetStateAction<boolean>>;
@@ -25,13 +29,7 @@ export const SearchForm = (props: SearchFormProps) => {
   const [loading, setLoading] = useState<any>({});
   const [showSearch, setshowSearch] = useState<boolean>(false);
   
-  const [searchValue, setSearchValue] = useState<SearchFormValue>({
-    stateOrders: "",
-    paymentMethod: "",
-    idTransaction: "",
-    refTransaction: "",
-    emailUser: "",
-  });
+
 
   const searchForm = useFormik({
     initialValues: {
@@ -45,15 +43,21 @@ export const SearchForm = (props: SearchFormProps) => {
     validateOnMount: false,
 
     onSubmit: (values) => {
-      setSearchValue(values);
-
+      props.formvalue({
+        stateOrders:statusOrderEnglish[values.stateOrders],
+        paymentMethod:paymentMethodEnglish[paymentMethodArray.indexOf(values.paymentMethod)+1],
+        idTransaction:values.idTransaction,
+        refTransaction:values.refTransaction,
+        emailUser:values.emailUser,
+      });
+    
       props.cleanSeacrh(false);
     },
   });
   const resetValuesForm = () => {
     searchForm.resetForm();
 
-    setSearchValue({
+    props.formvalue({
       stateOrders: "",
       paymentMethod: "",
       idTransaction: "",
@@ -65,7 +69,7 @@ export const SearchForm = (props: SearchFormProps) => {
 
   // fromDate?: string,
   // untilDate?: string,
-  useEffect(() => {
+ /*  useEffect(() => {
     if(showSearch){
     getDataSearch(
       URI,
@@ -91,7 +95,7 @@ export const SearchForm = (props: SearchFormProps) => {
         props.noDateFilter(true);
       }
     }  
-  }, [data])
+  }, [data]) */
 
   return (
     <div 
@@ -271,7 +275,8 @@ export const SearchForm = (props: SearchFormProps) => {
         <div className="flex flex-row space-x-8 content-center justify-center mt-6">
           <button        
             className="bg-blue-wompi w-32 flex flex-row justify-center py-2 h-11 sm:h-auto sm:py-1 content-center mt-1 hover:bg-blue-800 text-white border border-solid rounded-xl cursor-pointer md:w-32 md:h-9"
-            onClick={() => setshowSearch(true)}
+            // onClick={() => {
+            //  }}
           >
             <SearchIcon
               aria-hidden="true"

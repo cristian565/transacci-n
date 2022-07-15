@@ -21,6 +21,7 @@ import { useHistory } from "react-router-dom";
 import { DetailsValue } from "../components/interface/detailsValue";
 import { OrderDetails } from "../components/interface/orderDetails";
 import { DetailsSkeleton } from "../components/DetailsSkeleton";
+import { SearchFormValue } from "../components/interface/searchFormValue";
 
 
 export const Home = () => {
@@ -47,16 +48,37 @@ export const Home = () => {
   const [start, setStart] = useState<number>(0);
   const [limit, setLimit] = useState<number>(1);
 
+  const [searchValue, setSearchValue] = useState<SearchFormValue>({
+    stateOrders: "",
+    paymentMethod: "",
+    idTransaction: "",
+    refTransaction: "",
+    emailUser: "",
+  });
 
-
+/*id?: string,
+    reference?: string,
+    status?: string,
+    paymentMethod?: string,
+    customer?: string,
+    fromDate?: string,
+    untilDate?: string */
   const { orders, isLoading, isError } = useOrders(
     "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/",
-    keycloak.token ? keycloak.token : "", pagination
+    keycloak.token ? keycloak.token : "",
+    pagination,
+    (openTransaction && openFilter)?searchValue.idTransaction: "",
+    (openTransaction && openFilter)?searchValue.refTransaction: "",
+    (openTransaction && openFilter)?searchValue.stateOrders: "",
+    (openTransaction && openFilter)?searchValue.paymentMethod: "",
+    (openTransaction && openFilter)?searchValue.emailUser: "" 
   );
 
   useEffect(() => {
     if (orders && !showNoDateFilter) { setDataOrder(orders); }
   }, [orders, showNoDateFilter]);
+  
+
 
   /*    useEffect(() => {
     if (!removeSearch) {
@@ -77,7 +99,7 @@ export const Home = () => {
 
   return (
     <>
-      {console.log(orders)}
+      {console.log(searchValue,"searchValue")}
       {console.log(pagination,"props.page")}
       <div className="h-screen">
         {/* Componente para movil */}
@@ -148,6 +170,10 @@ export const Home = () => {
             leaveTo="opacity-0 translate-y-1"
           >
             <SearchForm
+              resPage={setpagination}
+              resStart={setStart}
+              resLimit={setLimit}
+              formvalue={setSearchValue}
               noDateFilter={setShowNoDateFilter}
               dataOrder={setDataOrder}
               token={keycloak.token ? keycloak.token : ""}
@@ -328,6 +354,10 @@ export const Home = () => {
                         leaveTo="opacity-0 translate-y-1"
                       >
                         <SearchForm
+                        resPage={setpagination}
+                        resStart={setStart}
+              resLimit={setLimit}
+                        formvalue={setSearchValue}
                           noDateFilter={setShowNoDateFilter}
                           dataOrder={setDataOrder}
                           token={keycloak.token ? keycloak.token : ""}

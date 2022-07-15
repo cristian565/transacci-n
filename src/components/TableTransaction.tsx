@@ -28,9 +28,9 @@ export interface TableTransactionProps {
 export const TableTransaction = (props: TableTransactionProps) => {
   const data = useMemo(() => props.order.transactions, [props.order]);
 
-  const [start, setStart] = useState(props.pagStart);
-  const [limit, setLimit] = useState(props.pagLimit);
-  const [pageIndex, setPageIndex] = useState(props.pageState);
+  const [start, setStart] = useState(((props.pageState===0)?0:props.pagStart));
+  const [limit, setLimit] = useState(((props.pageState===0)?1:props.pagLimit));
+  const [pageIndex, setPageIndex] = useState(((props.pageState===0)?0:props.pageState));
 
   const handlePagination = (action: "next" | "previous") => {
     switch (action) {
