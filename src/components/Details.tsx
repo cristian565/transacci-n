@@ -128,12 +128,13 @@ ATRAS
                             {statusOrder[data.status]}
                         </span>
                       </div>
-                      <div className="sm:col-span-1">
+                     {(data.paymentMethodType==="DECLINED")?
+                     (<div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">
                           Detalle del estado
                         </dt>
                         {(data.statusMessage)?data.statusMessage:"-------"}
-                      </div>
+                      </div>):""}
                       <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">
                           Transacción #
@@ -167,7 +168,7 @@ ATRAS
                         <dt className="text-sm font-medium text-gray-500">
                           Referencia
                         </dt>
-                        <dd className="mt-1 text-sm text-gray-900 break-words">
+                        <dd className="mt-1 text-sm text-gray-900 break-words pr-8">
                           {data.reference}
                         </dd>
                       </div>

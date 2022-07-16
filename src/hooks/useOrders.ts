@@ -37,9 +37,9 @@ export function useOrders(
 ) {
   const { data, error, mutate } = useSWR<Order>(
     [
-      `${path}?page=${page}&size=5&${id ? "id=" + id : ""}${
+      `${path}?page=${page}&size=5${id ? "&id=" + id : ""}${
         reference ? "&reference=" + reference : ""
-      }${status ? "status=" + status : ""}${
+      }${status ? "&status=" + status : ""}${
         paymentMethod ? "&paymentMethod=" + paymentMethod : ""
       }${customer ? "&customer=" + customer : ""}${
         fromDate ? "&fromDate=" + fromDate : ""

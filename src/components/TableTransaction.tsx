@@ -93,7 +93,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
       <div className="px-4 mt-8 sm:px-6 lg:px-2 " data-cy={props.e2eAttr}>
         <div className="flex-col hidden mt-4 shadow-xl md:flex">
           <div className="overflow-x-auto ">
-            <div className="inline-block min-w-full py-2 align-middle md:px-3 lg:px-2">
+            <div className="inline-block min-w-full py-2 align-middle md:px-3 lg:px-2 z-0">
               <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
                 <table className="min-w-full divide-y divide-gray-300">
                   <thead className="bg-gray-50 ">
@@ -229,18 +229,12 @@ export const TableTransaction = (props: TableTransactionProps) => {
                 >
                   <div className="hidden sm:block">
                     <p className="text-sm text-gray-700">
-                      Mostrando <span className="font-medium">{start + 1}</span>{" "}
-                      de{" "}
-                      <span className="font-medium">
-                        {limit > ((props.order.totalTransactions%5===0)?props.order.totalTransactions/5:(Math.trunc(props.order.totalTransactions/5)+1))
-                          ? ((props.order.totalTransactions%5===0)?props.order.totalTransactions/5:(Math.trunc(props.order.totalTransactions/5)+1))
-                          : limit}
-                      </span>{" "}
+                      Mostrando pagina <span className="font-medium">{start + 1}</span>{" "}
                       de{" "}
                       <span className="font-medium">
                         {(props.order.totalTransactions%5===0)?props.order.totalTransactions/5:(Math.trunc(props.order.totalTransactions/5)+1)}
                       </span>{" "}
-                      resultados
+                     
                     </p>
                   </div>
                   <div className="flex justify-between flex-1 sm:justify-end">

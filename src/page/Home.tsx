@@ -22,6 +22,7 @@ import { DetailsValue } from "../components/interface/detailsValue";
 import { OrderDetails } from "../components/interface/orderDetails";
 import { DetailsSkeleton } from "../components/DetailsSkeleton";
 import { SearchFormValue } from "../components/interface/searchFormValue";
+import { DateSearch } from "../components/DateSearch";
 
 
 export const Home = () => {
@@ -47,6 +48,8 @@ export const Home = () => {
   const [pagination, setpagination] = useState<number>(0);
   const [start, setStart] = useState<number>(0);
   const [limit, setLimit] = useState<number>(1);
+  const [startDate, setstartDate] = useState<string>("");
+  const [endDate, setendDate] = useState<string>("");
 
   const [searchValue, setSearchValue] = useState<SearchFormValue>({
     stateOrders: "",
@@ -56,29 +59,39 @@ export const Home = () => {
     emailUser: "",
   });
 
-/*id?: string,
-    reference?: string,
-    status?: string,
-    paymentMethod?: string,
-    customer?: string,
-    fromDate?: string,
-    untilDate?: string */
-    const { orders, isLoading, isError } = useOrders(
-      "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/",
-      keycloak.token ? keycloak.token : "",
-      pagination,
-      (openTransaction && openFilter)?searchValue.idTransaction: "",
-      (openTransaction && openFilter)?searchValue.refTransaction: "",
-      (openTransaction && openFilter)?searchValue.stateOrders: "",
-      (openTransaction && openFilter)?searchValue.paymentMethod: "",
-      (openTransaction && openFilter)?searchValue.emailUser: "" 
-    );
-    
+  /*id?: string,
+      reference?: string,
+      status?: string,
+      paymentMethod?: string,
+      customer?: string,
+      fromDate?: string,
+      untilDate?: string */
+  const { orders, isLoading, isError } = useOrders(
+    "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/",
+    keycloak.token ? keycloak.token : "",
+    pagination,
+    searchValue.idTransaction,
+    searchValue.refTransaction,
+    searchValue.stateOrders,
+    searchValue.paymentMethod,
+    searchValue.emailUser,
+    (startDate!=="") ? startDate : "",
+    (endDate!=="") ? endDate : ""
+  );
+
 
   useEffect(() => {
-    if (orders && !showNoDateFilter) { setDataOrder(orders); }
-  }, [orders, showNoDateFilter]);
+    if (orders && !isLoading) { setDataOrder(orders); }
+
+      if(orders?.totalTransactions===0 && !isLoading && !showNoDateFilter){
+        setShowNoDateFilter(true)
+      setstartDate("")
+      setendDate("")
+   }
   
+    
+  }, [orders, showNoDateFilter]);
+
 
 
   /*    useEffect(() => {
@@ -100,8 +113,8 @@ export const Home = () => {
 
   return (
     <>
-      {console.log(searchValue,"searchValue")}
-      {console.log(pagination,"props.page")}
+      {console.log(orders, "strat date")}
+      {console.log(endDate, "end deta")}
       <div className="h-screen">
         {/* Componente para movil */}
 
@@ -160,7 +173,7 @@ export const Home = () => {
           </div>
 
           {/*contenedor  */}
-
+          <DateSearch endDate={setendDate} startDate={setstartDate}/>
           <Transition
             show={openTransaction && openFilter}
             enter="transition ease-out duration-200"
@@ -179,11 +192,10 @@ export const Home = () => {
               dataOrder={setDataOrder}
               token={keycloak.token ? keycloak.token : ""}
               stateFilter={setopenFilter}
-              cleanSeacrh={setremoveSearch}
               e2eAttr={"search-form"}
             />
           </Transition>
-          
+
           <div>
             <Transition
               show={openTransaction && !isLoading}
@@ -312,6 +324,8 @@ export const Home = () => {
                   {/* Reemplazar aca los componenetes par rendizar en el home*/}
                   <div className="py-4">
                     <div className="flex flex-col">
+
+                
                       <Transition
                         show={openTransaction}
                         enter="transition ease-out duration-200"
@@ -321,13 +335,15 @@ export const Home = () => {
                         leaveFrom="opacity-100 translate-y-0"
                         leaveTo="opacity-0 translate-y-1"
                       >
-                        <div className="px-4 mt-4">
+                        <div className="px-4 mt-4 z-auto">
                           <div className="w-full  texte-center">
                             <h1 className="left-0 text-2xl font-semibold text-gray-900 h-14">
                               Transacciones
                             </h1>
                           </div>
-
+                          <span className='font-extrabold text-blue-wompi'>Escoge las fechas para las que quieres ver transacciones</span>
+                          <div className="flex flex-row justify-between items-center">
+                          <DateSearch endDate={setendDate} startDate={setstartDate}/>
                           <div
                             className={
                               openFilter
@@ -344,9 +360,11 @@ export const Home = () => {
                               Filtros
                             </span>
                           </div>
+                          </div>
                         </div>
                       </Transition>
-
+                      
+                 
                       <Transition
                         show={openTransaction && openFilter}
                         enter="transition ease-out duration-150"
@@ -357,45 +375,45 @@ export const Home = () => {
                         leaveTo="opacity-0 translate-y-1"
                       >
                         <SearchForm
-                        resPage={setpagination}
-                        resStart={setStart}
-              resLimit={setLimit}
-                        formvalue={setSearchValue}
+                          resPage={setpagination}
+                          resStart={setStart}
+                          resLimit={setLimit}
+                          formvalue={setSearchValue}
                           noDateFilter={setShowNoDateFilter}
                           dataOrder={setDataOrder}
                           token={keycloak.token ? keycloak.token : ""}
                           stateFilter={setopenFilter}
-                          cleanSeacrh={setremoveSearch}
                           e2eAttr={"search-form"}
                         />
                       </Transition>
 
-                      <Transition
-                        show={openTransaction && !isLoading}
-                        enter="transition ease-out duration-200"
-                        enterFrom="opacity-0 translate-y-1"
-                        enterTo="opacity-100 translate-y-0"
-                        leave="transition ease-in duration-150"
-                        leaveFrom="opacity-100 translate-y-0"
-                        leaveTo="opacity-0 translate-y-1"
-                      >
-                        <TableTransaction
-                          detailsValue={setDetailsValue}
-                          openTransaction={setOpenTransaction}
-                          order={dataOrder}
-                          pageState={pagination}
-                          page={setpagination}
-                          pageStart={setStart}
-                          pageLimit={setLimit}
-                          pagStart={start}
-                          pagLimit={limit}
-                          e2eAttr="table-transaction"
-                        />
-                      </Transition>
-                      <Transition show={isLoading}>
-                        <TableTransactionSkeleton e2eAttr="table-transaction-skeleton" />
-                      </Transition>
-
+                      <div>
+                        <Transition
+                          show={openTransaction && !isLoading}
+                          enter="transition ease-out duration-200"
+                          enterFrom="opacity-0 translate-y-1"
+                          enterTo="opacity-100 translate-y-0"
+                          leave="transition ease-in duration-150"
+                          leaveFrom="opacity-100 translate-y-0"
+                          leaveTo="opacity-0 translate-y-1"
+                        >
+                          <TableTransaction
+                            detailsValue={setDetailsValue}
+                            openTransaction={setOpenTransaction}
+                            order={dataOrder}
+                            pageState={pagination}
+                            page={setpagination}
+                            pageStart={setStart}
+                            pageLimit={setLimit}
+                            pagStart={start}
+                            pagLimit={limit}
+                            e2eAttr="table-transaction"
+                          />
+                        </Transition>
+                        <Transition show={isLoading}>
+                          <TableTransactionSkeleton e2eAttr="table-transaction-skeleton" />
+                        </Transition>
+                      </div>
                       <Transition
                         show={!openTransaction}
                         enter="transition ease-out duration-200"
