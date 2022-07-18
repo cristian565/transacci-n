@@ -190,6 +190,7 @@ export const Home = () => {
               resStart={setStart}
               resLimit={setLimit}
               formvalue={setSearchValue}
+              formalValueData={searchValue}
               noDateFilter={setShowNoDateFilter}
               dataOrder={setDataOrder}
               token={keycloak.token ? keycloak.token : ""}
@@ -383,6 +384,7 @@ export const Home = () => {
                           formvalue={setSearchValue}
                           noDateFilter={setShowNoDateFilter}
                           dataOrder={setDataOrder}
+                          formalValueData={searchValue}
                           token={keycloak.token ? keycloak.token : ""}
                           stateFilter={setopenFilter}
                           e2eAttr={"search-form"}

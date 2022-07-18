@@ -16,6 +16,7 @@ export interface SearchFormProps {
   formvalue: Dispatch<SetStateAction<SearchFormValue>>;
   noDateFilter: Dispatch<SetStateAction<boolean>>;
   dataOrder: Dispatch<SetStateAction<any>>;
+  formalValueData:SearchFormValue;
   stateFilter: Dispatch<SetStateAction<boolean>>;
   token: string;
   e2eAttr?: string;
@@ -31,7 +32,7 @@ export const SearchForm = (props: SearchFormProps) => {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<any>({});
   const [showSearch, setshowSearch] = useState<boolean>(false);
-
+  const [errorFullFields, setErrorFullFields] = useState<boolean>(false);
 
 
   const searchForm = useFormik({
@@ -67,40 +68,21 @@ console.log(new Date(values.shippingDate).toISOString().slice(0, 10),"formulario
       refTransaction: "",
       emailUser: "",
     });
+    setErrorFullFields(false)
   };
 
-  // fromDate?: string,
-  // untilDate?: string,
-  /*  useEffect(() => {
-     if(showSearch){
-     getDataSearch(
-       URI,
-       token,
-       setLoading,
-       setData,
-       searchValue.idTransaction,
-       searchValue.refTransaction,
-       statusOrderEnglish[searchValue.stateOrders],
-       paymentMethodEnglish[paymentMethodArray.indexOf(searchValue.paymentMethod)+1],
-       searchValue.emailUser
-       ); }
-   }, [searchValue,showSearch])
- 
-   useEffect(() => {
-     if (data) {
-       console.log("data search",data);
-       console.log("data searchVlue",searchValue);
-       console.log("data de la consulta",paymentMethodArray.indexOf(searchValue.paymentMethod)+1);
-       console.log(paymentMethodEnglish[paymentMethodArray.indexOf(searchValue.paymentMethod)+1],"valor buscado")
-       props.dataOrder(data);
-       if(data.transactions.length===0){
-         props.noDateFilter(true);
-       }
-     }  
-   }, [data]) */
-
+  useEffect(() => {
+    if(props.formalValueData.idTransaction.length!==0 || props.formalValueData.stateOrders.length!==0 || props.formalValueData.paymentMethod.length!==0 || props.formalValueData.emailUser.length!==0 ||props.formalValueData.refTransaction.length!==0){
+      setErrorFullFields(true)
+    }
+  }, [])
+  
 
   return (
+    <>
+    
+    {(errorFullFields)?<div className="text-red-600 text-center mt-3 font-semibold">Haga click en <span className="my-auto underline font-bold">Limpiar filtro</span> para volver a las transacciones iniciales
+          </div>:""}
           <div
         className="z-0 relative w-4/5 px-4 py-4 mx-auto mt-2 rounded-lg lg:px-0 lg:mt-0 lg:w-full sm:flex sm:items-center md:flex md:items-center sm:w-3/5 md:w-4/5 bg-gray-50 drop-shadow-lg"
         data-cy={props.e2eAttr}
@@ -309,5 +291,5 @@ console.log(new Date(values.shippingDate).toISOString().slice(0, 10),"formulario
       </div>
   
 
-  );
+      </> );
 };
