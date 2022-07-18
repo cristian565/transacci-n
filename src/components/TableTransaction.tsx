@@ -8,6 +8,7 @@ import {
   ClockIcon,
   CalendarIcon,
   CreditCardIcon,
+  RefreshIcon,
 } from "@heroicons/react/outline";
 import { DetailsValue } from "./interface/detailsValue";
 import { number } from "prop-types";
@@ -22,6 +23,7 @@ export interface TableTransactionProps {
   pageLimit: Dispatch<SetStateAction<number>>;
   pagStart:number;
   pagLimit:number;
+  onRefresh:()=>void;
   e2eAttr?: string;
 }
 
@@ -90,10 +92,17 @@ export const TableTransaction = (props: TableTransactionProps) => {
     {console.log(pageIndex,"pageIndex")}
     
     
-      <div className="px-4 mt-8 sm:px-6 lg:px-2 " data-cy={props.e2eAttr}>
+      <div className="px-4 mt-8 sm:px-6 lg:px-2" data-cy={props.e2eAttr}>
         <div className="flex-col hidden mt-4 shadow-xl md:flex">
           <div className="overflow-x-auto ">
-            <div className="inline-block min-w-full py-2 align-middle md:px-3 lg:px-2 z-0">
+            <div className="inline-block min-w-full py-2 align-middle md:px-3 lg:px-2 ">
+            <div className="flex justify-end ">
+            <div className="flex cursor-pointer shadow-md h-10 justify-center top-0 right-0 items-center w-36 border-2 rounded-xl mb-2" onClick={()=>props.onRefresh()}>
+                <span className="mr-1">Refresh</span>
+               <RefreshIcon aria-hidden="true"
+                                className="w-6 h-6"/>
+               </div>
+               </div>
               <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
                 <table className="min-w-full divide-y divide-gray-300">
                   <thead className="bg-gray-50 ">
@@ -136,7 +145,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                             })
                           props.openTransaction(false)
                         }}
-                        className="cursor-pointer hover:bg-gray-300 active:bg-gray-300 focus:ring"
+                        className="cursor-pointer hover:bg-gray-300 active:bg-gray-300 focus:ring h-auto"
                         dta-cy={`table-transaction__${item.reference}`}
                         id={item.reference}
                       >
@@ -185,7 +194,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                             >
                               {`#${item.transactionId}`}
                             </span>
-                            <span
+                            <span className="break-words"
                               data-cy={`${props.e2eAttr}__reference-md`}
                             >{`Ref: ${item.reference}`}</span>
                           </div>

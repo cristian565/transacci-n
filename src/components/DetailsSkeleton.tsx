@@ -39,7 +39,7 @@ export const DetailsSkeleton = (props: DetailsSkeletonProps) => {
   return (
     <>
 
-      <div className="min-h-full">
+      <div className="min-h-full -z-30">
         {/*    <button onClick={handleHome}>
 ATRAS
         </button> */}

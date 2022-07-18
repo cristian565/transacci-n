@@ -25,7 +25,7 @@ export const TableTransactionSkeleton = memo(function (
   };
 
   return (
-    <div className="px-4 sm:px-6 lg:px-2 mt-8 ">
+    <div className="px-4 sm:px-6 lg:px-2 mt-8 -z-20">
       <div className="hidden md:flex mt-4 flex-col shadow-xl ">
         <div className="overflow-x-auto ">
           <div className="inline-block min-w-full py-2 align-middle md:px-3 lg:px-2">

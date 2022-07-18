@@ -75,7 +75,7 @@ export const Details = (props: DetailsProps) => {
   return (
     <>
     
-      {(!loading)?<div className="min-h-full">
+      {(!loading)?<div className="min-h-full -z-40">
         {/*    <button onClick={handleHome}>
 ATRAS
         </button> */}

@@ -19,8 +19,6 @@ import { useOrders } from "../hooks/useOrders";
 import { useKeycloak } from "@react-keycloak/web";
 import { useHistory } from "react-router-dom";
 import { DetailsValue } from "../components/interface/detailsValue";
-import { OrderDetails } from "../components/interface/orderDetails";
-import { DetailsSkeleton } from "../components/DetailsSkeleton";
 import { SearchFormValue } from "../components/interface/searchFormValue";
 import { DateSearch } from "../components/DateSearch";
 
@@ -39,7 +37,7 @@ export const Home = () => {
   const [openTransaction, setOpenTransaction] = useState<boolean>(true);
   const [removeSearch, setremoveSearch] = useState<boolean>(false);
   const [openFilter, setopenFilter] = useState<boolean>(false);
-  const { keycloak, initialized } = useKeycloak();
+  const { keycloak} = useKeycloak();
   const history = useHistory();
   const [detailsValue, setDetailsValue] = useState<DetailsValue>({
     transactionId: "",
@@ -59,14 +57,7 @@ export const Home = () => {
     emailUser: "",
   });
 
-  /*id?: string,
-      reference?: string,
-      status?: string,
-      paymentMethod?: string,
-      customer?: string,
-      fromDate?: string,
-      untilDate?: string */
-  const { orders, isLoading, isError } = useOrders(
+  const { orders, isLoading, isError,mutate } = useOrders(
     "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/",
     keycloak.token ? keycloak.token : "",
     pagination,
@@ -85,31 +76,35 @@ export const Home = () => {
 
       if(orders?.totalTransactions===0 && !isLoading && !showNoDateFilter){
         setShowNoDateFilter(true)
-      setstartDate("")
-      setendDate("")
+        handleReset()
    }
-  
-    
   }, [orders, showNoDateFilter]);
 
-
-
-  /*    useEffect(() => {
-    if (!removeSearch) {
-      if (orderInvoiceSearch(searchValue,orders?.transactions).length !== 0) {
-       setDataOrder(orderInvoiceSearch(searchValue,orders?.transactions));
-      } else {
-       
-        setShowNoDateFilter(true);
-      }
-    } else { setDataOrder(orders?.transactions);}
-   
-  }, [searchValue, removeSearch,orders]) ; */
+  useEffect(() => {
+    setpagination(0)
+      setStart(0)
+      setLimit(1)
+  }, [endDate,startDate]);
 
   const handleClosedSession = () => {
     keycloak.logout();
     history.push("/");
   };
+
+  const handleReset =()=>{
+    setstartDate("")
+      setendDate("")
+      setSearchValue({
+        stateOrders: "",
+        paymentMethod: "",
+        idTransaction: "",
+        refTransaction: "",
+        emailUser: "",
+      })
+      setpagination(0)
+      setStart(0)
+      setLimit(1)
+  }
 
   return (
     <>
@@ -121,10 +116,10 @@ export const Home = () => {
         <div className="w-full h-screen lg:hidden">
           <div className="relative bg-white">
             <div
-              className="absolute inset-0 z-30 shadow pointer-events-none"
+              className="absolute inset-0  shadow pointer-events-none"
               aria-hidden="true"
             />
-            <div className="relative z-20">
+            <div className="relative ">
               <div className="flex items-center justify-between px-4 py-5 mx-auto max-w-7xl sm:px-6 sm:py-4 lg:px-8 md:justify-start md:space-x-10">
                 <div>
                   <span className="sr-only">BellaPiel</span>
@@ -173,7 +168,11 @@ export const Home = () => {
           </div>
 
           {/*contenedor  */}
-          <DateSearch endDate={setendDate} startDate={setstartDate}/>
+     <Transition
+     show={openTransaction && openFilter}
+     >
+     <DateSearch endDate={setendDate} startDate={setstartDate} restValue={showNoDateFilter} onReset={()=>handleReset()}/>
+     </Transition>
           <Transition
             show={openTransaction && openFilter}
             enter="transition ease-out duration-200"
@@ -216,6 +215,7 @@ export const Home = () => {
                 pageLimit={setLimit}
                 pagStart={start}
                 pagLimit={limit}
+                onRefresh={()=>mutate()}
                 e2eAttr="table-transaction"
               />
             </Transition>
@@ -318,14 +318,14 @@ export const Home = () => {
             </span>
           </div> */}
 
-            <main className="flex-1 ">
-              <div className="relative py-6 ">
+            <main className="flex-1  ">
+              <div className="relative py-4 ">
                 <div className="px-4 mx-auto max-w-7xl sm:px-6 md:px-8 lg:mx-auto lg:px-4">
                   {/* Reemplazar aca los componenetes par rendizar en el home*/}
-                  <div className="py-4">
+                  <div >
                     <div className="flex flex-col">
 
-                
+                    <div className="z-10">
                       <Transition
                         show={openTransaction}
                         enter="transition ease-out duration-200"
@@ -335,15 +335,14 @@ export const Home = () => {
                         leaveFrom="opacity-100 translate-y-0"
                         leaveTo="opacity-0 translate-y-1"
                       >
-                        <div className="px-4 mt-4 z-auto">
+                        <div className="px-4 mt-4">
                           <div className="w-full  texte-center">
                             <h1 className="left-0 text-2xl font-semibold text-gray-900 h-14">
                               Transacciones
                             </h1>
                           </div>
-                          <span className='font-extrabold text-blue-wompi'>Escoge las fechas para las que quieres ver transacciones</span>
                           <div className="flex flex-row justify-between items-center">
-                          <DateSearch endDate={setendDate} startDate={setstartDate}/>
+                          <DateSearch endDate={setendDate} startDate={setstartDate} restValue={showNoDateFilter} onReset={()=>handleReset()}/>
                           <div
                             className={
                               openFilter
@@ -363,7 +362,7 @@ export const Home = () => {
                           </div>
                         </div>
                       </Transition>
-                      
+                      </div>
                  
                       <Transition
                         show={openTransaction && openFilter}
@@ -407,6 +406,7 @@ export const Home = () => {
                             pageLimit={setLimit}
                             pagStart={start}
                             pagLimit={limit}
+                            onRefresh={()=>mutate()}
                             e2eAttr="table-transaction"
                           />
                         </Transition>
@@ -453,9 +453,9 @@ export const Home = () => {
           }}
           style={{
             container:
-              "inline-block overflow-hidden px-4 pt-5 pb-4 text-left align-bottom bg-gray-50 rounded-lg shadow-xl transition-all transform sm:p-6 sm:my-8 sm:w-full sm:max-w-lg sm:align-middle",
+              "z-50 inline-block overflow-hidden px-4 pt-5 pb-4 text-left align-bottom bg-gray-50 rounded-lg shadow-xl transition-all transform sm:p-6 sm:my-8 sm:w-full sm:max-w-lg sm:align-middle",
             opacity:
-              "fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity",
+              " fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity",
           }}
         >
           <OrderNotFound

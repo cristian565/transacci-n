@@ -11,6 +11,9 @@ module.exports = {
         'white-wompi': '#FAFCFF',
         'blue-wompi' : '#333E6E'
       },
+      screens: {
+        'tm': '930px',
+      },
     },
   },
   plugins: [],

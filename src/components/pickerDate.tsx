@@ -43,7 +43,7 @@ export function PickerDate(props: PickerDateProps) {
           maxDate={props.metadata?.maxDate}
           className={
             props.touched && props.error
-              ? 'shadow-sm border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 block w-full sm:text-sm rounded-md'
+              ? 'shadow-sm z-50 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 block w-full sm:text-sm rounded-md'
               : props.metadata.className
           }
           name={props.metadata.name}
