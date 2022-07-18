@@ -14,6 +14,7 @@
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.4",
     "axios": "^0.27.2",
+    "axios-retry": "^3.3.1",
     "formik": "^2.2.9",
     "keycloak-js": "^13.0.1",
     "react": "^18.1.0",

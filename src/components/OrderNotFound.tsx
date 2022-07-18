@@ -25,7 +25,7 @@ export function OrderNotFound(props: OrderNotFoundProps) {
             as="h3"
             className="text-lg font-medium leading-6 text-gray-900"
           >
-            Transacciones no existen o no pudo ser encontrada
+            Transaccion no existen o no pudo ser encontrada
           </Dialog.Title>
         </div>
       </div>

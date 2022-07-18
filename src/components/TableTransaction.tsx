@@ -75,6 +75,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
     ERROR: "bg-red-400 text-red-700",
     APPROVED: "bg-green-400 text-green-700",
     VOIDED: "bg-yellow-400 text-yellow-700",
+    PENDING:"bg-orange-400 text-orange-700"
   };
 
   const statusOrder: Record<string, string> = {
@@ -92,10 +93,10 @@ export const TableTransaction = (props: TableTransactionProps) => {
     {console.log(pageIndex,"pageIndex")}
     
     
-      <div className="px-4 mt-8 sm:px-6 lg:px-2" data-cy={props.e2eAttr}>
+      <div className="px-4 mt-8 sm:px-3 lg:px-2" data-cy={props.e2eAttr}>
         <div className="flex-col hidden mt-4 shadow-xl md:flex">
           <div className="overflow-x-auto ">
-            <div className="inline-block min-w-full py-2 align-middle md:px-3 lg:px-2 ">
+            <div className="inline-block min-w-full py-2 align-middle md:px-1 lg:px-2 ">
             <div className="flex justify-end ">
             <div className="flex cursor-pointer shadow-md h-10 justify-center top-0 right-0 items-center w-36 border-2 rounded-xl mb-2" onClick={()=>props.onRefresh()}>
                 <span className="mr-1">Refresh</span>
@@ -158,8 +159,8 @@ export const TableTransaction = (props: TableTransactionProps) => {
                             {statusOrder[item.transactionStatus]}
                           </span>
                         </td>
-                        <td className="px-3 py-4 text-sm font-semibold text-gray-600 whitespace-nowrap">
-                          <div className="flex flex-row">
+                        <td className="px-3 py-4 text-sm font-semibold text-gray-600 ">
+                          <div className="flex flex-row justify-center items-center">
                             <div className="flex justify-center flex-shrink-0 w-1/6 ">
                               {item.paymentType === "CARD" ? (
                                 <CreditCardIcon
@@ -182,11 +183,11 @@ export const TableTransaction = (props: TableTransactionProps) => {
                               >
                                 {parseCurrency(item.totalTransactionValue/100)}
                               </span>
-                              <span>{item.client}</span>
+                              <span className=" break-all">{item.client}</span>
                             </div>
                           </div>
                         </td>
-                        <td className="px-3 py-4 text-sm font-semibold text-gray-600 whitespace-nowrap">
+                        <td className="px-3 py-4 text-sm font-semibold text-gray-600 ">
                           <div className="flex flex-col">
                             <span
                               className="font-bold"
@@ -194,9 +195,10 @@ export const TableTransaction = (props: TableTransactionProps) => {
                             >
                               {`#${item.transactionId}`}
                             </span>
-                            <span className="break-words"
+                            <span className="break-all"
                               data-cy={`${props.e2eAttr}__reference-md`}
                             >{`Ref: ${item.reference}`}</span>
+                            
                           </div>
                         </td>
                         <td className="px-3 py-4 text-sm font-semibold text-gray-600 whitespace-nowrap">

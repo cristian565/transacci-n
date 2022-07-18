@@ -14,6 +14,8 @@ import { AuthorizingDetailsTransfer } from "./AuthorizingDetailsTransfer";
 import { AuthorizingDetailsCollect } from "./AuthorizingDetailsCollect";
 import { AuthorizingDetailsNequi } from "./AuthorizingDetailsNequi";
 import { DetailsSkeleton } from "./DetailsSkeleton";
+import Modal from "./Modal";
+import ServerDown from "./ServerDow";
 
 const URI = "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/";
 export interface DetailsProps {
@@ -33,6 +35,7 @@ export const Details = (props: DetailsProps) => {
     ERROR: "bg-red-400 text-red-700",
     APPROVED: "bg-green-400 text-green-700",
     VOIDED: "bg-yellow-400 text-yellow-700",
+    PENDING:"bg-orange-400 text-orange-700"
   };
 
   const statusOrder: Record<string, string> = {
@@ -45,6 +48,7 @@ export const Details = (props: DetailsProps) => {
   const [data, setData] = useState<any>(null);
   const [prueba, setPrueba] = useState<any>(false);
   const [loading, setLoading] = useState<any>({});
+  const [isError, setIsError] = useState<any>(false);
   /* const navegate = useNavigate();
   const handleHome = () => {
     navegate("/Login");
@@ -56,8 +60,8 @@ export const Details = (props: DetailsProps) => {
   // }
 
   useEffect(() => {
-    getOrdersDetail(URI, token, paymentGateway, transactionId, setLoading, setData);  
-  }, [])
+    getOrdersDetail(URI, token, paymentGateway, transactionId, setLoading, setData,setIsError);  
+  }, [isError])
 
   useEffect(() => {
     if (data) {
@@ -74,8 +78,9 @@ export const Details = (props: DetailsProps) => {
 
   return (
     <>
-    
-      {(!loading)?<div className="min-h-full -z-40">
+    {console.log(isError,"state de error")}
+    {console.log(loading,"state de loading")}
+      {(!loading && !isError)?<div className="min-h-full -z-40">
         {/*    <button onClick={handleHome}>
 ATRAS
         </button> */}
@@ -128,7 +133,7 @@ ATRAS
                             {statusOrder[data.status]}
                         </span>
                       </div>
-                     {(data.paymentMethodType==="DECLINED")?
+                     {(data.paymentMethodType==="DECLINED" || data.paymentMethodType==="PENDING")?
                      (<div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">
                           Detalle del estado
@@ -316,7 +321,22 @@ ATRAS
         </main>
       </div>
     :<DetailsSkeleton e2eAttr="Details-skeleton__md"/>}
-
+        <Modal
+          open={!loading && isError}
+          backdropClose={true}
+          onClose={() => {
+            console.warn('clicked for closed');
+          }}
+          style={{
+            container:
+              'inline-block align-bottom bg-gray-50 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6',
+            opacity:
+              'fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity',
+          }}
+          e2eAttr="modal-server-down"
+        >
+          <ServerDown />
+        </Modal> 
     </>
   );
 };

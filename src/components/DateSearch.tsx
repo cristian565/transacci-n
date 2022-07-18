@@ -42,6 +42,9 @@ const searchForm = useFormik({
     useEffect(() => {
       if(props.restValue){
         searchForm.resetForm();
+        const a=new Date()
+        props.startDate("")
+        props.endDate("")
       }
 
     }, [props.restValue])

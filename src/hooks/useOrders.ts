@@ -12,6 +12,7 @@ const fetcher = async (
   token: string,
   headers?: Record<string, string>
 ) => {
+  try {
   const res = await fetch(path, {
     headers: {
       "x-store-id": "hardtech",
@@ -20,7 +21,33 @@ const fetcher = async (
     },
   });
 
+  if (!res.ok) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const error: { message: string; info?: any; status?: number } = {
+      message: 'An error occurred while fetching the data.',
+    };
+    // Attach extra info to the error object.
+    error.info = await res.json();
+    error.status = res.status;
+    throw error;
+  }
+
   return res.json();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+} catch (e: any) {
+  if (e.type === 'error') {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const error: { message: string; info?: any; status?: number } = {
+      message: 'An error occurred while fetching the data.',
+    };
+    // Attach extra info to the error object.
+    error.info = 'server timeout';
+    error.status = 100;
+    throw error;
+  }
+  throw e;
+}
+
 };
 
 export function useOrders(
@@ -52,13 +79,13 @@ export function useOrders(
         // Only retry up to 3 times.
         if (retryCount >= 3) return;
       },
-      // refreshInterval: 1000
     }
+   
   );
 
   return {
     orders: data,
-    isLoading: !data,
+    isLoading: !error && !data,
     isError: error,
     mutate,
   };
