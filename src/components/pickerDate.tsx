@@ -13,11 +13,9 @@ export interface PickerDateProps {
     value?: Date | null;
     locale: string;
     showDisabledMonthNavigation: boolean;
-    
     dateFormat: string;
     placeholderText: string;
     maxDate?:Date,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onChange?: (date: Date | null) => void;
   };
   touched?: boolean;

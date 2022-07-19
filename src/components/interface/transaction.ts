@@ -1,5 +1,5 @@
 
-export interface Order {
+export interface Transaction {
         totalPages: number
         totalTransactions: number
         transactions:[

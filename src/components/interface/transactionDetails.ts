@@ -1,4 +1,4 @@
-export interface OrderDetails {
+export interface TransactionDetails {
   data: {
     amountInCents: number;
     billingData: null;

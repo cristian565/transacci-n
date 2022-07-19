@@ -3,4 +3,3 @@ export interface DetailsValue {
   paymentGateway: string;
 }
 
-/**/

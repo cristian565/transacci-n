@@ -2,25 +2,19 @@ import React, { useState, Dispatch, SetStateAction, useMemo, useEffect } from "r
 
 import { parseCurrency } from "../hooks/parse-currency";
 import { parseDate } from "../hooks/parse-date";
-import { Order } from "./interface/order";
+import { Transaction } from "./interface/transaction";
 import { imagenes } from "../assets/imagenes";
-import {
-  ClockIcon,
-  CalendarIcon,
-  CreditCardIcon,
-  RefreshIcon,
-} from "@heroicons/react/outline";
+import {ClockIcon,CalendarIcon,CreditCardIcon,RefreshIcon} from "@heroicons/react/outline";
 import { DetailsValue } from "./interface/detailsValue";
-import { number } from "prop-types";
 
 export interface TableTransactionProps {
   detailsValue: Dispatch<SetStateAction<DetailsValue>>;
   openTransaction: Dispatch<SetStateAction<boolean>>;
-  order: Order;
+  order: Transaction;
   pageState:number
-  page: Dispatch<SetStateAction<number>>;
-  pageStart: Dispatch<SetStateAction<number>>;
-  pageLimit: Dispatch<SetStateAction<number>>;
+  setPageState: Dispatch<SetStateAction<number>>;
+  setPageStart: Dispatch<SetStateAction<number>>;
+  setPageLimit: Dispatch<SetStateAction<number>>;
   pagStart:number;
   pagLimit:number;
   onRefresh:()=>void;
@@ -33,8 +27,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
   const [start, setStart] = useState(props.pagStart);
   const [limit, setLimit] = useState(props.pagLimit);
   const [pageIndex, setPageIndex] = useState(props.pageState);
-  console.log("STRAR ",props.pageState);
-
+  
   useEffect(() => {
     setStart(((props.pageState===0)?0:props.pagStart))
     setLimit(((props.pageState===0)?1:props.pagLimit))
@@ -48,25 +41,24 @@ export const TableTransaction = (props: TableTransactionProps) => {
         setStart(start + 1);
         setLimit(limit + 1);
        
-        props.page(pageIndex + 1);
+        props.setPageState(pageIndex + 1);
         setPageIndex(pageIndex + 1);
-        props.pageStart(start + 1);
-        props.pageLimit(limit + 1);
+        props.setPageStart(start + 1);
+        props.setPageLimit(limit + 1);
         break;
       case "previous":
         setStart(start - 1);
         setLimit(limit - 1);
 
-        props.page(pageIndex- 1);
+        props.setPageState(pageIndex- 1);
         setPageIndex(pageIndex - 1);
-        props.pageStart(start - 1);
-        props.pageLimit(limit - 1);
+        props.setPageStart(start - 1);
+        props.setPageLimit(limit - 1);
         break;
     }
   };
 
   const handleDetails = (valor: string) => {
-    console.log(valor);
     props.openTransaction(false);
   };
 
@@ -88,11 +80,6 @@ export const TableTransaction = (props: TableTransactionProps) => {
 
   return (
     <>
-    {console.log(start,"start")}
-    {console.log(limit,"limit")}
-    {console.log(pageIndex,"pageIndex")}
-    
-    
       <div className="px-4 mt-8 sm:px-3 lg:px-2" data-cy={props.e2eAttr}>
         <div className="flex-col hidden mt-4 shadow-xl md:flex">
           <div className="overflow-x-auto ">

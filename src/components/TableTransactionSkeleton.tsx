@@ -112,6 +112,110 @@ export const TableTransactionSkeleton = memo(function (
                       </div>
                     </td>
                   </tr>
+                  <tr className="cursor-pointer hover:bg-gray-300 active:bg-gray-300 focus:ring">
+                    <td className="whitespace-nowrap py-4 pl-4 pr-3 md:pr-1 lg:pr-3 text-sm font-medium text-gray-900 sm:pl-6 md:pl-4 lg:pl-6">
+                      <span className="inline-block w-20 h-4 bg-gray-300 rounded-full px-3 md:px-1 lg:px-3  md:w-20 lg:w-24 text-center"></span>
+                    </td>
+                    <td className="whitespace-nowrap px-0 py-4 text-sm text-gray-600 font-semibold lg:w-72 xl:w-auto">
+                      <div className="flex flex-row">
+                        <div className="flex-shrink-0 flex justify-center w-1/6 ">
+                          <div className="w-20 h-8 bg-gray-300 rounded-lg">
+                            {/* aqui la imagen */}
+                          </div>
+                        </div>
+                        <div className="flex flex-col w-full px-3 lg:w-full">
+                          <span className="w-32 h-4 bg-gray-300 rounded-full">
+                            {/* aqui la el monto*/}
+                          </span>
+                          <span className="w-32 h-4 mt-1 bg-gray-300 rounded-full">
+                            {/* aqui el correo del cliente*/}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-600 font-semibold ">
+                      <div className="flex flex-col">
+                        <span className="w-48 h-4 bg-gray-300 rounded-lg">
+                          {/* aqui el ID*/}
+                        </span>
+                        <span className="w-24 h-4 bg-gray-300 rounded-lg mt-1">
+                          {/* aqui la REFERENCIA */}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-600 font-semibold">
+                      <div className="flex flex-col space-y-1">
+                        <div className="flex flex-row content-center">
+                          <ClockIcon aria-hidden="true" className="h-6 w-6" />
+                          <span className="ml-1 mt-1 w-16 h-4 bg-gray-300 rounded-lg">
+                            {/* aqui la HORA*/}
+                          </span>
+                        </div>
+
+                        <div className="flex flex-row content-center">
+                          <CalendarIcon
+                            aria-hidden="true"
+                            className="h-6 w-6"
+                          />
+                          <span className="ml-1 mt-1 w-16 h-4 bg-gray-300 rounded-lg">
+                            {/* aqui la FECHA */}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr className="cursor-pointer hover:bg-gray-300 active:bg-gray-300 focus:ring">
+                    <td className="whitespace-nowrap py-4 pl-4 pr-3 md:pr-1 lg:pr-3 text-sm font-medium text-gray-900 sm:pl-6 md:pl-4 lg:pl-6">
+                      <span className="inline-block w-20 h-4 bg-gray-300 rounded-full px-3 md:px-1 lg:px-3  md:w-20 lg:w-24 text-center"></span>
+                    </td>
+                    <td className="whitespace-nowrap px-0 py-4 text-sm text-gray-600 font-semibold lg:w-72 xl:w-auto">
+                      <div className="flex flex-row">
+                        <div className="flex-shrink-0 flex justify-center w-1/6 ">
+                          <div className="w-20 h-8 bg-gray-300 rounded-lg">
+                            {/* aqui la imagen */}
+                          </div>
+                        </div>
+                        <div className="flex flex-col w-full px-3 lg:w-full">
+                          <span className="w-32 h-4 bg-gray-300 rounded-full">
+                            {/* aqui la el monto*/}
+                          </span>
+                          <span className="w-32 h-4 mt-1 bg-gray-300 rounded-full">
+                            {/* aqui el correo del cliente*/}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-600 font-semibold ">
+                      <div className="flex flex-col">
+                        <span className="w-48 h-4 bg-gray-300 rounded-lg">
+                          {/* aqui el ID*/}
+                        </span>
+                        <span className="w-24 h-4 bg-gray-300 rounded-lg mt-1">
+                          {/* aqui la REFERENCIA */}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-600 font-semibold">
+                      <div className="flex flex-col space-y-1">
+                        <div className="flex flex-row content-center">
+                          <ClockIcon aria-hidden="true" className="h-6 w-6" />
+                          <span className="ml-1 mt-1 w-16 h-4 bg-gray-300 rounded-lg">
+                            {/* aqui la HORA*/}
+                          </span>
+                        </div>
+
+                        <div className="flex flex-row content-center">
+                          <CalendarIcon
+                            aria-hidden="true"
+                            className="h-6 w-6"
+                          />
+                          <span className="ml-1 mt-1 w-16 h-4 bg-gray-300 rounded-lg">
+                            {/* aqui la FECHA */}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
               <nav

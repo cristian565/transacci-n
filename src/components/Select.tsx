@@ -7,17 +7,14 @@ export interface SelectData {
   hidden?: boolean;
 }
 
-/* eslint-disable-next-line */
 export interface SelectProps {
   metadata: {
     name: string;
     id: string;
     className: string;
     disabled: boolean;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value?: any;
     defaultValue?: number | string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onChange?: (e: ChangeEvent<any>) => void;
   };
   data: SelectData[];
@@ -34,12 +31,12 @@ export function Select(props: SelectProps) {
     <>
       {props.label.text.length !== 0 && (
         <label htmlFor={props.metadata.name} className={props.label.className}
-        data-cy={`${props.e2eAttr}--label`}>
+          data-cy={`${props.e2eAttr}--label`}>
           {props.label.text}
         </label>
       )}
       <select {...props.metadata} className={props.metadata.className}
-      data-cy={`${props.e2eAttr}--select`}>
+        data-cy={`${props.e2eAttr}--select`}>
         {props.data.map((item) => (
           <option
             key={item.id}

@@ -1,7 +1,7 @@
 import { ExclamationCircleIcon } from "@heroicons/react/outline";
 import { ChangeEvent } from "react";
 
-/* eslint-disable-next-line */
+
 export interface InputBasicProps {
   metadata: {
     type: string;
@@ -12,7 +12,6 @@ export interface InputBasicProps {
     autoComplete?: string;
     checked?: boolean;
     disabled?: boolean;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onChange?: (e: ChangeEvent<any>) => void;
     value?: string | number;
   };

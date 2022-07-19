@@ -1,5 +1,5 @@
-import React, { useEffect, useState, Dispatch, SetStateAction, } from "react";
-import { dataDetails } from "./interface/orderDetails";
+import React from "react";
+import { dataDetails } from "./interface/transactionDetails";
 
 
 export interface AuthorizingDetailsPseProps {

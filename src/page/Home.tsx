@@ -36,9 +36,8 @@ export const Home = () => {
   const [dataOrder, setDataOrder] = useState<any>({});
   const [showNoDateFilter, setShowNoDateFilter] = useState<boolean>(false);
   const [openTransaction, setOpenTransaction] = useState<boolean>(true);
-  const [removeSearch, setremoveSearch] = useState<boolean>(false);
   const [openFilter, setopenFilter] = useState<boolean>(false);
-  const { keycloak} = useKeycloak();
+  const { keycloak } = useKeycloak();
   const history = useHistory();
   const [detailsValue, setDetailsValue] = useState<DetailsValue>({
     transactionId: "",
@@ -47,11 +46,11 @@ export const Home = () => {
   const [pagination, setpagination] = useState<number>(0);
   const [start, setStart] = useState<number>(0);
   const [limit, setLimit] = useState<number>(1);
-  const a=new Date()
-  const [startDate, setstartDate] = useState<string>( a.getFullYear()+"-"+ String(a.getMonth() + 1).padStart(2, '0')+"-"+String(a.getDate()-1).padStart(2, '0'));
-  const [endDate, setendDate] = useState<string>( a.getFullYear()+"-"+ String(a.getMonth() + 1).padStart(2, '0')+"-"+String(a.getDate()).padStart(2, '0'));
-  
- 
+  const date = new Date()
+  const [startDate, setstartDate] = useState<string>(date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate() - 1).padStart(2, '0'));
+  const [endDate, setendDate] = useState<string>(date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate()).padStart(2, '0'));
+
+
 
   const [searchValue, setSearchValue] = useState<SearchFormValue>({
     stateOrders: "",
@@ -61,7 +60,7 @@ export const Home = () => {
     emailUser: "",
   });
 
-  const { orders, isLoading, isError,mutate } = useOrders(
+  const { orders, isLoading, isError, mutate } = useOrders(
     "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/",
     keycloak.token ? keycloak.token : "",
     pagination,
@@ -70,44 +69,44 @@ export const Home = () => {
     searchValue.stateOrders,
     searchValue.paymentMethod,
     searchValue.emailUser,
-    (startDate!=="") ? startDate : "",
-    (endDate!=="") ? endDate : ""
+    (startDate !== "") ? startDate : "",
+    (endDate !== "") ? endDate : ""
   );
 
 
   useEffect(() => {
     if (orders && !isLoading) { setDataOrder(orders); }
 
-      if(orders?.totalTransactions===0 && !isLoading && !isError){
-        setShowNoDateFilter(true)
-        handleReset()
-   }
+    if (orders?.totalTransactions === 0 && !isLoading && !isError) {
+      setShowNoDateFilter(true)
+      handleReset()
+    }
   }, [orders, showNoDateFilter]);
 
   useEffect(() => {
     setpagination(0)
-      setStart(0)
-      setLimit(1)
-  }, [endDate,startDate]);
+    setStart(0)
+    setLimit(1)
+  }, [endDate, startDate]);
 
   const handleClosedSession = () => {
     keycloak.logout();
     history.push("/");
   };
 
-  const handleReset =()=>{
+  const handleReset = () => {
     setstartDate("")
-      setendDate("")
-      setSearchValue({
-        stateOrders: "",
-        paymentMethod: "",
-        idTransaction: "",
-        refTransaction: "",
-        emailUser: "",
-      })
-      setpagination(0)
-      setStart(0)
-      setLimit(1)
+    setendDate("")
+    setSearchValue({
+      stateOrders: "",
+      paymentMethod: "",
+      idTransaction: "",
+      refTransaction: "",
+      emailUser: "",
+    })
+    setpagination(0)
+    setStart(0)
+    setLimit(1)
   }
 
   return (
@@ -171,11 +170,11 @@ export const Home = () => {
           </div>
 
           {/*contenedor  */}
-     <Transition
-     show={openTransaction && openFilter}
-     >
-     <DateSearch endDate={setendDate} startDate={setstartDate} restValue={showNoDateFilter} onReset={()=>handleReset()}/>
-     </Transition>
+          <Transition
+            show={openTransaction && openFilter}
+          >
+            <DateSearch endDate={setendDate} startDate={setstartDate} restValue={showNoDateFilter} onReset={() => handleReset()} />
+          </Transition>
           <Transition
             show={openTransaction && openFilter}
             enter="transition ease-out duration-200"
@@ -189,11 +188,8 @@ export const Home = () => {
               resPage={setpagination}
               resStart={setStart}
               resLimit={setLimit}
-              formvalue={setSearchValue}
-              formalValueData={searchValue}
-              noDateFilter={setShowNoDateFilter}
-              dataOrder={setDataOrder}
-              token={keycloak.token ? keycloak.token : ""}
+              setFormValueData={setSearchValue}
+              formValueData={searchValue}
               stateFilter={setopenFilter}
               e2eAttr={"search-form"}
             />
@@ -214,12 +210,12 @@ export const Home = () => {
                 openTransaction={setOpenTransaction}
                 order={dataOrder}
                 pageState={pagination}
-                page={setpagination}
-                pageStart={setStart}
-                pageLimit={setLimit}
+                setPageState={setpagination}
+                setPageStart={setStart}
+                setPageLimit={setLimit}
                 pagStart={start}
                 pagLimit={limit}
-                onRefresh={()=>mutate()}
+                onRefresh={() => mutate()}
                 e2eAttr="table-transaction"
               />
             </Transition>
@@ -329,45 +325,45 @@ export const Home = () => {
                   <div >
                     <div className="flex flex-col">
 
-                    <div className="z-10">
-                      <Transition
-                        show={openTransaction}
-                        enter="transition ease-out duration-200"
-                        enterFrom="opacity-0 translate-y-1"
-                        enterTo="opacity-100 translate-y-0"
-                        leave="transition ease-in duration-150"
-                        leaveFrom="opacity-100 translate-y-0"
-                        leaveTo="opacity-0 translate-y-1"
-                      >
-                        <div className="px-4 mt-4">
-                          <div className="w-full  texte-center">
-                            <h1 className="left-0 text-2xl font-semibold text-gray-900 h-14">
-                              Transacciones
-                            </h1>
+                      <div className="z-10">
+                        <Transition
+                          show={openTransaction}
+                          enter="transition ease-out duration-200"
+                          enterFrom="opacity-0 translate-y-1"
+                          enterTo="opacity-100 translate-y-0"
+                          leave="transition ease-in duration-150"
+                          leaveFrom="opacity-100 translate-y-0"
+                          leaveTo="opacity-0 translate-y-1"
+                        >
+                          <div className="px-4 mt-4">
+                            <div className="w-full  texte-center">
+                              <h1 className="left-0 text-2xl font-semibold text-gray-900 h-14">
+                                Transacciones
+                              </h1>
+                            </div>
+                            <div className="flex flex-row justify-between items-center">
+                              <DateSearch endDate={setendDate} startDate={setstartDate} restValue={showNoDateFilter} onReset={() => handleReset()} />
+                              <div
+                                className={
+                                  openFilter
+                                    ? "hidden"
+                                    : "sm:flex sm:flex-row sm:justify-center py-1 content-center flex-4 hover:bg-gray-300 border border-solid px-2 rounded-xl cursor-pointer md:w-28 md:h-8"
+                                }
+                                onClick={() => setopenFilter(true)}
+                              >
+                                <FilterIcon
+                                  className="w-6 h-6 text-lg"
+                                  aria-hidden="true"
+                                />
+                                <span className="font-bold text-gray-700 text-md">
+                                  Filtros
+                                </span>
+                              </div>
+                            </div>
                           </div>
-                          <div className="flex flex-row justify-between items-center">
-                          <DateSearch endDate={setendDate} startDate={setstartDate} restValue={showNoDateFilter} onReset={()=>handleReset()}/>
-                          <div
-                            className={
-                              openFilter
-                                ? "hidden"
-                                : "sm:flex sm:flex-row sm:justify-center py-1 content-center flex-4 hover:bg-gray-300 border border-solid px-2 rounded-xl cursor-pointer md:w-28 md:h-8"
-                            }
-                            onClick={() => setopenFilter(true)}
-                          >
-                            <FilterIcon
-                              className="w-6 h-6 text-lg"
-                              aria-hidden="true"
-                            />
-                            <span className="font-bold text-gray-700 text-md">
-                              Filtros
-                            </span>
-                          </div>
-                          </div>
-                        </div>
-                      </Transition>
+                        </Transition>
                       </div>
-                 
+
                       <Transition
                         show={openTransaction && openFilter}
                         enter="transition ease-out duration-150"
@@ -381,11 +377,8 @@ export const Home = () => {
                           resPage={setpagination}
                           resStart={setStart}
                           resLimit={setLimit}
-                          formvalue={setSearchValue}
-                          noDateFilter={setShowNoDateFilter}
-                          dataOrder={setDataOrder}
-                          formalValueData={searchValue}
-                          token={keycloak.token ? keycloak.token : ""}
+                          setFormValueData={setSearchValue}
+                          formValueData={searchValue}
                           stateFilter={setopenFilter}
                           e2eAttr={"search-form"}
                         />
@@ -406,12 +399,12 @@ export const Home = () => {
                             openTransaction={setOpenTransaction}
                             order={dataOrder}
                             pageState={pagination}
-                            page={setpagination}
-                            pageStart={setStart}
-                            pageLimit={setLimit}
+                            setPageState={setpagination}
+                            setPageStart={setStart}
+                            setPageLimit={setLimit}
                             pagStart={start}
                             pagLimit={limit}
-                            onRefresh={()=>mutate()}
+                            onRefresh={() => mutate()}
                             e2eAttr="table-transaction"
                           />
                         </Transition>
@@ -451,55 +444,54 @@ export const Home = () => {
           </div>
         </div>
 
-      {(isError?.status === 100 && !isLoading) ?
+        {(isError?.status === 100 && !isLoading) ?
 
-     
+
           <Modal
-          open={!isLoading && isError?.status === 100}
-          backdropClose={true}
-          onClose={() => {
-            console.warn('clicked for closed');
-          }}
-          style={{
-            container:
-              'inline-block align-bottom bg-gray-50 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6',
-            opacity:
-              'fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity',
-          }}
-          e2eAttr="modal-server-down"
-        >
-          <ServerDown />
-        </Modal> 
-      :
-      <Modal
-      open={showNoDateFilter && !isError}
-      backdropClose={true}
-      onClose={() => {
-        setShowNoDateFilter(false);
-      }}
-      style={{
-        container:
-          "z-50 inline-block overflow-hidden px-4 pt-5 pb-4 text-left align-bottom bg-gray-50 rounded-lg shadow-xl transition-all transform sm:p-6 sm:my-8 sm:w-full sm:max-w-lg sm:align-middle",
-        opacity:
-          " fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity",
-      }}
-    >
-      <OrderNotFound
-        onClick={() => {
-          setShowNoDateFilter(false);
-          setremoveSearch(true);
-        }}
-        button={{
-          className:
-            "bg-blue-400 inline-flex justify-center py-2 px-4 w-full text-base font-medium text-white bg-pantone-blue-100 hover:bg-pantone-blue-300 rounded-md border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm sm:text-sm",
-        }}
-      />
-    </Modal>
-      }
+            open={!isLoading && isError?.status === 100}
+            backdropClose={true}
+            onClose={() => {
+              console.warn('clicked for closed');
+            }}
+            style={{
+              container:
+                'inline-block align-bottom bg-gray-50 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6',
+              opacity:
+                'fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity',
+            }}
+            e2eAttr="modal-server-down"
+          >
+            <ServerDown />
+          </Modal>
+          :
+          <Modal
+            open={showNoDateFilter && !isError}
+            backdropClose={true}
+            onClose={() => {
+              setShowNoDateFilter(false);
+            }}
+            style={{
+              container:
+                "z-50 inline-block overflow-hidden px-4 pt-5 pb-4 text-left align-bottom bg-gray-50 rounded-lg shadow-xl transition-all transform sm:p-6 sm:my-8 sm:w-full sm:max-w-lg sm:align-middle",
+              opacity:
+                " fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity",
+            }}
+          >
+            <OrderNotFound
+              onClick={() => {
+                setShowNoDateFilter(false);
+              }}
+              button={{
+                className:
+                  "bg-blue-400 inline-flex justify-center py-2 px-4 w-full text-base font-medium text-white bg-pantone-blue-100 hover:bg-pantone-blue-300 rounded-md border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm sm:text-sm",
+              }}
+            />
+          </Modal>
+        }
 
-       
 
-   
+
+
       </div>
     </>
   );

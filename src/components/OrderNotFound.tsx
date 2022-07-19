@@ -1,7 +1,7 @@
 import { Dialog } from "@headlessui/react";
 import { ExclamationCircleIcon } from "@heroicons/react/outline";
 
-/* eslint-disable-next-line */
+
 export interface OrderNotFoundProps {
   onClick: () => void;
   button: {

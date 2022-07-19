@@ -1,6 +1,5 @@
 import { ExclamationCircleIcon } from "@heroicons/react/outline";
 
-/* eslint-disable-next-line */
 export interface ServerDownProps {}
 
 export function ServerDown(props: ServerDownProps) {

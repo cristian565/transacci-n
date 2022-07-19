@@ -1,12 +1,9 @@
-import React, { Dispatch, memo, useEffect, useState, SetStateAction} from "react";
-// import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { parseCurrency } from "../hooks/parse-currency";
 import { parseDate } from "../hooks/parse-date";
 import { imagenes } from "../assets/imagenes";
-import { ArrowLeftIcon, ClockIcon, CalendarIcon, CreditCardIcon } from "@heroicons/react/outline";
-import { OrderDetails } from "./interface/orderDetails";
+import { ArrowLeftIcon, ClockIcon, CalendarIcon } from "@heroicons/react/outline";
 import { getOrdersDetail } from "../hooks/ordersDetail";
-import { useKeycloak } from "@react-keycloak/web";
 import { DetailsValue } from "./interface/detailsValue";
 import { AuthorizingDetailsCard } from "./AuthorizingDetailsCard";
 import { AuthorizingDetailsPse } from "./AuthorizingDetailsPse";
@@ -26,16 +23,17 @@ export interface DetailsProps {
 }
 
 export const Details = (props: DetailsProps) => {
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState<any>({});
+  const [isError, setIsError] = useState<any>(false);
+  const { detailsValue: { transactionId, paymentGateway }, token } = props;
 
-  const {detailsValue: { transactionId, paymentGateway }, token } = props;
-
-  // const [data, setdata] = useState<any>(111)
   const statusStyles: Record<string, string> = {
     DECLINED: "bg-red-400 text-red-700",
     ERROR: "bg-red-400 text-red-700",
     APPROVED: "bg-green-400 text-green-700",
     VOIDED: "bg-yellow-400 text-yellow-700",
-    PENDING:"bg-orange-400 text-orange-700"
+    PENDING: "bg-orange-400 text-orange-700"
   };
 
   const statusOrder: Record<string, string> = {
@@ -45,45 +43,20 @@ export const Details = (props: DetailsProps) => {
     VOIDED: "Anulada",
   };
 
-  const [data, setData] = useState<any>(null);
-  const [prueba, setPrueba] = useState<any>(false);
-  const [loading, setLoading] = useState<any>({});
-  const [isError, setIsError] = useState<any>(false);
-  /* const navegate = useNavigate();
-  const handleHome = () => {
-    navegate("/Login");
-  };
- */
-
-  // const loadOrderDetails = async ()  => {
-  //   await getOrdersDetail(URI, token, paymentGateway, transactionId, setLoading);
-  // }
-
   useEffect(() => {
-    getOrdersDetail(URI, token, paymentGateway, transactionId, setLoading, setData,setIsError);  
+    getOrdersDetail(URI, token, paymentGateway, transactionId, setLoading, setData, setIsError);
   }, [isError])
 
   useEffect(() => {
     if (data) {
       console.log(data);
-    }  
+    }
   }, [data])
 
-  // useEffect(() => {
-  //   console.log('data en details', {field: data.paymentMethodType})
-
-  // }, [])
-
-  
 
   return (
     <>
-    {console.log(isError,"state de error")}
-    {console.log(loading,"state de loading")}
-      {(!loading && !isError)?<div className="min-h-full -z-40">
-        {/*    <button onClick={handleHome}>
-ATRAS
-        </button> */}
+      {(!loading && !isError) ? <div className="min-h-full -z-40">
         <main className="py-2 md:py-9"
           data-cy={props.e2eAttr}>
           {/* Page header */}
@@ -119,7 +92,7 @@ ATRAS
                           Monto
                         </dt>
                         <dd className="mt-1 text-sm font-semibold text-gray-900">{`COP ${parseCurrency(
-                          data.amountInCents/100
+                          data.amountInCents / 100
                         )}`}</dd>
                       </div>
                       <div className="sm:col-span-1">
@@ -130,16 +103,16 @@ ATRAS
                           className={`${statusStyles[data.status]}
                              font-semibold inline-block  rounded-lg h-1/2 px-3 w-24 text-center`}
                         >
-                            {statusOrder[data.status]}
+                          {statusOrder[data.status]}
                         </span>
                       </div>
-                     {(data.paymentMethodType==="DECLINED" || data.paymentMethodType==="PENDING")?
-                     (<div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">
-                          Detalle del estado
-                        </dt>
-                        {(data.statusMessage)?data.statusMessage:"-------"}
-                      </div>):""}
+                      {(data.paymentMethodType === "DECLINED" || data.paymentMethodType === "PENDING") ?
+                        (<div className="sm:col-span-1">
+                          <dt className="text-sm font-medium text-gray-500">
+                            Detalle del estado
+                          </dt>
+                          {(data.statusMessage) ? data.statusMessage : "-------"}
+                        </div>) : ""}
                       <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">
                           Transacción #
@@ -156,17 +129,17 @@ ATRAS
                           <img
                             data-cy={`${props.e2eAttr}__image-md`}
                             className="block h-9 mt-1 w-auto"
-                            src={imagenes[(data.paymentMethodType==="CARD")?
-                            data.paymentMethod.extra.brand
-                            :data.paymentMethodType]}
+                            src={imagenes[(data.paymentMethodType === "CARD") ?
+                              data.paymentMethod.extra.brand
+                              : data.paymentMethodType]}
                             alt="LogoMetPago"
                           />
-                           
-                            {(data.paymentMethodType==="CARD")?
-                           <dd className="self-center text-sm text-gray-900"> - {data.paymentMethod.extra.last_four}</dd>
-                            :""}
-                             
-                          
+
+                          {(data.paymentMethodType === "CARD") ?
+                            <dd className="self-center text-sm text-gray-900"> - {data.paymentMethod.extra.last_four}</dd>
+                            : ""}
+
+
                         </div>
                       </div>
                       <div className="sm:col-span-1">
@@ -243,15 +216,15 @@ ATRAS
                       id="applicant-information-title"
                       className="text-lg leading-6 font-medium text-gray-900"
                     >
-                      Detalles del autorizador 
+                      Detalles del autorizador
                     </h2>
                   </div>
-               {(data.paymentMethodType==="CARD")? <AuthorizingDetailsCard data={data} />:""}
-               {(data.paymentMethodType==="PSE")? <AuthorizingDetailsPse data={data} />:""} 
-               {(data.paymentMethodType==="BANCOLOMBIA_TRANSFER")? <AuthorizingDetailsTransfer data={data} />:""} 
-               {(data.paymentMethodType==="BANCOLOMBIA_COLLECT")? <AuthorizingDetailsCollect data={data} />:""}      
-               {(data.paymentMethodType==="NEQUI")? <AuthorizingDetailsNequi data={data} />:""} 
-               </div>
+                  {(data.paymentMethodType === "CARD") ? <AuthorizingDetailsCard data={data} /> : ""}
+                  {(data.paymentMethodType === "PSE") ? <AuthorizingDetailsPse data={data} /> : ""}
+                  {(data.paymentMethodType === "BANCOLOMBIA_TRANSFER") ? <AuthorizingDetailsTransfer data={data} /> : ""}
+                  {(data.paymentMethodType === "BANCOLOMBIA_COLLECT") ? <AuthorizingDetailsCollect data={data} /> : ""}
+                  {(data.paymentMethodType === "NEQUI") ? <AuthorizingDetailsNequi data={data} /> : ""}
+                </div>
               </section>
             </div>
 
@@ -270,7 +243,7 @@ ATRAS
                   <div className="sm:py-4 mt-2 sm:mt-0">
                     <dt className="text-sm font-medium text-gray-500">Email</dt>
                     <dd className="mt-1 text-sm font-semibold text-gray-900">
-                     {data.customerEmail}
+                      {data.customerEmail}
                     </dd>
                   </div>
                   <div className="sm:sm:py-4 mt-4 sm:mt-0">
@@ -278,7 +251,7 @@ ATRAS
                       Nombres y apellidos
                     </dt>
                     <dd className="mt-1 text-sm font-semibold text-gray-900">
-                      {(data.customerData.full_name)?data.customerData.full_name:'------'}
+                      {(data.customerData.full_name) ? data.customerData.full_name : '------'}
                     </dd>
                   </div>
                   <div className="sm:sm:py-4 mt-4 sm:mt-0">
@@ -286,7 +259,7 @@ ATRAS
                       Número de contacto
                     </dt>
                     <dd className="mt-1 text-sm font-semibold text-gray-900">
-                      {(data.customerData.phone_number)?data.customerData.phone_number:'------'}
+                      {(data.customerData.phone_number) ? data.customerData.phone_number : '------'}
                     </dd>
                   </div>
                 </div>
@@ -297,7 +270,7 @@ ATRAS
                   id="timeline-title"
                   className="text-lg font-medium text-gray-900 sm:mt-2 md:mt-2"
                 >
-                  Entradas contables 
+                  Entradas contables
                 </h2>
                 <div className="mt-3 md:mt-4 lg:mt-6 flow-root border-t border-gray-200 ">
                   <div className="sm:py-4 mt-4 sm:mt-0">
@@ -320,23 +293,23 @@ ATRAS
           </div>
         </main>
       </div>
-    :<DetailsSkeleton e2eAttr="Details-skeleton__md"/>}
-        <Modal
-          open={!loading && isError}
-          backdropClose={true}
-          onClose={() => {
-            console.warn('clicked for closed');
-          }}
-          style={{
-            container:
-              'inline-block align-bottom bg-gray-50 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6',
-            opacity:
-              'fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity',
-          }}
-          e2eAttr="modal-server-down"
-        >
-          <ServerDown />
-        </Modal> 
+        : <DetailsSkeleton e2eAttr="Details-skeleton__md" />}
+      <Modal
+        open={!loading && isError}
+        backdropClose={true}
+        onClose={() => {
+          console.warn('clicked for closed');
+        }}
+        style={{
+          container:
+            'inline-block align-bottom bg-gray-50 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6',
+          opacity:
+            'fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity',
+        }}
+        e2eAttr="modal-server-down"
+      >
+        <ServerDown />
+      </Modal>
     </>
   );
 };

@@ -4,21 +4,15 @@ import InputBasic from "./InputBasic";
 import { useFormik } from "formik";
 import { SearchFormValue } from "./interface/searchFormValue";
 import { XIcon, SearchIcon, TrashIcon } from "@heroicons/react/outline";
-import { getDataSearch } from "../hooks/dataSearch";
-import DatePicker, { registerLocale } from 'react-datepicker';
-import PickerDate from "./pickerDate";
 
 
 export interface SearchFormProps {
   resPage: Dispatch<SetStateAction<number>>;
   resStart: Dispatch<SetStateAction<number>>;
   resLimit: Dispatch<SetStateAction<number>>;
-  formvalue: Dispatch<SetStateAction<SearchFormValue>>;
-  noDateFilter: Dispatch<SetStateAction<boolean>>;
-  dataOrder: Dispatch<SetStateAction<any>>;
-  formalValueData:SearchFormValue;
+  setFormValueData: Dispatch<SetStateAction<SearchFormValue>>;
+  formValueData:SearchFormValue;
   stateFilter: Dispatch<SetStateAction<boolean>>;
-  token: string;
   e2eAttr?: string;
 }
 
@@ -28,10 +22,6 @@ export const SearchForm = (props: SearchFormProps) => {
   const statusOrderEnglish: Record<string, string> = { Declinada: "DECLINED", Error: "ERROR", Aprobado: "APPROVED", Anulada: "VOIDED" };
   const paymentMethodArray = ["Tarjeta", "Nequi", "Botón Bancolombia", "Corresponsal Bancario Bancolombia", "PSE"];
   const paymentMethodEnglish: Record<string, string> = { 1: "CARD", 2: "NEQUI", 3: "BANCOLOMBIA_TRANSFER", 4: "BANCOLOMBIA_COLLECT", 5: "PSE" };
-  const { token } = props;
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState<any>({});
-  const [showSearch, setshowSearch] = useState<boolean>(false);
   const [errorFullFields, setErrorFullFields] = useState<boolean>(false);
 
 
@@ -42,26 +32,24 @@ export const SearchForm = (props: SearchFormProps) => {
       idTransaction: "",
       refTransaction: "",
       emailUser: "",
-      shippingDate:"2022/01/01",
     },
     validateOnChange: true,
     validateOnMount: false,
 
     onSubmit: (values) => {
-      props.formvalue({
+      props.setFormValueData({
         stateOrders: statusOrderEnglish[values.stateOrders],
         paymentMethod: paymentMethodEnglish[paymentMethodArray.indexOf(values.paymentMethod) + 1],
         idTransaction: values.idTransaction,
         refTransaction: values.refTransaction,
         emailUser: values.emailUser,
       });
-console.log(new Date(values.shippingDate).toISOString().slice(0, 10),"formulario");
     },
   });
   const resetValuesForm = () => {
     searchForm.resetForm();
 
-    props.formvalue({
+    props.setFormValueData({
       stateOrders: "",
       paymentMethod: "",
       idTransaction: "",
@@ -72,7 +60,7 @@ console.log(new Date(values.shippingDate).toISOString().slice(0, 10),"formulario
   };
 
   useEffect(() => {
-    if(props.formalValueData.idTransaction.length!==0 || props.formalValueData.stateOrders.length!==0 || props.formalValueData.paymentMethod.length!==0 || props.formalValueData.emailUser.length!==0 ||props.formalValueData.refTransaction.length!==0){
+    if(props.formValueData.idTransaction.length!==0 || props.formValueData.stateOrders.length!==0 || props.formValueData.paymentMethod.length!==0 || props.formValueData.emailUser.length!==0 ||props.formValueData.refTransaction.length!==0){
       setErrorFullFields(true)
     }
   }, [])
@@ -80,7 +68,6 @@ console.log(new Date(values.shippingDate).toISOString().slice(0, 10),"formulario
 
   return (
     <>
-    
     {(errorFullFields)?<div className="text-red-600 text-center mt-3 font-semibold">Haga click en <span className="my-auto underline font-bold">Limpiar filtro</span> para volver a las transacciones iniciales
           </div>:""}
           <div
@@ -289,7 +276,5 @@ console.log(new Date(values.shippingDate).toISOString().slice(0, 10),"formulario
           </div>
         </form>
       </div>
-  
-
       </> );
 };

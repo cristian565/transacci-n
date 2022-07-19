@@ -1,7 +1,7 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, MutableRefObject, useEffect, useState } from "react";
 
-/* eslint-disable-next-line */
+
 export interface ModalProps {
   open: boolean;
   backdropClose?: boolean;
@@ -37,8 +37,6 @@ export function Modal(props: ModalProps) {
       >
         <div className="flex justify-center items-end px-4 pt-4 pb-20 min-h-screen text-center sm:block sm:p-0">
           <Dialog.Overlay className={props.style.opacity} />
-
-          {/* This element is to trick the browser into centering the modal contents. */}
           <span
             className="hidden sm:inline-block sm:h-screen sm:align-middle"
             aria-hidden="true"

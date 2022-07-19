@@ -1,7 +1,7 @@
 import { CalendarIcon, ClockIcon } from "@heroicons/react/outline";
-import React, { useEffect, useState, Dispatch, SetStateAction, } from "react";
+import React from "react";
 import { parseDate } from "../hooks/parse-date";
-import { dataDetails } from "./interface/orderDetails";
+import { dataDetails } from "./interface/transactionDetails";
 
 
 export interface AuthorizingDetailsCollectProps {

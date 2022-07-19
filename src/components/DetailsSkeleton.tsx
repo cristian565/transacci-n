@@ -1,18 +1,5 @@
-import React, { Dispatch, memo, useEffect, useState } from "react";
-// import { useNavigate } from "react-router-dom";
-import { parseCurrency } from "../hooks/parse-currency";
-import { parseDate } from "../hooks/parse-date";
-import { imagenes } from "../assets/imagenes";
-import { ArrowLeftIcon, ClockIcon, CalendarIcon, CreditCardIcon } from "@heroicons/react/outline";
-import { OrderDetails } from "./interface/orderDetails";
-import { getOrdersDetail } from "../hooks/ordersDetail";
-import { useKeycloak } from "@react-keycloak/web";
-import { DetailsValue } from "./interface/detailsValue";
-import { AuthorizingDetailsCard } from "./AuthorizingDetailsCard";
-import { AuthorizingDetailsPse } from "./AuthorizingDetailsPse";
-import { AuthorizingDetailsTransfer } from "./AuthorizingDetailsTransfer";
-import { AuthorizingDetailsCollect } from "./AuthorizingDetailsCollect";
-import { AuthorizingDetailsNequi } from "./AuthorizingDetailsNequi";
+import React from "react";
+import { ArrowLeftIcon, ClockIcon, CalendarIcon } from "@heroicons/react/outline";
 
 
 export interface DetailsSkeletonProps {
@@ -40,12 +27,8 @@ export const DetailsSkeleton = (props: DetailsSkeletonProps) => {
     <>
 
       <div className="min-h-full -z-30">
-        {/*    <button onClick={handleHome}>
-ATRAS
-        </button> */}
         <main className="py-2 md:py-9"
           data-cy={props.e2eAttr}>
-          {/* Page header */}
           <div className=" mx-auto px-4 h-10 sm:px-6  md:flex md:content-center  md:space-x-2 lg:max-w-7xl lg:px-8">
             <ArrowLeftIcon
               aria-hidden="true"
@@ -57,7 +40,6 @@ ATRAS
           </div>
           <div className="mt-8 max-w-3xl mx-auto grid grid-cols-1 gap-6 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-3">
             <div className="space-y-6 lg:col-start-1 lg:col-span-2">
-              {/* Description list*/}
               <section aria-labelledby="applicant-information-title">
                 <div className="mx-4 sm:mx-0 shadow-xl sm:rounded-lg mt-2 sm:mt-0">
                   <div className="px-4 py-5 sm:px-6">
@@ -76,7 +58,6 @@ ATRAS
                         </dt>
                         <div className="flex flex-row ">
                           <span className="w-24 h-4 bg-gray-300 rounded-full">
-                            {/* aqui la el monto*/}
                           </span>
                         </div>
                       </div>
@@ -86,7 +67,6 @@ ATRAS
                         </dt>
                         <div className="flex flex-row ">
                           <span className="w-20 h-4 bg-gray-300 rounded-full">
-                            {/* aqui la el monto*/}
                           </span>
                         </div>
                       </div>
@@ -96,7 +76,6 @@ ATRAS
                         </dt>
                         <div className="flex flex-row ">
                           <span className="w-32 h-4 bg-gray-300 rounded-full">
-                            {/* aqui la el monto*/}
                           </span>
                         </div>
                       </div>
@@ -106,7 +85,6 @@ ATRAS
                         </dt>
                         <div className="flex flex-row ">
                           <span className="w-32 h-4 bg-gray-300 rounded-full">
-                            {/* aqui la el monto*/}
                           </span>
                         </div>
                       </div>
@@ -116,7 +94,6 @@ ATRAS
                         </dt>
                         <div className="flex flex-row ">
                           <span className="w-12 h-10 bg-gray-300 rounded-lg">
-                            {/* aqui la el monto*/}
                           </span>
 
                         </div>
@@ -127,7 +104,6 @@ ATRAS
                         </dt>
                         <div className="flex flex-row ">
                           <span className="w-28 h-4 bg-gray-300 rounded-full">
-                            {/* aqui la el monto*/}
                           </span>
                         </div>
                       </div>
@@ -142,7 +118,6 @@ ATRAS
                               className="h-6 w-6"
                             />
                             <span className="w-12 h-4 mt-1 bg-gray-300 rounded-full">
-                              {/* aqui la el monto*/}
                             </span>
                           </div>
 
@@ -152,7 +127,6 @@ ATRAS
                               className="h-6 w-6"
                             />
                             <span className="w-12 h-4 mt-1 bg-gray-300 rounded-full">
-                              {/* aqui la el monto*/}
                             </span>
                           </div>
                         </div>
@@ -168,7 +142,6 @@ ATRAS
                               className="h-6 w-6"
                             />
                             <span className="w-12 h-4 mt-1 bg-gray-300 rounded-full">
-                              {/* aqui la el monto*/}
                             </span>
                           </div>
 
@@ -179,7 +152,6 @@ ATRAS
 
                             />
                             <span className="w-12 h-4 mt-1 bg-gray-300 rounded-full">
-                              {/* aqui la el monto*/}
                             </span>
                           </div>
                         </div>
@@ -189,7 +161,7 @@ ATRAS
                 </div>
               </section>
 
-              {/* Detalles del autorizador*/}
+
               <section aria-labelledby="applicant-information-title">
                 <div className="bg-white mx-4 sm:mx-0 shadow-xl sm:rounded-lg ">
                   <div className="px-4 py-5 sm:px-6">
@@ -208,7 +180,6 @@ ATRAS
                           </dt>
                           <div className="flex flex-row ">
                             <span className="w-28 h-4 bg-gray-300 rounded-full">
-                              {/* aqui la el monto*/}
                             </span>
                           </div>
                         </div>
@@ -219,7 +190,6 @@ ATRAS
                           </dt>
                           <div className="flex flex-row ">
                             <span className="w-28 h-4 bg-gray-300 rounded-full">
-                              {/* aqui la el monto*/}
                             </span>
                           </div>
                         </div>
@@ -246,7 +216,6 @@ ATRAS
                     <dt className="text-sm font-medium text-gray-500">Email</dt>
                     <div className="flex flex-row ">
                       <span className="w-28 h-4 bg-gray-300 rounded-full">
-                        {/* aqui la el monto*/}
                       </span>
                     </div>
                   </div>
@@ -256,7 +225,6 @@ ATRAS
                     </dt>
                     <div className="flex flex-row ">
                       <span className="w-28 h-4 bg-gray-300 rounded-full">
-                        {/* aqui la el monto*/}
                       </span>
                     </div>
                   </div>
@@ -266,7 +234,6 @@ ATRAS
                     </dt>
                     <div className="flex flex-row ">
                       <span className="w-28 h-4 bg-gray-300 rounded-full">
-                        {/* aqui la el monto*/}
                       </span>
                     </div>
                   </div>
@@ -287,7 +254,6 @@ ATRAS
                     </dt>
                     <div className="flex flex-row ">
                       <span className="w-28 h-4 bg-gray-300 rounded-full">
-                        {/* aqui la el monto*/}
                       </span>
                     </div>
                   </div>
@@ -295,7 +261,6 @@ ATRAS
                     <dt className="text-sm font-medium text-gray-500">Monto</dt>
                     <div className="flex flex-row ">
                       <span className="w-28 h-4 bg-gray-300 rounded-full">
-                        {/* aqui la el monto*/}
                       </span>
                     </div>
                   </div>
@@ -305,8 +270,6 @@ ATRAS
           </div>
         </main>
       </div>
-
-
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { Order } from "../components/interface/order";
+import { Transaction } from "../components/interface/transaction";
 import useSWR from "swr";
 import fetch from "unfetch";
 import { useKeycloak } from "@react-keycloak/web";
@@ -13,41 +13,40 @@ const fetcher = async (
   headers?: Record<string, string>
 ) => {
   try {
-  const res = await fetch(path, {
-    headers: {
-      "x-store-id": "hardtech",
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "applicaton/json",
-    },
-  });
+    const res = await fetch(path, {
+      headers: {
+        "x-store-id": "hardtech",
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "applicaton/json",
+      },
+    });
 
-  if (!res.ok) {
+    if (!res.ok) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const error: { message: string; info?: any; status?: number } = {
+        message: "An error occurred while fetching the data.",
+      };
+      // Attach extra info to the error object.
+      error.info = await res.json();
+      error.status = res.status;
+      throw error;
+    }
+
+    return res.json();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const error: { message: string; info?: any; status?: number } = {
-      message: 'An error occurred while fetching the data.',
-    };
-    // Attach extra info to the error object.
-    error.info = await res.json();
-    error.status = res.status;
-    throw error;
+  } catch (e: any) {
+    if (e.type === "error") {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const error: { message: string; info?: any; status?: number } = {
+        message: "An error occurred while fetching the data.",
+      };
+      // Attach extra info to the error object.
+      error.info = "server timeout";
+      error.status = 100;
+      throw error;
+    }
+    throw e;
   }
-
-  return res.json();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-} catch (e: any) {
-  if (e.type === 'error') {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const error: { message: string; info?: any; status?: number } = {
-      message: 'An error occurred while fetching the data.',
-    };
-    // Attach extra info to the error object.
-    error.info = 'server timeout';
-    error.status = 100;
-    throw error;
-  }
-  throw e;
-}
-
 };
 
 export function useOrders(
@@ -62,7 +61,7 @@ export function useOrders(
   fromDate?: string,
   untilDate?: string
 ) {
-  const { data, error, mutate } = useSWR<Order>(
+  const { data, error, mutate } = useSWR<Transaction>(
     [
       `${path}?page=${page}&size=5${id ? "&id=" + id : ""}${
         reference ? "&reference=" + reference : ""
@@ -76,11 +75,9 @@ export function useOrders(
     fetcher,
     {
       onErrorRetry: (lastError, key, config, revalidate, { retryCount }) => {
-        // Only retry up to 3 times.
         if (retryCount >= 3) return;
       },
     }
-   
   );
 
   return {

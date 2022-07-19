@@ -1,9 +1,9 @@
-import logoBancolombia from './bancolombia-transfer.825960f.png'
-import logoBancolombiaCorresponsal from './bancolombia-collect.png'
-import logoNequi from './LogoNequi.png'
-import logoPse from './LogoPSE.png'
-import logoVisa from './LogoVisa.png'
-import logoMasterCard from './mastercard-logo-7.png'
+import logoBancolombia from './logo-bancolombia-transfer.png'
+import logoBancolombiaCorresponsal from './logo-bancolombia-collect.png'
+import logoNequi from './logo-nequi.png'
+import logoPse from './logo-PSE.png'
+import logoVisa from './logo-visa.png'
+import logoMasterCard from './logo-mastercard.png'
 import logoBellaPiel from './logo-BellaPiel.svg'
 
 

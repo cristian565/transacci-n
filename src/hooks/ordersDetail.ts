@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import fetch from 'unfetch';
-import { OrderDetails } from '../components/interface/orderDetails';
+import { TransactionDetails } from '../components/interface/transactionDetails';
 import axios  from 'axios';
 import { json } from 'node:stream/consumers';
 import axiosRetry from 'axios-retry'
