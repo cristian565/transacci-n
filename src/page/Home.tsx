@@ -110,6 +110,16 @@ export const Home = () => {
   }
 
    
+  // setInterval(() => {
+  //   keycloak.updateToken(62).then((refreshed)=>{
+  //     if (!refreshed) {
+  //       keycloak.logout()
+  //     } 
+  //     if(refreshed){console.log("refres correcto")}
+  //   }).catch(function() {
+  //     keycloak.logout()
+  //   });
+  // }, 60000);
  
 
 
