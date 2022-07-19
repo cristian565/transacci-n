@@ -54,19 +54,11 @@ export const Details = (props: DetailsProps) => {
   useEffect(() => {
     if (isError) {
       const interval = setInterval(() => {
-        console.log("Error al cargar la información");
         loadOrderDetails();
         clearInterval(interval);
       }, 9000);
     }
   }, [isError, loading]);
-
-  useEffect(() => {
-    if (data) {
-      console.log(data);
-    }
-  }, [data])
-
 
   return (
     <>

@@ -15,11 +15,9 @@ const root = ReactDOM.createRoot(
 );
 
 const eventLogger = (event: unknown, error: unknown) => {
-  console.log('onKeycloakEvent', event, error)
 }
 
 const tokenLogger = (tokens: unknown) => {
-  console.log('onKeycloakTokens', tokens)
 }
 
 root.render(

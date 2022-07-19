@@ -77,8 +77,9 @@ export const Home = () => {
     if (orders && !isLoading) { setDataOrder(orders); }
 
     if (orders?.totalTransactions === 0 && !isLoading && !isError) {
-      setShowNoDateFilter(true)
       handleReset()
+      setShowNoDateFilter(true)
+      
     }
   }, [orders, showNoDateFilter]);
 
@@ -108,63 +109,12 @@ export const Home = () => {
     setLimit(1)
   }
 
-  const interval=setInterval(() => {
-  keycloak.updateToken(60).then((refreshed)=>{
-    if (!refreshed) {
-      keycloak.logout()
-    } 
-    console.log("refres correcto")
-  }).catch(function() {
-    keycloak.logout()
-  });
-}, 60000);
+   
  
-  // keycloak.updateToken(60).then((refreshed)=>{
-  //   if (!refreshed) {
-  //     keycloak.logout()
-  //   } 
-  //   console.log("refres correcto")
-  // }).catch(function() {
-  //   keycloak.logout()
-  // });
 
-
-//useEffect(() => {
- 
-//}, [orders])
-
-
-
-  //Token Refresh
-
-
- /*    keycloak.updateToken(70).then((refreshed) => {
-      if (refreshed) {
-        console.log('Token refreshed' + refreshed);
-      } else {
-        console.log('Token not refreshed, valid for '
-          + Math.round(keycloak.ins?.tokenParsed.exp + keycloak?.timeSkew - new Date().getTime() / 1000) + ' seconds');
-      }
-    }).catch(() => {
-      console.log('Failed to refresh token');
-    }); */
-
- /* 
-  const interval=setInterval(() => {
-    console.log("prueba para refresh");
-  
-    keycloak.updateToken(5)
-    .then(successCallback)
-    .catch(doLogin);
-
-    clearInterval(interval);
-  
-  */
-  
 
   return (
     <>
-      {console.log(isLoading, "isLoading")}
       <div className="h-screen">
         {/* Componente para movil */}
 
@@ -497,11 +447,11 @@ export const Home = () => {
           </div>
         </div>
 
-        {(isError?.status === 100 && !isLoading) ?
+        {(isError?.status === 100 || isError?.status === 401 && !isLoading) ?
 
 
           <Modal
-            open={!isLoading && isError?.status === 100}
+            open={!isLoading && isError?.status === 100 || isError?.status === 401}
             backdropClose={true}
             onClose={() => {
               console.warn('clicked for closed');

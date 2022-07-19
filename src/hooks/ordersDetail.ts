@@ -26,7 +26,6 @@ export async function getOrdersDetail(
     setData(response.data);
     setIsError(false);
   } catch (error) {
-    console.log(error);
     setIsError(true)
   }
 
