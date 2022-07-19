@@ -24,6 +24,7 @@ import { DateSearch } from "../components/DateSearch";
 import ServerDown from "../components/ServerDow";
 
 
+
 export const Home = () => {
   const navigation = [
     { name: "Transacciones", href: "#", icon: HomeIcon, current: true },
@@ -49,8 +50,6 @@ export const Home = () => {
   const date = new Date()
   const [startDate, setstartDate] = useState<string>(date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate() - 1).padStart(2, '0'));
   const [endDate, setendDate] = useState<string>(date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate()).padStart(2, '0'));
-
-
 
   const [searchValue, setSearchValue] = useState<SearchFormValue>({
     stateOrders: "",
@@ -108,6 +107,60 @@ export const Home = () => {
     setStart(0)
     setLimit(1)
   }
+
+  const interval=setInterval(() => {
+  keycloak.updateToken(60).then((refreshed)=>{
+    if (!refreshed) {
+      keycloak.logout()
+    } 
+    console.log("refres correcto")
+  }).catch(function() {
+    keycloak.logout()
+  });
+}, 60000);
+ 
+  // keycloak.updateToken(60).then((refreshed)=>{
+  //   if (!refreshed) {
+  //     keycloak.logout()
+  //   } 
+  //   console.log("refres correcto")
+  // }).catch(function() {
+  //   keycloak.logout()
+  // });
+
+
+//useEffect(() => {
+ 
+//}, [orders])
+
+
+
+  //Token Refresh
+
+
+ /*    keycloak.updateToken(70).then((refreshed) => {
+      if (refreshed) {
+        console.log('Token refreshed' + refreshed);
+      } else {
+        console.log('Token not refreshed, valid for '
+          + Math.round(keycloak.ins?.tokenParsed.exp + keycloak?.timeSkew - new Date().getTime() / 1000) + ' seconds');
+      }
+    }).catch(() => {
+      console.log('Failed to refresh token');
+    }); */
+
+ /* 
+  const interval=setInterval(() => {
+    console.log("prueba para refresh");
+  
+    keycloak.updateToken(5)
+    .then(successCallback)
+    .catch(doLogin);
+
+    clearInterval(interval);
+  
+  */
+  
 
   return (
     <>

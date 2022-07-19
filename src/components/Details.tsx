@@ -71,7 +71,9 @@ export const Details = (props: DetailsProps) => {
   return (
     <>
       <div>
-        {(!loading && !isError) ? <div className="min-h-full -z-40">
+        {(!loading && !isError) ?
+        
+        <div className="min-h-full -z-40">
           <main className="py-2 md:py-9"
             data-cy={props.e2eAttr}>
             {/* Page header */}
@@ -309,25 +311,28 @@ export const Details = (props: DetailsProps) => {
           </main>
         </div>
           : ""}
-          {(!loading && !isError) ?<DetailsSkeleton e2eAttr="Details-skeleton__md" />:""}
+          
+        {(loading && !isError && !data) ?<DetailsSkeleton e2eAttr="Details-skeleton__md" />:""}
         
         {(!loading && isError) ?
-         <Modal
-          open={!loading && isError}
-          backdropClose={true}
-          onClose={() => {
-            console.warn('clicked for closed');
-          }}
-          style={{
-            container:
-              "z-50 inline-block overflow-hidden px-4 pt-5 pb-4 text-left align-bottom bg-gray-50 rounded-lg shadow-xl transition-all transform sm:p-6 sm:my-8 sm:w-full sm:max-w-lg sm:align-middle",
-            opacity:
-              " fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity",
-          }}
-          e2eAttr="modal-server-down"
-        >
-          <ServerDown />
-        </Modal> : ""}
+        
+        <Modal
+        open={!loading && isError}
+        backdropClose={true}
+        onClose={() => {
+          console.warn('clicked for closed');
+        }}
+        style={{
+          container:
+            'inline-block align-bottom bg-gray-50 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6',
+          opacity:
+            'fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity',
+        }}
+        e2eAttr="modal-server-down"
+      >
+        <ServerDown />
+      </Modal>
+        : ""}
       </div>
     </>
   );
