@@ -3,9 +3,6 @@ import useSWR from "swr";
 import fetch from "unfetch";
 import { useKeycloak } from "@react-keycloak/web";
 
-export interface RepaymentEmailParams {
-  userId: number;
-}
 
 const fetcher = async (
   path: string,
@@ -22,25 +19,20 @@ const fetcher = async (
     });
 
     if (!res.ok) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const error: { message: string; info?: any; status?: number } = {
         message: "An error occurred while fetching the data.",
       };
-      // Attach extra info to the error object.
       error.info = await res.json();
       error.status = res.status;
       throw error;
     }
 
     return res.json();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
     if (e.type === "error") {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const error: { message: string; info?: any; status?: number } = {
         message: "An error occurred while fetching the data.",
       };
-      // Attach extra info to the error object.
       error.info = "server timeout";
       error.status = 100;
       throw error;
@@ -49,7 +41,7 @@ const fetcher = async (
   }
 };
 
-export function useOrders(
+export function useTransactions(
   path: string,
   token: string,
   page: number,

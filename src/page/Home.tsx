@@ -15,7 +15,7 @@ import { SearchForm } from "../components/SearchForm";
 import { TableTransactionSkeleton } from "../components/TableTransactionSkeleton";
 import Modal from "../components/Modal";
 import OrderNotFound from "../components/OrderNotFound";
-import { useOrders } from "../hooks/useOrders";
+import { useTransactions } from "../hooks/useTransactions";
 import { useKeycloak } from "@react-keycloak/web";
 import { useHistory } from "react-router-dom";
 import { DetailsValue } from "../components/interface/detailsValue";
@@ -47,9 +47,8 @@ export const Home = () => {
   const [pagination, setpagination] = useState<number>(0);
   const [start, setStart] = useState<number>(0);
   const [limit, setLimit] = useState<number>(1);
-  const date = new Date()
-  const [startDate, setstartDate] = useState<string>(date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate() - 1).padStart(2, '0'));
-  const [endDate, setendDate] = useState<string>(date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate()).padStart(2, '0'));
+  const [startDate, setstartDate] = useState<string>("");
+  const [endDate, setendDate] = useState<string>("");
 
   const [searchValue, setSearchValue] = useState<SearchFormValue>({
     stateOrders: "",
@@ -59,7 +58,7 @@ export const Home = () => {
     emailUser: "",
   });
 
-  const { orders, isLoading, isError, mutate } = useOrders(
+  const { orders, isLoading, isError, mutate } = useTransactions(
     "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/",
     keycloak.token ? keycloak.token : "",
     pagination,
@@ -109,17 +108,20 @@ export const Home = () => {
     setLimit(1)
   }
 
-   
-  // setInterval(() => {
-  //   keycloak.updateToken(62).then((refreshed)=>{
-  //     if (!refreshed) {
-  //       keycloak.logout()
-  //     } 
-  //     if(refreshed){console.log("refres correcto")}
-  //   }).catch(function() {
-  //     keycloak.logout()
-  //   });
-  // }, 60000);
+  useEffect(() => {
+    setInterval(() => {
+      keycloak.updateToken(62).then((refreshed)=>{
+        if (!refreshed) {
+          keycloak.logout()
+        } 
+        if(refreshed){console.log("refres correcto")}
+  
+      }).catch(function() {
+        keycloak.logout()
+      });
+    }, 60000);
+    console.log("ingreso")
+  }, [])
  
 
 

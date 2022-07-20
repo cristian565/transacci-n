@@ -1,10 +1,9 @@
-import { ExclamationCircleIcon } from '@heroicons/react/outline';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import es from 'date-fns/locale/es';
 registerLocale('es', es);
 
-/* eslint-disable-next-line */
+
 export interface PickerDateProps {
   metadata: {
     className: string;

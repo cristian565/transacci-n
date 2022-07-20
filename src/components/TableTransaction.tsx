@@ -75,6 +75,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
     ERROR: "Error",
     APPROVED: "Aprobado",
     VOIDED: "Anulada",
+    PENDING:"Pendiente",
   };
 
 
@@ -85,7 +86,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
           <div className="overflow-x-auto ">
             <div className="inline-block min-w-full py-2 align-middle md:px-1 lg:px-2 ">
             <div className="flex justify-end ">
-            <div className="flex cursor-pointer shadow-md h-10 justify-center top-0 right-0 items-center w-36 border-2 rounded-xl mb-2" onClick={()=>props.onRefresh()}>
+            <div className="flex cursor-pointer shadow-md h-10 justify-center hover:bg-blue-400 hover:text-blue-800 top-0 right-0 items-center w-36 border-2 rounded-xl mb-2" onClick={()=>props.onRefresh()}>
                 <span className="mr-1">Refresh</span>
                <RefreshIcon aria-hidden="true"
                                 className="w-6 h-6"/>

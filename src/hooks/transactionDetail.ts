@@ -1,8 +1,6 @@
 import axios from 'axios';
 
-
-
-export async function getOrdersDetail(
+export async function getTransactionDetail(
   path: string,
   token: string,
   paymentGateway: string,

@@ -8,24 +8,8 @@ export interface DetailsSkeletonProps {
 
 export const DetailsSkeleton = (props: DetailsSkeletonProps) => {
 
-  // const [data, setdata] = useState<any>(111)
-  const statusStyles: Record<string, string> = {
-    DECLINED: "bg-red-400 text-red-700",
-    ERROR: "bg-red-400 text-red-700",
-    APPROVED: "bg-green-400 text-green-700",
-    VOIDED: "bg-yellow-400 text-yellow-700",
-  };
-
-  const statusOrder: Record<string, string> = {
-    DECLINED: "Declinada",
-    ERROR: "Error",
-    APPROVED: "Aprobado",
-    VOIDED: "Anulada",
-  };
-
   return (
     <>
-
       <div className="min-h-full -z-30">
         <main className="py-2 md:py-9"
           data-cy={props.e2eAttr}>

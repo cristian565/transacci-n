@@ -31,13 +31,6 @@ export const DateSearch = (props: DateSearchProps) => {
     });
 
 
-    useEffect(() => {
-        if (!props.startDate) {
-            const a = new Date()
-            setoneDate(a.getFullYear() + "-" + String(a.getMonth() + 1).padStart(2, '0') + "-" + String(a.getDate()).padStart(2, '0'))
-            settwoDate(a.getFullYear() + "-" + String(a.getMonth() + 1).padStart(2, '0') + "-" + String(a.getDate()).padStart(2, '0'))
-        }
-    }, [props.startDate]);
 
     useEffect(() => {
         if (props.restValue) {
@@ -130,7 +123,7 @@ export const DateSearch = (props: DateSearchProps) => {
                         handleReset()
                         props.onReset()
                     }}>
-                        <XCircleIcon aria-hidden="true" className="w-5 h-5" />
+                        <XCircleIcon aria-hidden="true" className="w-5 h-5 cursor-pointer" />
                     </div>
                 </div>
             </div>

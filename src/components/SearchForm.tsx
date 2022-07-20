@@ -16,10 +16,9 @@ export interface SearchFormProps {
   e2eAttr?: string;
 }
 
-const URI = "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions";
 export const SearchForm = (props: SearchFormProps) => {
-  const statusOrderArray = ["Declinada", "Error", "Aprobado", "Anulada"];
-  const statusOrderEnglish: Record<string, string> = { Declinada: "DECLINED", Error: "ERROR", Aprobado: "APPROVED", Anulada: "VOIDED" };
+  const statusOrderArray = ["Declinada", "Error", "Aprobado", "Anulada","Pendiente"];
+  const statusOrderEnglish: Record<string, string> = { Declinada: "DECLINED", Error: "ERROR", Aprobado: "APPROVED", Anulada: "VOIDED",Pendiente:"PENDING" };
   const paymentMethodArray = ["Tarjeta", "Nequi", "Botón Bancolombia", "Corresponsal Bancario Bancolombia", "PSE"];
   const paymentMethodEnglish: Record<string, string> = { 1: "CARD", 2: "NEQUI", 3: "BANCOLOMBIA_TRANSFER", 4: "BANCOLOMBIA_COLLECT", 5: "PSE" };
   const [errorFullFields, setErrorFullFields] = useState<boolean>(false);
@@ -38,8 +37,8 @@ export const SearchForm = (props: SearchFormProps) => {
 
     onSubmit: (values) => {
       props.setFormValueData({
-        stateOrders: statusOrderEnglish[values.stateOrders],
-        paymentMethod: paymentMethodEnglish[paymentMethodArray.indexOf(values.paymentMethod) + 1],
+        stateOrders: statusOrderEnglish[values.stateOrders] ?? "",
+        paymentMethod: paymentMethodEnglish[paymentMethodArray.indexOf(values.paymentMethod) + 1] ?? "",
         idTransaction: values.idTransaction,
         refTransaction: values.refTransaction,
         emailUser: values.emailUser,

@@ -8,8 +8,6 @@ export interface AuthorizingDetailsCardProps {
 
 export const AuthorizingDetailsCard = (props: AuthorizingDetailsCardProps) => {
 
-
- 
   return (
     <>
       <div className="border-t border-gray-200 px-4 py-5 sm:px-6 lg:pb-8">
