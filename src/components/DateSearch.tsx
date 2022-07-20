@@ -72,7 +72,7 @@ export const DateSearch = (props: DateSearchProps) => {
         <>
             <div className='flex flex-col w-full px-6 mt-2 lg:mt-0 lg:px-0'>
                 <span className='font-extrabold text-blue-wompi'>Escoge las fechas para las que quieres ver transacciones</span>
-                <div className=' flex flex-row w-4/6 sm:w-3/6 sm:px-4  tm:pr-6 lg:pr-0 md:px-0 md:w-3/6 bg-red-400 lg:w-2/4 h-10 mt-2 mb-2 items-center justify-between lg:bg-gray-50 '>
+                <div className=' flex flex-row w-4/6 sm:w-3/6 sm:px-4  tm:pr-6 lg:pr-0 md:px-0 md:w-3/6  lg:w-2/4 h-10 mt-2 mb-2 items-center justify-between lg:bg-gray-50 '>
                     <div className='w-2/5 sm:w-2/6 lg:w-2/5'>
                         <PickerDate metadata={{
                             className:

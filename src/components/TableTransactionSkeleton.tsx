@@ -11,19 +11,6 @@ export const TableTransactionSkeleton = memo(function (
   const [start, setStart] = useState(0);
   const [limit, setLimit] = useState(10);
 
-  const handlePagination = (action: "next" | "previous") => {
-    switch (action) {
-      case "next":
-        setStart(start + 10);
-        setLimit(limit + 10);
-        break;
-      case "previous":
-        setStart(start - 10);
-        setLimit(limit - 10);
-        break;
-    }
-  };
-
   return (
     <div className="px-4 sm:px-6 lg:px-2 mt-8 -z-20">
       <div className="hidden md:flex mt-4 flex-col shadow-xl ">
@@ -224,16 +211,14 @@ export const TableTransactionSkeleton = memo(function (
               >
                 <div className="hidden sm:block">
                   <p className="text-sm text-gray-700">
-                    Mostrando <span className="font-medium">{start + 1}</span>{" "}
-                    de <span className="font-medium"></span> de{" "}
-                    <span className="font-medium"></span> resultados
+                    Mostrando pagina<span className="font-medium">{start + 1}</span>{" "}
+                    de <span className="font-medium"></span>
+                    <span className="font-medium"></span>
                   </p>
                 </div>
                 <div className="flex flex-1 justify-between sm:justify-end">
                   <button
                     className="inline-flex relative items-center py-2 px-4 text-sm font-medium text-white bg-blue-wompi hover:bg-blue-400 rounded-md border border-gray-300"
-                    disabled={start === 0}
-                    onClick={() => handlePagination("previous")}
                   >
                     Anterior
                   </button>
