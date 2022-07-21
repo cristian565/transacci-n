@@ -22,6 +22,7 @@ import { DetailsValue } from "../components/interface/detailsValue";
 import { SearchFormValue } from "../components/interface/searchFormValue";
 import { DateSearch } from "../components/DateSearch";
 import ServerDown from "../components/ServerDow";
+import { UserService } from "../Keycloak";
 
 
 
@@ -60,7 +61,7 @@ export const Home = () => {
 
   const { orders, isLoading, isError, mutate } = useTransactions(
     "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/",
-    keycloak.token ? keycloak.token : "",
+    UserService.getToken()? UserService.getToken() : "",
     pagination,
     searchValue.idTransaction,
     searchValue.refTransaction,
@@ -89,7 +90,7 @@ export const Home = () => {
   }, [endDate, startDate]);
 
   const handleClosedSession = () => {
-    keycloak.logout();
+    UserService.doLogout();
     history.push("/");
   };
 
@@ -110,18 +111,11 @@ export const Home = () => {
 
   useEffect(() => {
     setInterval(() => {
-      keycloak.updateToken(62).then((refreshed)=>{
-        if (!refreshed) {
-          keycloak.logout()
-        } 
-        if(refreshed){console.log("refres correcto")}
+      UserService.updateToken(()=>console.log("ingreso y todo bien"))       
   
-      }).catch(function() {
-        keycloak.logout()
-      });
-    }, 60000);
+    }, 300000);
     console.log("ingreso")
-  }, [])
+  }, []) 
  
 
 
@@ -251,7 +245,7 @@ export const Home = () => {
           >
 
             <Details
-              token={keycloak.token ? keycloak.token : ""}
+              token={UserService.getToken()? UserService.getToken() : ""}
               detailsValue={{
                 transactionId: detailsValue.transactionId,
                 paymentGateway: detailsValue.paymentGateway,
@@ -438,7 +432,7 @@ export const Home = () => {
                       >
 
                         <Details
-                          token={keycloak.token ? keycloak.token : ""}
+                          token={UserService.getToken()? UserService.getToken() : ""}
                           detailsValue={{
                             transactionId: detailsValue.transactionId,
                             paymentGateway: detailsValue.paymentGateway,
