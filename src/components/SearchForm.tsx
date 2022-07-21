@@ -67,6 +67,7 @@ export const SearchForm = (props: SearchFormProps) => {
 
   return (
     <>
+    {console.log("componente--searhform")}
     {(errorFullFields)?<div className="text-red-600 text-center mt-3 font-semibold">Haga click en <span className="my-auto underline font-bold">Limpiar filtro</span> para volver a las transacciones iniciales
           </div>:""}
           <div

@@ -22,8 +22,7 @@ export interface TableTransactionProps {
 }
 
 export const TableTransaction = (props: TableTransactionProps) => {
-  const data = useMemo(() => props.order.transactions, [props.order]);
-
+  const [data, setdata] = useState(props.order.transactions);
   const [start, setStart] = useState(props.pagStart);
   const [limit, setLimit] = useState(props.pagLimit);
   const [pageIndex, setPageIndex] = useState(props.pageState);
@@ -63,11 +62,11 @@ export const TableTransaction = (props: TableTransactionProps) => {
   };
 
   const statusStyles: Record<string, string> = {
-    DECLINED: "bg-red-400 text-red-700",
-    ERROR: "bg-red-400 text-red-700",
-    APPROVED: "bg-green-400 text-green-700",
-    VOIDED: "bg-yellow-400 text-yellow-700",
-    PENDING:"bg-orange-400 text-orange-700"
+    DECLINED: "bg-red-200 text-red-700",
+    ERROR: "bg-gray-200 text-gray-700",
+    APPROVED: "bg-green-200 text-green-700",
+    VOIDED: "bg-yellow-200 text-yellow-700",
+    PENDING:"bg-orange-200 text-orange-700"
   };
 
   const statusOrder: Record<string, string> = {
@@ -81,7 +80,16 @@ export const TableTransaction = (props: TableTransactionProps) => {
 
   return (
     <>
+    {console.log("componente--tabla")}
+    {console.log("componente--tabla-data",data)}
+    {console.log("componente--tabla-data-props",props.order.transactions)}
+    
       <div className="px-4 mt-8 sm:px-3 lg:px-2" data-cy={props.e2eAttr}>
+        {/* escritorio*/}
+
+        {
+          (props.order.transactions.length>0)
+            ?
         <div className="flex-col hidden mt-4 shadow-xl md:flex">
           <div className="overflow-x-auto ">
             <div className="inline-block min-w-full py-2 align-middle md:px-1 lg:px-2 ">
@@ -123,7 +131,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {data.map((item) => (
+                    {props.order.transactions.map((item) => (
                       <tr
                         key={item.reference}
                         onClick={() =>{
@@ -259,8 +267,12 @@ export const TableTransaction = (props: TableTransactionProps) => {
             </div>
           </div>
         </div>
+          : <div className="text-white-wompi text-sm font-bold "> HO HAY NADA</div>
+        }
 
-        <div>
+{
+          (props.order.transactions.length>0)
+            ? <div>
           <div className="shadow md:hidden">
             <div className="flex px-6 py-3 text-xs font-medium tracking-wider text-center text-gray-700 uppercase rounded-t-lg bg-pantone-blue-100">
               <span className="flex items-center justify-center flex-1">
@@ -269,14 +281,21 @@ export const TableTransaction = (props: TableTransactionProps) => {
               </span>
             </div>
             <ul className="mt-2 overflow-hidden divide-y divide-gray-200 shadow ">
-              {data.map((item) => (
+              {props.order.transactions.map((item) => (
                 <li
                   key={item.reference}
                   className="mb-0 sm:relative "
-                  onClick={() => handleDetails(item.reference)}
+                  onClick={() =>{
+                    props.detailsValue(
+                      {
+                        transactionId:item.transactionId,
+                        paymentGateway:item.paymentGateway
+                      })
+                    props.openTransaction(false)
+                  }}
                 >
                   <div className="flex flex-row justify-center mt-4 sm:py-2 sm:h-44 md:px-4 sm:mt-0">
-                    <div className="flex flex-row justify-between px-4 py-4 text-sm sm:pb-4 sm:py-2 sm:justify-center sm:items-center sm:px-2 sm:w-full sm:h-48 md:justify-center md:items-center md:py-2 md:px-4 md:w-1/2 md:h-full">
+                    <div className="w-11/12 flex flex-row justify-between px-4 py-4 text-sm sm:pb-4 sm:py-2 sm:justify-center sm:items-center sm:px-2 sm:w-full sm:h-48 md:justify-center md:items-center md:py-2 md:px-4 md:w-1/2 md:h-full">
                       <div className="flex flex-col mt-1 mr-2 space-y-1 text-sm sm:hidden ">
                         <span className="text-blue-400 truncate">Estado</span>
                         <span className="text-blue-400 truncate">Cliente:</span>
@@ -294,7 +313,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                           Metodo de pago
                         </span>
                       </div>
-                      <div className="flex flex-col space-y-1 text-sm text-gray-700 sm:hidden ">
+                      <div className="flex flex-col space-y-1 text-sm text-gray-700 sm:hidden bg-blue-600 w-10/12">
                         <span
                           className={`${statusStyles[item.transactionStatus]}
                              font-semibold inline-block  rounded-lg px-3 w-24 text-center h-5`}
@@ -302,7 +321,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                           {statusOrder[item.transactionStatus]}
                         </span>
                         <div className="flex flex-col w-full ">
-                          <span>{item.client}</span>
+                          <span className="bg-red-400 break-words">{item.client}</span>
                         </div>
                         <div className="flex flex-row content-center">
                           <ClockIcon aria-hidden="true" className="w-6 h-6" />
@@ -322,10 +341,10 @@ export const TableTransaction = (props: TableTransactionProps) => {
                         </div>
 
                         <div className="flex flex-col">
-                          <span className="font-bold">
+                          <span className="font-bold bg-red-400 break-words">
                             {`#${item.transactionId}`}
                           </span>
-                          <span>{`Ref: ${item.reference}`}</span>
+                          <span className="bg-red-400 break-words">{`Ref: ${item.reference}`}</span>
                         </div>
                         <div className="flex flex-col">
                           {item.paymentType === "CARD" ? (
@@ -364,7 +383,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                           <span className="inline-block text-blue-400 truncate">
                             Ref. Transaccion
                           </span>
-                          <span>{item.reference}</span>
+                          <span >{item.reference}</span>
                         </div>
                       </div>
                       <div className="flex-col content-center justify-between hidden w-2/4 h-40 px-12 mr-2 text-sm sm:flex md:hidden">
@@ -461,6 +480,8 @@ export const TableTransaction = (props: TableTransactionProps) => {
             </nav>
           </div>
         </div>
+         : <div className="text-red-400 text-sm absolute">holaaaa</div>
+        }
       </div>
     </>
   );

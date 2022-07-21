@@ -29,11 +29,11 @@ export const Details = (props: DetailsProps) => {
   const { detailsValue: { transactionId, paymentGateway }, token } = props;
 
   const statusStyles: Record<string, string> = {
-    DECLINED: "bg-red-400 text-red-700",
-    ERROR: "bg-red-400 text-red-700",
-    APPROVED: "bg-green-400 text-green-700",
-    VOIDED: "bg-yellow-400 text-yellow-700",
-    PENDING: "bg-orange-400 text-orange-700"
+    DECLINED: "bg-red-200 text-red-700",
+    ERROR: "bg-gray-200 text-gray-700",
+    APPROVED: "bg-green-200 text-green-700",
+    VOIDED: "bg-yellow-200 text-yellow-700",
+    PENDING: "bg-orange-200 text-orange-700"
   };
 
   const statusOrder: Record<string, string> = {
@@ -63,6 +63,7 @@ export const Details = (props: DetailsProps) => {
 
   return (
     <>
+    {console.log("componente--details")}
       <div>
         {(!loading && !isError) ?
         
