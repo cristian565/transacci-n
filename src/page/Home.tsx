@@ -111,10 +111,9 @@ export const Home = () => {
 
   useEffect(() => {
     setInterval(() => {
-      UserService.updateToken(()=>console.log("ingreso y todo bien"))       
+      UserService.updateToken(()=>console.log("update token"))       
   
     }, 60000);
-    console.log("ingreso")
   }, []) 
  
 

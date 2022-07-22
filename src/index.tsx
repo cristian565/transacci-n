@@ -10,11 +10,9 @@ const root = ReactDOM.createRoot(
 );
 
 const eventLogger = (event: unknown, error: unknown) => {
-  console.log("aqui el evento",event," error:",error)
 }
 
 const tokenLogger = (tokens: unknown) => {
-  console.log(tokens,"token")
 }
 
 

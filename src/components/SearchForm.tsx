@@ -246,6 +246,7 @@ export const SearchForm = (props: SearchFormProps) => {
 
           <div className="flex flex-row content-center justify-center mt-6 space-x-8">
             <button
+           /*  type="submit" */
               className="flex flex-row content-center justify-center w-32 py-2 mt-1 text-white border border-solid cursor-pointer bg-blue-wompi h-11 sm:h-auto sm:py-1 hover:bg-blue-800 rounded-xl md:w-32 md:h-9"
               onClick={() => {
                 props.resPage(0)
