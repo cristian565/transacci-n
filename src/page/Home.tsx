@@ -209,12 +209,12 @@ export const Home = () => {
           <div>
             <Transition
               show={openTransaction && !isLoading && orders?.totalTransactions !== 0}
-              enter="transition ease-out duration-200"
-              enterFrom="opacity-0 translate-y-1"
-              enterTo="opacity-100 translate-y-0"
-              leave="transition ease-in duration-150"
-              leaveFrom="opacity-100 translate-y-0"
-              leaveTo="opacity-0 translate-y-1"
+              // enter="transition ease-out duration-200"
+              // enterFrom="opacity-0 translate-y-1"
+              // enterTo="opacity-100 translate-y-0"
+              // leave="transition ease-in duration-150"
+              // leaveFrom="opacity-100 translate-y-0"
+              // leaveTo="opacity-0 translate-y-1"
             >
               
                   <TableTransaction
@@ -278,12 +278,16 @@ export const Home = () => {
                 <nav className="flex-1 px-2 mt-5 space-y-1 cursor-pointer">
                   {navigation.map((item) => (
                     <div
+                    onClick={()=>{
+                      handleReset();
+                      setOpenTransaction(true)
+                      }}
                       key={item.name}
                       /* aqui accion bototn transacciones */
                       className={classNames(
                         item.current
-                          ? "bg-gray-300 shodow-sm text-gray-700"
-                          : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                          ? "bg-gray-300 shodow-sm text-gray-700 cursor-pointer"
+                          : "text-gray-300 hover:bg-gray-700 hover:text-white cursor-pointer",
                         "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
                       )}
                     >
@@ -424,7 +428,7 @@ export const Home = () => {
                   />
             </Transition>
 
-            <Transition show={isLoading && orders?.totalTransactions === 0}>
+            <Transition show={isLoading}>
               <TableTransactionSkeleton e2eAttr="table-transaction" />
             </Transition>
           </div>
@@ -500,7 +504,7 @@ export const Home = () => {
               }}
               button={{
                 className:
-                  "bg-blue-400 inline-flex justify-center py-2 px-4 w-full text-base font-medium text-white bg-pantone-blue-100 hover:bg-pantone-blue-300 rounded-md border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm sm:text-sm",
+                  "bg-blue-wompi inline-flex justify-center py-2 px-4 w-full text-base font-medium text-white hover:bg-blue-700 rounded-md border border-transparent  shadow-sm sm:text-sm",
               }}
             />
           </Modal>

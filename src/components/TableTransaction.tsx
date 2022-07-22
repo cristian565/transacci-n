@@ -94,8 +94,8 @@ export const TableTransaction = (props: TableTransactionProps) => {
           <div className="overflow-x-auto ">
             <div className="inline-block min-w-full py-2 align-middle md:px-1 lg:px-2 ">
             <div className="flex justify-end ">
-            <div className="flex cursor-pointer shadow-md h-10 justify-center hover:bg-blue-400 hover:text-blue-800 top-0 right-0 items-center w-36 border-2 rounded-xl mb-2" onClick={()=>props.onRefresh()}>
-                <span className="mr-1">Refresh</span>
+            <div className="flex cursor-pointer shadow-md h-10 justify-center hover:bg-gray-300 top-0 right-0 items-center w-36 border-2 rounded-xl mb-2" onClick={()=>props.onRefresh()}>
+                <span className="mr-1 font-bold text-gray-700 text-md">Refresh</span>
                <RefreshIcon aria-hidden="true"
                                 className="w-6 h-6"/>
                </div>
@@ -267,19 +267,27 @@ export const TableTransaction = (props: TableTransactionProps) => {
             </div>
           </div>
         </div>
-          : <div className="text-white-wompi text-sm font-bold "> HO HAY NADA</div>
+          : <div className="text-white-wompi text-sm">loading</div>
         }
 
 {
           (props.order.transactions.length>0)
             ? <div>
           <div className="shadow md:hidden">
+          <div className="flex justify-end ">
+            <div className="flex cursor-pointer shadow-md h-10 justify-center hover:bg-gray-300 top-0 right-0 items-center w-36 border-2 rounded-xl mb-2" onClick={()=>props.onRefresh()}>
+                <span className="mr-1 font-bold text-gray-700 text-md">Refresh</span>
+               <RefreshIcon aria-hidden="true"
+                                className="w-6 h-6"/>
+               </div>
+               </div>
             <div className="flex px-6 py-3 text-xs font-medium tracking-wider text-center text-gray-700 uppercase rounded-t-lg bg-pantone-blue-100">
               <span className="flex items-center justify-center flex-1">
                 {" "}
                 Transacciones{" "}
               </span>
             </div>
+            
             <ul className="mt-2 overflow-hidden divide-y divide-gray-200 shadow ">
               {props.order.transactions.map((item) => (
                 <li
@@ -296,6 +304,9 @@ export const TableTransaction = (props: TableTransactionProps) => {
                 >
                   <div className="flex flex-row justify-center mt-4 sm:py-2 sm:h-44 md:px-4 sm:mt-0">
                     <div className="w-11/12 flex flex-row justify-between px-4 py-4 text-sm sm:pb-4 sm:py-2 sm:justify-center sm:items-center sm:px-2 sm:w-full sm:h-48 md:justify-center md:items-center md:py-2 md:px-4 md:w-1/2 md:h-full">
+                      
+                    
+                     
                       <div className="flex flex-col mt-1 mr-2 space-y-1 text-sm sm:hidden ">
                         <span className="text-blue-400 truncate">Estado</span>
                         <span className="text-blue-400 truncate">Cliente:</span>
@@ -306,14 +317,16 @@ export const TableTransaction = (props: TableTransactionProps) => {
                           Fecha
                         </span>
 
-                        <span className="inline-block h-10 py-3 text-blue-400 truncate">
+                        <span className="inline-block h-10 mt-4 py-3 text-blue-400 truncate">
                           Datos del pago
                         </span>
-                        <span className="inline-block py-2 text-blue-400 truncate sm:py-1 ">
+                        <span className="inline-block h-8 smm:h-2 text-blue-400 truncate sm:py-1 justify-self-end ">
+                        </span>
+                        <span className="inline-block pt-2 h-8 text-blue-400 truncate sm:py-1 justify-self-end ">
                           Metodo de pago
                         </span>
                       </div>
-                      <div className="flex flex-col space-y-1 text-sm text-gray-700 sm:hidden bg-blue-600 w-10/12">
+                      <div className="flex flex-col space-y-1 text-sm text-gray-700 sm:hidden w-8/12">
                         <span
                           className={`${statusStyles[item.transactionStatus]}
                              font-semibold inline-block  rounded-lg px-3 w-24 text-center h-5`}
@@ -321,7 +334,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                           {statusOrder[item.transactionStatus]}
                         </span>
                         <div className="flex flex-col w-full ">
-                          <span className="bg-red-400 break-words">{item.client}</span>
+                          <span className=" break-words">{item.client}</span>
                         </div>
                         <div className="flex flex-row content-center">
                           <ClockIcon aria-hidden="true" className="w-6 h-6" />
@@ -341,12 +354,12 @@ export const TableTransaction = (props: TableTransactionProps) => {
                         </div>
 
                         <div className="flex flex-col">
-                          <span className="font-bold bg-red-400 break-words">
+                          <span className="font-bold  break-words">
                             {`#${item.transactionId}`}
                           </span>
-                          <span className="bg-red-400 break-words">{`Ref: ${item.reference}`}</span>
+                          <span className="break-words">{`Ref:${item.reference}`}</span>
                         </div>
-                        <div className="flex flex-col">
+                        <div className="flex h-12 items-center">
                           {item.paymentType === "CARD" ? (
                             <CreditCardIcon
                               aria-hidden="true"
@@ -362,6 +375,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                         </div>
                       </div>
 
+
                       <div className="flex-col justify-between hidden w-2/4 h-40 pl-12 text-sm text-gray-700 sm:flex md:hidden ">
                         <div className="flex flex-col w-full ">
                           <span className="text-blue-400 truncate">
@@ -372,7 +386,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
 
                         <div className="flex flex-col w-full ">
                           <span className="inline-block text-blue-400 truncate">
-                            ID Transaccion
+                            ID Transacción
                           </span>
                           <span className="font-bold">
                             {item.transactionId}
@@ -381,7 +395,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
 
                         <div className="flex flex-col w-full ">
                           <span className="inline-block text-blue-400 truncate">
-                            Ref. Transaccion
+                            Ref. Transacción
                           </span>
                           <span >{item.reference}</span>
                         </div>
@@ -449,7 +463,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
 
                   <div className="flex flex-col h-auto bg-gray-200 rounded-lg sm:mt-4 sm:relative sm:bottom-0 sm:flex-row sm:justify-between">
                     <div className="px-2 py-1 text-sm font-bold text-gray-700 sm:order-last sm:p-2 sm:text-sm">
-                      TOTAL: {parseCurrency(item.totalTransactionValue)}
+                      TOTAL: {parseCurrency(item.totalTransactionValue/100)}
                     </div>
                   </div>
                 </li>
@@ -480,7 +494,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
             </nav>
           </div>
         </div>
-         : <div className="text-red-400 text-sm absolute">holaaaa</div>
+         : <div className="text-white-wompi text-sm ">loading</div>
         }
       </div>
     </>
