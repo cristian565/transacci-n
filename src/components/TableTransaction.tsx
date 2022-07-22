@@ -80,9 +80,6 @@ export const TableTransaction = (props: TableTransactionProps) => {
 
   return (
     <>
-    {console.log("componente--tabla")}
-    {console.log("componente--tabla-data",data)}
-    {console.log("componente--tabla-data-props",props.order.transactions)}
     
       <div className="px-4 mt-8 sm:px-3 lg:px-2" data-cy={props.e2eAttr}>
         {/* escritorio*/}
@@ -485,8 +482,8 @@ export const TableTransaction = (props: TableTransactionProps) => {
                 <button
                   type="button"
                   className="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-white border border-gray-300 rounded-md bg-blue-wompi hover:bg-blue-800"
-                  disabled={limit >= props.order.totalTransactions}
-                  onClick={() => handlePagination("next")}
+                  disabled={limit >= ((props.order.totalTransactions%5===0)?props.order.totalTransactions/5:(Math.trunc(props.order.totalTransactions/5)+1))}
+                      onClick={() => handlePagination("next")}
                 >
                   Siguiente
                 </button>

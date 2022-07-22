@@ -63,7 +63,7 @@ export const Details = (props: DetailsProps) => {
 
   return (
     <>
-    {console.log("componente--details")}
+   
       <div>
         {(!loading && !isError) ?
         

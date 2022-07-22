@@ -113,7 +113,7 @@ export const Home = () => {
     setInterval(() => {
       UserService.updateToken(()=>console.log("ingreso y todo bien"))       
   
-    }, 300000);
+    }, 60000);
     console.log("ingreso")
   }, []) 
  
@@ -121,8 +121,6 @@ export const Home = () => {
 
   return (
     <>
-    {console.log("orders--home",orders)}
-    {console.log("dataOrder--home",dataOrder)}
       <div className="h-screen">
         {/* Componente para movil */}
 

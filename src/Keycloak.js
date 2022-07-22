@@ -20,7 +20,7 @@ const getToken = () => keycloak.token;
 const isLoggedIn = () => !!keycloak.token;
 
 const updateToken = (successCallback) =>
-keycloak.updateToken(300)
+keycloak.updateToken(62)
     .then(successCallback)
     .catch(doLogin);
 

@@ -10,7 +10,6 @@ export const DetailsSkeleton = (props: DetailsSkeletonProps) => {
 
   return (
     <>
-    {console.log("componente--detailsSkeleton")}
       <div className="min-h-full -z-30">
         <main className="py-2 md:py-9"
           data-cy={props.e2eAttr}>
