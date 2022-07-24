@@ -63,7 +63,7 @@ export const Details = (props: DetailsProps) => {
 
   return (
     <>
-   
+   {console.log(data)}
       <div>
         {(!loading && !isError) ?
         
@@ -115,7 +115,7 @@ export const Details = (props: DetailsProps) => {
                             {statusOrder[data.status]}
                           </span>
                         </div>
-                        {(data.paymentMethodType === "DECLINED" || data.paymentMethodType === "PENDING") ?
+                        {(data.status === "DECLINED" || data.status === "PENDING") ?
                           (<div className="sm:col-span-1">
                             <dt className="text-sm font-medium text-gray-500">
                               Detalle del estado
