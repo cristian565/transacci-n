@@ -55,6 +55,9 @@ export const SearchForm = (props: SearchFormProps) => {
       refTransaction: "",
       emailUser: "",
     });
+    props.resPage(0)
+    props.resStart(0)
+    props.resLimit(1)
     setErrorFullFields(false)
   };
 
