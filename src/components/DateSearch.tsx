@@ -46,8 +46,10 @@ export const DateSearch = (props: DateSearchProps) => {
 
     const handleDate = (date: any, value: string) => {
         const a = new Date(date)
+        const b = new Date()
         if (value === "start") {
             setoneDate(a.getFullYear() + "-" + String(a.getMonth() + 1).padStart(2, '0') + "-" + String(a.getDate()).padStart(2, '0'))
+            settwoDate(b.getFullYear() + "-" + String(b.getMonth() + 1).padStart(2, '0') + "-" + String(b.getDate()).padStart(2, '0'))
         } else {
             settwoDate(a.getFullYear() + "-" + String(a.getMonth() + 1).padStart(2, '0') + "-" + String(a.getDate()).padStart(2, '0'))
         }
@@ -59,7 +61,8 @@ export const DateSearch = (props: DateSearchProps) => {
             props.startDate(oneDate)
             props.endDate(twoDate)
         }
-    }, [twoDate]);
+       
+    }, [oneDate,twoDate]);
 
     const handleReset = () => {
         searchForm.resetForm();

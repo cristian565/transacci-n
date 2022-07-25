@@ -120,6 +120,7 @@ export const Home = () => {
 
   return (
     <>
+    {console.log(orders,"aqui data")}
       <div className="h-screen">
         {/* Componente para movil */}
 

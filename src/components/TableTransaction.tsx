@@ -236,7 +236,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                       Mostrando pagina <span className="font-medium">{start + 1}</span>{" "}
                       de{" "}
                       <span className="font-medium">
-                        {(props.order.totalTransactions%5===0)?props.order.totalTransactions/5:(Math.trunc(props.order.totalTransactions/5)+1)}
+                        {(props.order.totalTransactions%10===0)?props.order.totalTransactions/10:(Math.trunc(props.order.totalTransactions/10)+1)}
                       </span>{" "}
                      
                     </p>
@@ -253,7 +253,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                       className={
                         "inline-flex relative items-center py-2 px-4 ml-3 text-sm font-medium text-white bg-blue-wompi hover:bg-blue-400 rounded-md border border-gray-300"
                       }
-                      disabled={limit >= ((props.order.totalTransactions%5===0)?props.order.totalTransactions/5:(Math.trunc(props.order.totalTransactions/5)+1))}
+                      disabled={limit >= ((props.order.totalTransactions%10===0)?props.order.totalTransactions/10:(Math.trunc(props.order.totalTransactions/10)+1))}
                       onClick={() => handlePagination("next")}
                     >
                       Siguiente
@@ -482,7 +482,7 @@ export const TableTransaction = (props: TableTransactionProps) => {
                 <button
                   type="button"
                   className="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-white border border-gray-300 rounded-md bg-blue-wompi hover:bg-blue-800"
-                  disabled={limit >= ((props.order.totalTransactions%5===0)?props.order.totalTransactions/5:(Math.trunc(props.order.totalTransactions/5)+1))}
+                  disabled={limit >= ((props.order.totalTransactions%10===0)?props.order.totalTransactions/10:(Math.trunc(props.order.totalTransactions/10)+1))}
                       onClick={() => handlePagination("next")}
                 >
                   Siguiente

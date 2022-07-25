@@ -55,7 +55,7 @@ export function useTransactions(
 ) {
   const { data, error, mutate } = useSWR<Transaction>(
     [
-      `${path}?page=${page}&size=5${id ? "&id=" + id : ""}${
+      `${path}?page=${page}&size=10${id ? "&id=" + id : ""}${
         reference ? "&reference=" + reference : ""
       }${status ? "&status=" + status : ""}${
         paymentMethod ? "&paymentMethod=" + paymentMethod : ""
