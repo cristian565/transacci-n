@@ -16,7 +16,8 @@ import ServerDown from "./ServerDow";
 
 const URI = "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/";
 export interface DetailsProps {
-  detailsValue: DetailsValue
+  detailsValue: DetailsValue;
+  storeId:string;
   token: string;
   onClose: () => void;
   e2eAttr?: string;
@@ -26,7 +27,7 @@ export const Details = (props: DetailsProps) => {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<any>({});
   const [isError, setIsError] = useState<any>(false);
-  const { detailsValue: { transactionId, paymentGateway }, token } = props;
+  const { detailsValue: { transactionId, paymentGateway }, token ,storeId} = props;
 
   const statusStyles: Record<string, string> = {
     DECLINED: "bg-red-200 text-red-700",
@@ -45,7 +46,7 @@ export const Details = (props: DetailsProps) => {
   };
 
   const loadOrderDetails = () => {
-    getTransactionDetail(URI, token, paymentGateway, transactionId, setLoading, setData, setIsError);
+    getTransactionDetail(URI, token,storeId, paymentGateway, transactionId, setLoading, setData, setIsError);
   }
 
   useEffect(() => {
@@ -63,7 +64,6 @@ export const Details = (props: DetailsProps) => {
 
   return (
     <>
-   {console.log(data)}
       <div>
         {(!loading && !isError) ?
         

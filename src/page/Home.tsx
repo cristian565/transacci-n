@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect,useLayoutEffect} from "react";
 import { Transition } from "@headlessui/react";
 import {
   HomeIcon,
@@ -23,8 +23,8 @@ import { SearchFormValue } from "../components/interface/searchFormValue";
 import { DateSearch } from "../components/DateSearch";
 import ServerDown from "../components/ServerDow";
 import { UserService } from "../Keycloak";
-
-
+import { getStoreId } from "../hooks/getStoreId";
+import { AccesUser } from "../components/AccesUser";
 
 export const Home = () => {
   const navigation = [
@@ -39,7 +39,6 @@ export const Home = () => {
   const [showNoDateFilter, setShowNoDateFilter] = useState<boolean>(false);
   const [openTransaction, setOpenTransaction] = useState<boolean>(true);
   const [openFilter, setopenFilter] = useState<boolean>(false);
-  const { keycloak } = useKeycloak();
   const history = useHistory();
   const [detailsValue, setDetailsValue] = useState<DetailsValue>({
     transactionId: "",
@@ -50,6 +49,9 @@ export const Home = () => {
   const [limit, setLimit] = useState<number>(1);
   const [startDate, setstartDate] = useState<string>("");
   const [endDate, setendDate] = useState<string>("");
+  const [storeAcces, setStoreAcces] = useState<any>(null);
+  const [loadingAccess, setLoadingAccess] = useState<any>(false);
+  const [isErrorAccess, setIsErrorAccess] = useState<any>(false);
 
   const [searchValue, setSearchValue] = useState<SearchFormValue>({
     stateOrders: "",
@@ -59,9 +61,19 @@ export const Home = () => {
     emailUser: "",
   });
 
+  useLayoutEffect(() => {
+    getStoreId("https://bizzhub-gateway.hardtech.co:8098/token-claims", 
+    UserService.getToken()? UserService.getToken() : "",
+    setLoadingAccess,
+    setStoreAcces,
+    setIsErrorAccess
+    )
+   },[])
+
   const { orders, isLoading, isError, mutate } = useTransactions(
     "https://bizzhub-gateway.hardtech.co:8098/engine-api/transactions/",
     UserService.getToken()? UserService.getToken() : "",
+    storeAcces,
     pagination,
     searchValue.idTransaction,
     searchValue.refTransaction,
@@ -74,7 +86,7 @@ export const Home = () => {
 
 
   useEffect(() => {
-    if (orders && !isLoading) { setDataOrder(orders); }
+    if (orders && !isLoading && !loadingAccess) { setDataOrder(orders); }
 
     if (orders?.totalTransactions === 0 && !isLoading && !isError) {
       handleReset()
@@ -116,11 +128,10 @@ export const Home = () => {
     }, 60000);
   }, []) 
  
-
+ 
 
   return (
     <>
-    {console.log(orders,"aqui data")}
       <div className="h-screen">
         {/* Componente para movil */}
 
@@ -206,13 +217,7 @@ export const Home = () => {
 
           <div>
             <Transition
-              show={openTransaction && !isLoading && orders?.totalTransactions !== 0}
-              // enter="transition ease-out duration-200"
-              // enterFrom="opacity-0 translate-y-1"
-              // enterTo="opacity-100 translate-y-0"
-              // leave="transition ease-in duration-150"
-              // leaveFrom="opacity-100 translate-y-0"
-              // leaveTo="opacity-0 translate-y-1"
+              show={openTransaction && !isLoading && orders?.totalTransactions !== 0 && !loadingAccess}
             >
               
                   <TableTransaction
@@ -231,7 +236,7 @@ export const Home = () => {
               
             </Transition>
 
-            <Transition show={isLoading}>
+            <Transition show={isLoading || loadingAccess}>
               <TableTransactionSkeleton e2eAttr="table-transaction" />
             </Transition>
           </div>
@@ -247,6 +252,7 @@ export const Home = () => {
           >
 
             <Details
+              storeId={storeAcces}
               token={UserService.getToken()? UserService.getToken() : ""}
               detailsValue={{
                 transactionId: detailsValue.transactionId,
@@ -402,13 +408,7 @@ export const Home = () => {
 
                       <div>
             <Transition
-              show={openTransaction && !isLoading && orders?.totalTransactions !== 0}
-              // enter="transition ease-out duration-100"
-              // enterFrom="opacity-0 translate-y-1"
-              // enterTo="opacity-100 translate-y-0"
-              // leave="transition ease-in duration-150"
-              // leaveFrom="opacity-100 translate-y-0"
-              // leaveTo="opacity-0 translate-y-1"
+              show={openTransaction && !isLoading && orders?.totalTransactions !== 0 && !loadingAccess}
             >
               
                   <TableTransaction
@@ -426,7 +426,7 @@ export const Home = () => {
                   />
             </Transition>
 
-            <Transition show={isLoading}>
+            <Transition show={isLoading || loadingAccess}>
               <TableTransactionSkeleton e2eAttr="table-transaction" />
             </Transition>
           </div>
@@ -442,6 +442,7 @@ export const Home = () => {
                       >
 
                         <Details
+                        storeId={storeAcces}
                           token={UserService.getToken()? UserService.getToken() : ""}
                           detailsValue={{
                             transactionId: detailsValue.transactionId,
@@ -507,11 +508,35 @@ export const Home = () => {
             />
           </Modal>
         }
-
+          
+           <Modal
+            open={!loadingAccess && isErrorAccess}
+            backdropClose={true}
+            onClose={() => {
+              console.warn('clicked for closed');
+            }}
+            style={{
+              container:
+                'inline-block align-bottom bg-gray-50 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6',
+              opacity:
+                'fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity',
+            }}
+            e2eAttr="modal-server-down"
+          >
+            <AccesUser
+             onClick={() => {
+              handleClosedSession() 
+            }}
+            button={{
+              className:
+                "bg-blue-wompi inline-flex justify-center py-2 px-4 w-full text-base font-medium text-white hover:bg-blue-700 rounded-md border border-transparent  shadow-sm sm:text-sm",
+            }} />
+          </Modal> 
 
 
 
       </div>
-    </>
+    
+   </> 
   );
 };

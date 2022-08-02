@@ -7,12 +7,13 @@ import { useKeycloak } from "@react-keycloak/web";
 const fetcher = async (
   path: string,
   token: string,
+  storeAcces:string,
   headers?: Record<string, string>
 ) => {
   try {
     const res = await fetch(path, {
       headers: {
-        "x-store-id": "hardtech",
+        "x-store-id": `${storeAcces}`,
         Authorization: `Bearer ${token}`,
         "Content-Type": "applicaton/json",
       },
@@ -44,6 +45,7 @@ const fetcher = async (
 export function useTransactions(
   path: string,
   token: string,
+ storeAcces:string,
   page: number,
   id?: string,
   reference?: string,
@@ -54,7 +56,7 @@ export function useTransactions(
   untilDate?: string
 ) {
   const { data, error, mutate } = useSWR<Transaction>(
-    [
+    storeAcces?[
       `${path}?page=${page}&size=10${id ? "&id=" + id : ""}${
         reference ? "&reference=" + reference : ""
       }${status ? "&status=" + status : ""}${
@@ -63,7 +65,8 @@ export function useTransactions(
         fromDate ? "&fromDate=" + fromDate : ""
       }${untilDate ? "&untilDate=" + untilDate : ""}&sort=createdAt,desc`,
       token,
-    ],
+      storeAcces,
+    ]:null,
     fetcher,
     {
       onErrorRetry: (lastError, key, config, revalidate, { retryCount }) => {

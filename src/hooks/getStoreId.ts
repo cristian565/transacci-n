@@ -1,11 +1,8 @@
 import axios from 'axios';
 
-export async function getTransactionDetail(
+export async function getStoreId(
   path: string,
   token: string,
-  storeId: string,
-  paymentGateway: string,
-  transactionId: string,
   setLoading: Function,
   setData: Function,
   setIsError: Function,
@@ -15,18 +12,18 @@ export async function getTransactionDetail(
     setLoading(true);
     const myConfig = {
       headers: {
-        'x-store-id': storeId,
-        Authorization:
-          `Bearer ${token}`,
+        Authorization:`Bearer ${token}`,
         'Content-Type': 'applicaton/json',
       },
     }
-    const response = await axios.get(`${path}${paymentGateway}/${transactionId}`, myConfig);
-    setData(response.data);
+    const response = await axios.get(`${path}`, myConfig);
+    if(response.data.storeId.length===0){
+      setIsError(true)
+    }
+    setData(response.data.storeId);
     setIsError(false);
   } catch (error) {
     setIsError(true)
   }
-
   setLoading(false);
 }
